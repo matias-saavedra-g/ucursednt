@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-Cursedn't</title>
+    <style>
+        /* Estilo para la clase 'popup', que controla la apariencia del contenedor */
+        .popup {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        /* Estilo para el texto emergente dentro del popup */
+        .popup .popuptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Posiciona el popup */
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Flecha del popup */
+        .popup .popuptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+        /* Mostrar el popup cuando se pasa el ratón sobre el contenedor */
+        .popup:hover .popuptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Estilo para la imagen dentro del popup */
+        .popup img {
+            width: 128px;
+            height: 128px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Título principal de la página -->
+    <h1>Se acepta un cafecito.</h1>
+    
+    <!-- Contenedor del popup -->
+    <div class="popup" id="popup">
+        <!-- Texto emergente dentro del popup -->
+        <span class="popuptext" id="myPopup">Datos bancarios 🤑</span>
+        <!-- Imagen dentro del popup -->
+        <img src="icons/cafecito.webp" alt="Imagen">
+    </div>
+    
+    <!-- Script externo para manejar la lógica del popup -->
+    <script src="js/popup.js"></script>
+</body>
+</html>

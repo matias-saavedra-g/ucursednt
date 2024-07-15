@@ -1,0 +1,109 @@
+{
+  "name": "U-Cursedn't",
+  "version": "3.0",
+  "description": "Esta extensión agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
+  "manifest_version": 3,
+  "author": "matias-saavedra-g",
+  "permissions": [
+    "activeTab",
+    "clipboardWrite"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/popup.js"]
+    },
+    {
+      "matches": ["*://*.u-cursos.cl/*"],
+      "js": ["js/otrasRealizaciones.js"]
+    },
+    {
+      "matches": ["*://*.u-cursos.cl/*/*/*/*/*/notas/*"],
+      "js": ["js/easyCopyGrades.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/*/*/*/*/*/integrantes/*",
+        "*://*.u-cursos.cl/*/*/*/*/*/*/*/*/integrantes/*"
+      ],
+      "js": ["js/easyCopyMembers.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/usuario/*/horario/*",
+        "*://*.u-cursos.cl/*/*/*/*/*/horario_curso/*"
+      ],
+      "js": [
+        "js/weekCounter.js",
+        "js/ical.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/ingenieria/*/*/*/*notas/*"
+      ],
+      "js": ["js/popupGrading.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["*://*.u-cursos.cl/*"],
+      "js": ["js/resizePreviewPDF.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/ingenieria/2/foro_institucion/*",
+        "*://www.u-cursos.cl/ingenieria/*/*/*/*/foro/*",
+        "*://www.u-cursos.cl/uchile/4/foro_institucion/",
+        "*://www.u-cursos.cl/uchile/*/0/*/1/foro/"
+      ],
+      "js": ["js/muchoTexto.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/usuario/*",
+        "*://*.u-cursos.cl/ucursednt/*"
+      ],
+      "js": ["js/menuBoton.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/ucursednt/*"
+      ],
+      "js": ["js/menuGen.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["https://www.u-cursos.cl/*"],
+      "js": ["js/firstTime.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon.png",
+      "48": "icons/icon.png",
+      "128": "icons/icon.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.html"],
+      "matches": ["<all_urls>"]
+    },
+    {
+      "resources": ["changelog.html"],
+      "matches": ["https://www.u-cursos.cl/*"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon.png",
+    "48": "icons/icon.png",
+    "128": "icons/icon.png"
+  }
+}
