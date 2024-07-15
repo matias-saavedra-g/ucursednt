@@ -21,7 +21,7 @@ Proporciona una forma sencilla de copiar la lista de miembros de un curso en U-C
 ## 3. Recortar Texto Largo
 
 > Por sebcp
-> Se cambian los nombres de los botones.
+> (Se cambian los nombres de los botones)
 
 ### Descripción:
 Permite recortar y mostrar una versión corta de textos largos en U-Cursos, con la opción de expandirlos mostrándose como "Mucho Texto".
@@ -36,7 +36,7 @@ Crea un botón de "Otros Realizaciones del Curso" dentro de algún curso en U-Cu
 ## 5. Ventana Emergente de Calificaciones
 
 > Por sebcp
-> No testeado.
+> (No testeado)
 
 ### Descripción:
 Abre el editor de calificaciones de los estudiantes en una ventana emergente en U-Cursos en lugar de redirigir a otra página.
@@ -44,7 +44,7 @@ Abre el editor de calificaciones de los estudiantes en una ventana emergente en 
 ## 6. Redimensionar Vista Previa de PDF
 
 > Por PuntitOWO
-> Se añade alerta para mostrar esta funcionalidad.
+> (Se añade alerta para mostrar esta funcionalidad)
 
 ### Descripción:
 Permite el ajuste de la vista previa de los PDF en U-Cursos para ocupar todo el espacio disponible en la pantalla que se esté ocupando..
@@ -52,7 +52,7 @@ Permite el ajuste de la vista previa de los PDF en U-Cursos para ocupar todo el 
 ## 7. Contador de Semanas
 
 > Por TaconeoMental
-> Se añade soporte de inglés.
+> (Se añade soporte de inglés)
 
 ### Descripción:
 Cuenta y muestra el número de semanas entre la primera semana de clases del calendario y la fecha actual en U-Cursos.
