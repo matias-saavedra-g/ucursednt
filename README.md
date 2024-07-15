@@ -1,6 +1,6 @@
 <img align="left" height=64 src="icons/icon.png"/><h1><a href="https://github.com/matias-saavedra-g/ucursednt">U-Cursedn't</a></h1>
 
-Extension de Chromium y Firefox que agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas. Desarrollado por [matias-saavedra-g](), basado en la idea de [Eric K](https://github.com/Nyveon), [PuntitOWO](https://github.com/PuntitOwO), [sebcp](https://github.com/sebcp), [vmkovacs](https://github.com/vmkovacs), y [TaconeoMental](https://github.com/TaconeoMental).
+Extension de Chromium y Firefox que agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas. Desarrollado por [matias-saavedra-g](), basado en la idea de [Eric K](https://github.com/Nyveon), [PuntitOWO](https://github.com/PuntitOwO), [sebcp](https://github.com/sebcp), [vmkovacs](https://github.com/vmkovacs), y [TaconeoMental](https://github.com/TaconeoMental): [tU-Cursos](https://github.com/Nyveon/tU-Cursos).
 
 # Funcionalidades de las Extensiones para U-Cursos
 
