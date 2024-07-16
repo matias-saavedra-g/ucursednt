@@ -65,7 +65,7 @@ Cuenta y muestra el número de semanas entre la primera semana de clases del cal
 
 1. Clonar el repositorio desde GitHub:
    ```
-   git clone https://github.com/usuario/repo.git
+   git clone https://github.com/matias-saavedra-g/ucursednt.git
    ```
 
 2. Abrir Chrome y navegar a `chrome://extensions/`.
@@ -80,7 +80,7 @@ Cuenta y muestra el número de semanas entre la primera semana de clases del cal
 
 1. Clonar el repositorio desde GitHub:
    ```
-   git clone https://github.com/usuario/repo.git
+   git clone https://github.com/matias-saavedra-g/ucursednt.git
    ```
 
 2. Abrir Opera y visitar `opera://extensions/`.
@@ -93,7 +93,7 @@ Cuenta y muestra el número de semanas entre la primera semana de clases del cal
 
 1. Clonar el repositorio desde GitHub:
    ```
-   git clone https://github.com/usuario/repo.git
+   git clone https://github.com/matias-saavedra-g/ucursednt.git
    ```
 
 2. Abrir Microsoft Edge y navegar a `edge://extensions/`.
