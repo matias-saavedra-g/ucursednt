@@ -57,18 +57,49 @@ Permite el ajuste de la vista previa de los PDF en U-Cursos para ocupar todo el 
 ### Descripción:
 Cuenta y muestra el número de semanas entre la primera semana de clases del calendario y la fecha actual en U-Cursos.
 
-# Instalación:
+# Instalación
 
-- Chrome: 
-  1. Clonar el repositorio
-  2. Ir a chrome://extensions/
-  3. Habilitar "Developer Mode" arriba a la derecha
-  4. Poner "Load unpacked", seleccionando la carpeta de tU-Cursos.
+# Instalación de la Extensión desde GitHub
 
-- Opera:
-  1. Clonar el repositorio
-  2. Ir a opera://extensions/
-  3. Poner "Load unpacked", seleccionando la carpeta de tU-Cursos.
+## Chrome:
 
-- Firefox:
-  1. Temporalmente, parece no estar funcionando. 
+1. Clonar el repositorio desde GitHub:
+   ```
+   git clone https://github.com/usuario/repo.git
+   ```
+
+2. Abrir Chrome y navegar a `chrome://extensions/`.
+
+3. Habilitar el modo desarrollador (Developer Mode) en la esquina superior derecha de la página.
+
+4. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (U-Cursedn't).
+
+5. La extensión debería cargarse y aparecer en la lista de extensiones instaladas.
+
+## Opera:
+
+1. Clonar el repositorio desde GitHub:
+   ```
+   git clone https://github.com/usuario/repo.git
+   ```
+
+2. Abrir Opera y visitar `opera://extensions/`.
+
+3. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (U-Cursedn't).
+
+4. La extensión debería cargarse y aparecer en la lista de extensiones instaladas.
+
+## Microsoft Edge:
+
+1. Clonar el repositorio desde GitHub:
+   ```
+   git clone https://github.com/usuario/repo.git
+   ```
+
+2. Abrir Microsoft Edge y navegar a `edge://extensions/`.
+
+3. Habilitar el modo desarrollador (Developer Mode) en la esquina inferior izquierda de la página.
+
+4. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (U-Cursedn't).
+
+5. La extensión debería cargarse y aparecer en la lista de extensiones instaladas.
