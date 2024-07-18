@@ -62,7 +62,7 @@
         const botonesContainer = document.createElement('div');
         botonesContainer.style.position = 'absolute';
         botonesContainer.style.top = '0px';
-        botonesContainer.style.right = '15px';
+        botonesContainer.style.right = '2.5px';
         botonesContainer.style.zIndex = '1000';
         botonesContainer.style.backgroundColor = 'transparent';
 
@@ -73,7 +73,7 @@
         botonSuma.style.background = 'transparent';
         botonSuma.style.border = 'transparent';
         botonSuma.style.cursor = 'pointer';
-        botonSuma.style.marginRight = '10px';
+        botonSuma.style.marginRight = '0px';
         botonSuma.onclick = () => copiarNotas('suma');
         botonesContainer.appendChild(botonSuma);
 

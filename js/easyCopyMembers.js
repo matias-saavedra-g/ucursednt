@@ -66,7 +66,7 @@
             const botonesContainer = document.createElement('div');
             botonesContainer.style.position = "absolute";
             botonesContainer.style.top = '0px';
-            botonesContainer.style.right = '15px';
+            botonesContainer.style.right = '5px';
             botonesContainer.style.zIndex = '1000';
             botonesContainer.style.backgroundColor = 'transparent';
 
@@ -77,7 +77,7 @@
             botonHorizontal.style.background = 'transparent';
             botonHorizontal.style.border = 'transparent';
             botonHorizontal.style.cursor = 'pointer';
-            botonHorizontal.style.marginRight = '10px';
+            botonHorizontal.style.marginRight = '0px';
             botonHorizontal.onclick = () => copiarIntegrantes('horizontal', categoria);
             botonesContainer.appendChild(botonHorizontal);
 

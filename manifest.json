@@ -79,7 +79,7 @@
       "run_at": "document_end"
     },
     {
-      "matches": ["https://www.u-cursos.cl/*"],
+      "matches": ["*://www.u-cursos.cl/*"],
       "js": ["js/firstTime.js"]
     }
   ],
@@ -98,7 +98,7 @@
     },
     {
       "resources": ["changelog.html"],
-      "matches": ["https://www.u-cursos.cl/*"]
+      "matches": ["*://www.u-cursos.cl/*"]
     }
   ],
   "icons": {
