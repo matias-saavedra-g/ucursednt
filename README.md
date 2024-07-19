@@ -117,6 +117,8 @@ En un botón en la pantalla de inicio de [U-Cursos](https://www.u-cursos.cl/) pe
 
 ## Chrome:
 
+> Tutorial en [video](https://www.youtube.com/watch?v=oswjtLwCUqg) (24s).
+
 1. Clonar el repositorio desde GitHub:
    ```
    git clone https://github.com/matias-saavedra-g/ucursednt.git
@@ -132,6 +134,8 @@ En un botón en la pantalla de inicio de [U-Cursos](https://www.u-cursos.cl/) pe
 
 ## Opera:
 
+> Tutorial en [video](https://www.youtube.com/watch?v=5X9wGp3kWwA) (86s).
+
 1. Clonar el repositorio desde GitHub:
    ```
    git clone https://github.com/matias-saavedra-g/ucursednt.git
@@ -144,6 +148,8 @@ En un botón en la pantalla de inicio de [U-Cursos](https://www.u-cursos.cl/) pe
 4. La extensión debería cargarse y aparecer en la lista de extensiones instaladas.
 
 ## Microsoft Edge:
+
+> Tutorial en [video](https://www.youtube.com/watch?v=ruMPPADElqU) (39s).
 
 1. Clonar el repositorio desde GitHub:
    ```
