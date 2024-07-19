@@ -6,6 +6,11 @@
     }
 
     // Función para obtener un dato de LocalStorage
+    /**
+     * Retrieves an item from the local storage based on the provided key.
+     * @param {string} key - The key of the item to retrieve from the local storage.
+     * @returns {any} - The retrieved item, or null if the item does not exist.
+     */
     function getLocalStorageItem(key) {
         const item = localStorage.getItem(key);
         return item ? JSON.parse(item) : null;

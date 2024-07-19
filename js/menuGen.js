@@ -21,7 +21,8 @@
                 otrasRealizaciones: true,
                 popupGrading: true,
                 resizePreviewPDF: true,
-                weekCounter: true
+                weekCounter: true,
+                pendingTasks: true,
             },
         };
 
@@ -31,6 +32,10 @@
     }
 
     // Crear el menú de características
+    /**
+     * Creates a feature menu based on the settings stored in local storage.
+     * @returns {HTMLElement} The created feature menu element.
+     */
     function createFeatureMenu() {
         const settings = getLocalStorageItem("settings");
         const features = settings.features;
@@ -45,7 +50,8 @@
             { id: "otrasRealizaciones", name: "Otras Realizaciones del Curso" },
             { id: "popupGrading", name: "Ventana Emergente de Calificaciones" },
             { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF" },
-            { id: "weekCounter", name: "Contador de Semanas" }
+            { id: "weekCounter", name: "Contador de Semanas" },
+            { id: "pendingTasks", name: "Insignia Tareas Pendientes" }
         ];
 
         featuresList.forEach(feature => {

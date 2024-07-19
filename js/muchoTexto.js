@@ -17,6 +17,12 @@
     /**
      * Function that counts the amount of paragraphs in a HTML element
      */
+    /**
+     * Counts the number of lines in an HTML element.
+     *
+     * @param {HTMLElement} elem - The HTML element to count the lines from.
+     * @returns {number} The number of lines in the element.
+     */
     function countLines(elem) {
         var paragraphs = elem.innerHTML.split("<br>").filter(String);
         var len = paragraphs.length;

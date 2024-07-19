@@ -26,6 +26,9 @@ if (!firstVisit) {
 }
 
 // Función para mostrar el popup del changelog
+/**
+ * Opens a popup window to display the changelog.
+ */
 function showChangeLogPopup() {
     const popupUrl = chrome.runtime.getURL('changelog.html');
     const popupWindow = window.open(popupUrl, 'Changelog', 'width=400,height=600');

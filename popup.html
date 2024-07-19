@@ -1,3 +1,11 @@
+<!--
+    This HTML file represents a popup container with a coffee image and banking information.
+    It includes styles for the popup container, the popup text, and the popup image.
+    The popup is triggered when the user hovers over the container.
+    The banking information is displayed in the popup text.
+    The coffee image is displayed within the popup container.
+    The logic for handling the popup is implemented in an external JavaScript file.
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,14 +13,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>U-Cursedn't</title>
     <style>
-        /* Estilo para la clase 'popup', que controla la apariencia del contenedor */
+        /* Styles for the popup container */
         .popup {
             position: relative;
             display: inline-block;
             cursor: pointer;
         }
 
-        /* Estilo para el texto emergente dentro del popup */
+        /* Styles for the popup text */
         .popup .popuptext {
             visibility: hidden;
             width: 200px;
@@ -23,14 +31,14 @@
             padding: 8px 0;
             position: absolute;
             z-index: 1;
-            bottom: 125%; /* Posiciona el popup */
+            bottom: 125%; /* Positions the popup */
             left: 50%;
             margin-left: -100px;
             opacity: 0;
             transition: opacity 0.3s;
         }
 
-        /* Flecha del popup */
+        /* Styles for the popup arrow */
         .popup .popuptext::after {
             content: "";
             position: absolute;
@@ -42,13 +50,13 @@
             border-color: #555 transparent transparent transparent;
         }
 
-        /* Mostrar el popup cuando se pasa el ratón sobre el contenedor */
+        /* Show the popup when hovering over the container */
         .popup:hover .popuptext {
             visibility: visible;
             opacity: 1;
         }
 
-        /* Estilo para la imagen dentro del popup */
+        /* Styles for the popup image */
         .popup img {
             width: 128px;
             height: 128px;
@@ -56,18 +64,18 @@
     </style>
 </head>
 <body>
-    <!-- Título principal de la página -->
+    <!-- Main title of the page -->
     <h1>Se acepta un cafecito.</h1>
     
-    <!-- Contenedor del popup -->
+    <!-- Popup container -->
     <div class="popup" id="popup">
-        <!-- Texto emergente dentro del popup -->
+        <!-- Popup text -->
         <span class="popuptext" id="myPopup">Datos bancarios 🤑</span>
-        <!-- Imagen dentro del popup -->
+        <!-- Popup image -->
         <img src="icons/cafecito.webp" alt="Imagen">
     </div>
     
-    <!-- Script externo para manejar la lógica del popup -->
+    <!-- External script for handling the popup logic -->
     <script src="js/popup.js"></script>
 </body>
 </html>

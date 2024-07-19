@@ -57,6 +57,9 @@
     }
 
     // Función para agregar botones para copiar integrantes en cada categoría
+    /**
+     * Adds buttons to copy members horizontally and vertically for each category.
+     */
     function añadirBotones() {
         // Calcular el número total de categorías de integrantes
         const totalCategorias = document.querySelectorAll("tbody").length / 2;
@@ -66,9 +69,9 @@
             const botonesContainer = document.createElement('div');
             botonesContainer.style.position = "absolute";
             botonesContainer.style.top = '0px';
-            botonesContainer.style.right = '5px';
+            botonesContainer.style.right = '0px';
             botonesContainer.style.zIndex = '1000';
-            botonesContainer.style.backgroundColor = 'transparent';
+            botonesContainer.style.backgroundColor = '#222';
 
             // Botón para copiar horizontalmente
             const botonHorizontal = document.createElement('button');

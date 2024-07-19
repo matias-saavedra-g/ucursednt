@@ -1,66 +1,119 @@
 
 <img align="left" height=64 src="icons/icon.png"/><h1><a href="https://github.com/matias-saavedra-g/ucursednt">U-Cursedn't</a></h1>
 
-Extension de Chromium que agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas. Desarrollado por [matias-saavedra-g](https://github.com/matias-saavedra-g/), basado en la idea de [Eric K](https://github.com/Nyveon), [PuntitOWO](https://github.com/PuntitOwO), [sebcp](https://github.com/sebcp), [vmkovacs](https://github.com/vmkovacs), y [TaconeoMental](https://github.com/TaconeoMental): [tU-Cursos](https://github.com/Nyveon/tU-Cursos).
+Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cursos](https://www.u-cursos.cl/) y respectivos logros por hacer cada una de ellas. Desarrollado por [matias-saavedra-g](https://github.com/matias-saavedra-g/), basado en la idea de [Eric K](https://github.com/Nyveon), [PuntitOWO](https://github.com/PuntitOwO), [sebcp](https://github.com/sebcp), [vmkovacs](https://github.com/vmkovacs), y [TaconeoMental](https://github.com/TaconeoMental): [tU-Cursos](https://github.com/Nyveon/tU-Cursos).
 
-# Funcionalidades de las Extensiones para U-Cursos
+---
+
+# Funcionalidades de las Extensiones para [U-Cursos](https://www.u-cursos.cl/)
 
 ## 📋 Copia Fácil de Notas
 
+<img align="left" src="images/easyCopyGrades.png"/>
+
 > Por matias-saavedra-g
 
 ### Descripción:
-Esta función permite copiar fácilmente las notas de los estudiantes desde U-Cursos de manera horizontal o vertical, para pegarlas dentro de una hoja de cálculo, o separadas por el símbolo de suma, para ingresarlas (junto a sus ponderaciones) en un software de cálculo simbólico como [Wolfram Alpha](https://www.wolframalpha.com/).
+Esta función permite copiar fácilmente las notas de los estudiantes desde [U-Cursos](https://www.u-cursos.cl/) de manera horizontal o vertical, para pegarlas dentro de una hoja de cálculo, o separadas por el símbolo de suma, para ingresarlas (junto a sus ponderaciones) en un software de cálculo simbólico como [Wolfram Alpha](https://www.wolframalpha.com/).
+
+---
 
 ## 📋 Copia Fácil de Miembros
 
+<img align="left" src="images/easyCopyMembers.png"/>
+
 > Por matias-saavedra-g
 
 ### Descripción:
-Proporciona una forma sencilla de copiar la lista de miembros de un curso en U-Cursos de manera horizontal o vertical, para pegarlos dentro de una hoja de cálculo, o en software de composición de textos como [Overleaf](https://www.overleaf.com/)
+Proporciona una forma sencilla de copiar la lista de miembros de un curso en [U-Cursos](https://www.u-cursos.cl/) de manera horizontal o vertical, para pegarlos dentro de una hoja de cálculo, o en software de composición de textos como [Overleaf](https://www.overleaf.com/)
+
+---
 
 ## 📖 Recortar Texto Largo
 
+<img align="left" src="images/muchoTexto.png"/>
+
 > Por sebcp
+
 > (Se cambian los nombres de los botones)
 
 ### Descripción:
-Permite recortar y mostrar una versión corta de textos largos en U-Cursos, con la opción de expandirlos mostrándose como "Mucho Texto".
+Permite recortar y mostrar una versión corta de textos largos en [U-Cursos](https://www.u-cursos.cl/), con la opción de expandirlos mostrándose como "Mucho Texto".
+
+---
 
 ## 🔘 Otras Realizaciones del Curso
+
+<img align="left" src="images/otrasRealizaciones.png"/>
 
 > Por matias-saavedra-g
 
 ### Descripción:
-Crea un botón de "Otros Realizaciones del Curso" dentro de algún curso en U-Cursos.
+Crea un botón de "Otros Realizaciones del Curso" dentro de algún curso en [U-Cursos](https://www.u-cursos.cl/).
+
+---
 
 ## ✔ Ventana Emergente de Calificaciones
 
 > Por sebcp
+
 > (No testeado)
 
 ### Descripción:
-Abre el editor de calificaciones de los estudiantes en una ventana emergente en U-Cursos en lugar de redirigir a otra página.
+Abre el editor de calificaciones de los estudiantes en una ventana emergente en [U-Cursos](https://www.u-cursos.cl/) en lugar de redirigir a otra página.
+
+---
 
 ## 📐 Redimensionar Vista Previa de PDF
 
+<img align="left" src="images/resizePreviewPDF.png"/>
+
 > Por PuntitOWO
+
 > (Se añade alerta para mostrar esta funcionalidad)
 
 ### Descripción:
-Permite el ajuste de la vista previa de los PDF en U-Cursos para ocupar todo el espacio disponible en la pantalla que se esté ocupando..
+Permite el ajuste de la vista previa de los PDF en [U-Cursos](https://www.u-cursos.cl/) para ocupar todo el espacio disponible en la pantalla que se esté ocupando..
+
+---
 
 ## 📆 Contador de Semanas
 
+<img align="left" src="images/weekCounter.png"/>
+
 > Por TaconeoMental
+
 > (Se añade soporte de inglés)
 
 ### Descripción:
-Cuenta y muestra el número de semanas entre la primera semana de clases del calendario y la fecha actual en U-Cursos.
+Cuenta y muestra el número de semanas entre la primera semana de clases del calendario y la fecha actual en [U-Cursos](https://www.u-cursos.cl/).
+
+---
+
+## 🔔 Notificación de Tareas Pendientes
+
+<img align="left" src="images/pendingTasks.png"/>
+
+> Por matias-saavedra-g
+
+### Descripción:
+Muestra el número de tareas pendientes en una insignia de notificaciones. Este conteo ocurre cada vez que se entra a tareas en la página de inicio de [U-Cursos](https://www.u-cursos.cl/). Por la misma razón se aconseja utilizar esta página como la principal.
+
+---
+
+## ⚙ Menú de Configuración
+
+<img align="left" src="images/menuGen.png"/>
+
+> Por matias-saavedra-g
+
+### Descripción:
+
+En un botón en la pantalla de inicio de [U-Cursos](https://www.u-cursos.cl/) permite acceder a la configuración de [U-Cursden't](http://github.com/matias-saavedra-g/ucursednt) y borrar los datos locales generados por la misma.
+
+---
 
 # Instalación
-
-# Instalación de la Extensión desde GitHub
 
 ## Chrome:
 

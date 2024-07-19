@@ -58,13 +58,16 @@
     }
 
     // Añadir botones para copiar en diferentes formatos
+    /**
+     * Adds buttons to the page for copying grades.
+     */
     function añadirBotones() {
         const botonesContainer = document.createElement('div');
         botonesContainer.style.position = 'absolute';
         botonesContainer.style.top = '0px';
-        botonesContainer.style.right = '2.5px';
+        botonesContainer.style.right = '0px';
         botonesContainer.style.zIndex = '1000';
-        botonesContainer.style.backgroundColor = 'transparent';
+        botonesContainer.style.backgroundColor = '#222';
 
         // Botón para copiar suma
         const botonSuma = document.createElement('button');
@@ -110,7 +113,7 @@
     }
 
     // Verificar si estamos en la página de notas del alumno
-    const notasUrlPattern = /https:\/\/www\.u-cursos\.cl\/\w+\/\d+\/\w+\/\w+\/\w+\/notas\/alumno$/;
+    const notasUrlPattern = /https:\/\/www\.u-cursos\.cl\/\w+\/\d+\/\w+\/\w+\/\w+\/notas\/\w+$/;
     if (notasUrlPattern.test(window.location.href)) {
         añadirBotones();
     }

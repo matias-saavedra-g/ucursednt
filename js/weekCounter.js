@@ -122,6 +122,12 @@
     }
 
     // Función principal para agregar contador
+    /**
+     * Adds a counter to the schedule date element on the page.
+     * The counter displays the number of weeks based on the current date and the dates from the calendar events.
+     *
+     * @param {string} file - The iCal file containing the calendar events.
+     */
     function addCounter(file) {
         var schedule_date_dom = document.getElementById("body").getElementsByTagName("h1")[0];
 

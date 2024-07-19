@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Función para copiar texto al portapapeles utilizando el API del navegador
+/**
+ * Copies the given text to the clipboard.
+ * @param {string} text - The text to be copied.
+ */
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(function () {
         // Alerta cuando se ha copiado correctamente el texto
