@@ -9,7 +9,7 @@ Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cur
 
 ## 📋 Copia Fácil de Notas
 
-<img align="left" src="images/easyCopyGrades.png"/>
+<img src="images/easyCopyGrades.png"/>
 
 > Por matias-saavedra-g
 
@@ -20,7 +20,7 @@ Esta función permite copiar fácilmente las notas de los estudiantes desde [U-C
 
 ## 📋 Copia Fácil de Miembros
 
-<img align="left" src="images/easyCopyMembers.png"/>
+<img src="images/easyCopyMembers.png"/>
 
 > Por matias-saavedra-g
 
@@ -31,7 +31,7 @@ Proporciona una forma sencilla de copiar la lista de miembros de un curso en [U-
 
 ## 📖 Recortar Texto Largo
 
-<img align="left" src="images/muchoTexto.png"/>
+<img src="images/muchoTexto.png"/>
 
 > Por sebcp
 
@@ -44,7 +44,7 @@ Permite recortar y mostrar una versión corta de textos largos en [U-Cursos](htt
 
 ## 🔘 Otras Realizaciones del Curso
 
-<img align="left" src="images/otrasRealizaciones.png"/>
+<img src="images/otrasRealizaciones.png"/>
 
 > Por matias-saavedra-g
 
@@ -66,7 +66,7 @@ Abre el editor de calificaciones de los estudiantes en una ventana emergente en 
 
 ## 📐 Redimensionar Vista Previa de PDF
 
-<img align="left" src="images/resizePreviewPDF.png"/>
+<img src="images/resizePreviewPDF.png"/>
 
 > Por PuntitOWO
 
@@ -79,7 +79,7 @@ Permite el ajuste de la vista previa de los PDF en [U-Cursos](https://www.u-curs
 
 ## 📆 Contador de Semanas
 
-<img align="left" src="images/weekCounter.png"/>
+<img src="images/weekCounter.png"/>
 
 > Por TaconeoMental
 
@@ -92,7 +92,7 @@ Cuenta y muestra el número de semanas entre la primera semana de clases del cal
 
 ## 🔔 Notificación de Tareas Pendientes
 
-<img align="left" src="images/pendingTasks.png"/>
+<img src="images/pendingTasks.png"/>
 
 > Por matias-saavedra-g
 
@@ -103,7 +103,7 @@ Muestra el número de tareas pendientes en una insignia de notificaciones. Este 
 
 ## ⚙ Menú de Configuración
 
-<img align="left" src="images/menuGen.png"/>
+<img src="images/menuGen.png"/>
 
 > Por matias-saavedra-g
 
