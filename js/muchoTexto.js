@@ -1,3 +1,5 @@
+// Basado en https://github.com/Nyveon/tU-Cursos - Modificado por matias-saavedra-g el 2024.07.16
+
 (function() {
 
     // Función para establecer un dato en LocalStorage

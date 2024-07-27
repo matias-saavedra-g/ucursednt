@@ -1,4 +1,4 @@
-// Créditos a https://github.com/Nyveon/tU-Cursos por la inspiración inicial.
+// Basado en https://github.com/Nyveon/tU-Cursos - Modificado por matias-saavedra-g el 2024.07.16
 // Se halló la solución del problema del contador al usar U-Cursos en inglés.
 
 (function() {
