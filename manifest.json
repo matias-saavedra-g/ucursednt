@@ -91,6 +91,11 @@
       "matches": ["*://www.u-cursos.cl/*"],
       "js": ["js/easyCopyCourseDetails.js"],
       "run_at": "document_end"
+    },
+    {
+      "matches": ["*://www.u-cursos.cl/*"],
+      "js": ["js/easterEgg.js"],
+      "run_at": "document_end"
     }
   ],
   "action": {
