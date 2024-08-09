@@ -86,6 +86,11 @@
       "matches": ["*://www.u-cursos.cl/*"],
       "js": ["js/pendingTasks.js"],
       "run_at": "document_end"
+    },
+    {
+      "matches": ["*://www.u-cursos.cl/*"],
+      "js": ["js/easyCopyCourseDetails.js"],
+      "run_at": "document_end"
     }
   ],
   "action": {

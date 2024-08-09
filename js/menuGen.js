@@ -23,6 +23,7 @@
                 resizePreviewPDF: true,
                 weekCounter: true,
                 pendingTasks: true,
+                easyCopyCourseDetails: true,
             },
         };
 
@@ -51,7 +52,8 @@
             { id: "popupGrading", name: "Ventana Emergente de Calificaciones" },
             { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF" },
             { id: "weekCounter", name: "Contador de Semanas" },
-            { id: "pendingTasks", name: "Insignia Tareas Pendientes" }
+            { id: "pendingTasks", name: "Insignia Tareas Pendientes" },
+            { id: "easyCopyCourseDetails", name: "Copia Fácil de Detalles del Curso" },
         ];
 
         featuresList.forEach(feature => {
