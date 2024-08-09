@@ -30,6 +30,17 @@ Proporciona una forma sencilla de copiar la lista de miembros de un curso en [U-
 
 ---
 
+## 📋 Copia Fácil de Datos del Curso
+
+<img src="images/easyCopyCourseDetails.png"/>
+
+> Por matias-saavedra-g
+
+### Descripción:
+Proporciona una forma sencilla de copiar el nombre y código de un curso en [U-Cursos](https://www.u-cursos.cl/) para pegarlos dentro como texto.
+
+---
+
 ## 📖 Recortar Texto Largo
 
 <img src="images/muchoTexto.png"/>
