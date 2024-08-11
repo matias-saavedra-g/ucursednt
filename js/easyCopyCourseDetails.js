@@ -74,6 +74,10 @@
         courseCodeElement.parentNode.appendChild(courseCodeButton);
     }
 
+    // Verificar si la página es https://www.u-cursos.cl/usuario/* y retorna
+    if (!window.location.href.includes ("https://www.u-cursos.cl/usuario/*")) {return}
+    
+    // Verificar si la configuración de easyCopyCourseDetails está activada
     const easyCopyCourseDetailsConfig = JSON.parse(localStorage.getItem("settings")).features.easyCopyCourseDetails
     if (getLocalStorageItem("settings")) {
         if (!easyCopyCourseDetailsConfig) {return}
