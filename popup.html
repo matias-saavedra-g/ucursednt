@@ -28,7 +28,7 @@
             color: #fff;
             text-align: center;
             border-radius: 6px;
-            padding: 8px 0;
+            padding: 15px 0;
             position: absolute;
             z-index: 1;
             bottom: 125%; /* Positions the popup */
@@ -65,7 +65,13 @@
 </head>
 <body>
     <!-- Main title of the page -->
-    <h1>Se acepta un cafecito.</h1>
+    <h2 style="text-align: center;">Gracias por descargar U-Cursedn't 💌</h2>
+
+    <!-- Opens changelog html file using h3 -->
+    <h3 style="text-align: center;"><a href="changelog.html" target="_blank">🆕 Changelog</a></h3>
+
+    <!-- Sponsor -->
+    <h4 style="text-align: center;">Se acepta un cafecito ☕</h4>
     
     <!-- Popup container -->
     <div class="popup" id="popup">
@@ -74,6 +80,19 @@
         <!-- Popup image -->
         <img src="icons/cafecito.webp" alt="Imagen">
     </div>
+
+    <!-- Separator -->
+    <h4>    </h4>
+
+    <!-- About info: Clickable image with h4 text, both centered -->
+    <div style="text-align: center;">
+        <a href="https://github.com/matias-saavedra-g/ucursednt" target="_blank">
+            <h4>Acerca de
+            <img src="icons/icon.png" alt="About U-Cursedn't" width="16" height="16">
+            </h4>
+        </a>
+    </div>
+
     
     <!-- External script for handling the popup logic -->
     <script src="js/popup.js"></script>
