@@ -27,6 +27,9 @@
         // Obtener el elemento que coincide
         const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > h1 > span");
 
+        // Verificar si el elemento existe
+        if (!courseNameElement) {return "No se pudo encontrar el nombre del curso"}
+
         // Obtener el contenido de texto del elemento
         return courseNameElement.textContent.trim();
     }
@@ -34,10 +37,13 @@
     // Función para obtener el código del curso
     function getCourseCode() {
         // Obtener el elemento que coincide
-        const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > h2");
+        const courseCodeElement = document.querySelector("#navigation-wrapper > div.curso > div > h2");
+
+        // Verificar si el elemento existe
+        if (!courseCodeElement) {return "No se pudo encontrar el código del curso"}
 
         // Obtener el contenido de texto del elemento y luego truncar el string justo después del primer espacio
-        return courseNameElement.textContent.trim().split(' ')[0];
+        return courseCodeElement.textContent.trim().split(' ')[0];
     }
 
     // Añadir botones para copiar justo a la derecha de ambos elementos.
@@ -46,6 +52,7 @@
         const courseName = getCourseName();
         const courseCode = getCourseCode();
 
+        // Crear botones
         const courseNameButton = document.createElement("button");
         courseNameButton.classList.add("btn", "btn-default", "btn-sm");
         courseNameButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
@@ -70,15 +77,14 @@
         courseCodeButton.style.border = "none";
         courseCodeButton.style.padding = "4px";
 
+        // Añadir botones justo a la derecha de los elementos
         const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > h1 > span");
-        courseNameElement.parentNode.appendChild(courseNameButton);
+        // Verificar si el elemento existe
+        if (courseNameElement) {courseNameElement.parentNode.appendChild(courseNameButton)};
 
         const courseCodeElement = document.querySelector("#navigation-wrapper > div.curso > div > h2");
-        courseCodeElement.parentNode.appendChild(courseCodeButton);
+        if (courseCodeElement) {courseCodeElement.parentNode.appendChild(courseCodeButton)};
     }
-
-    // Verificar si la página es https://www.u-cursos.cl/usuario/* y retorna
-    if (window.location.href.includes ("https://www.u-cursos.cl/usuario/")) {return}
     
     // Verificar si la configuración de easyCopyCourseDetails está activada
     const easyCopyCourseDetailsConfig = JSON.parse(localStorage.getItem("settings")).features.easyCopyCourseDetails
