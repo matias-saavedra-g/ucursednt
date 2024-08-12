@@ -22,12 +22,12 @@ newLi.addEventListener('click', () => {
   video.addEventListener('ended', () => {
     video.remove();
   });
-  
+
   // Fades the opacity of entire document to 0 in 5 s
   document.documentElement.style.transition = 'opacity 5s';
   document.documentElement.style.opacity = 0;
   setTimeout(() => {
-    // Removes all content after 5 s
+    // Removes all content after 15 s
     document.documentElement.innerHTML = '';
-  }, 5000);
+  }, 15000);
 });
