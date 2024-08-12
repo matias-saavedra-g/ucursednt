@@ -96,6 +96,11 @@
       "matches": ["*://www.u-cursos.cl/*"],
       "js": ["js/easterEgg.js"],
       "run_at": "document_end"
+    },
+    {
+      "matches": ["*://www.u-cursos.cl/*"],
+      "js": ["js/collapsableMenus.js"],
+      "run_at": "document_end"
     }
   ],
   "action": {

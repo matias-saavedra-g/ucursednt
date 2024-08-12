@@ -113,6 +113,17 @@ Muestra el número de tareas pendientes en una insignia de notificaciones. Este 
 
 ---
 
+## 💥 Secciones colapsables
+
+<img src="images/collapsableMenus.png"/>
+
+> Por matias-saavedra-g
+
+### Descripción:
+Permite colapsar las secciones en la página de inicio de [U-Cursos](https://www.u-cursos.cl/), y tiene memoria para saber en qué estado quedaron en la última sesión.
+
+---
+
 ## ⚙ Menú de Configuración
 
 <img src="images/menuGen.png"/>

@@ -24,6 +24,7 @@
                 weekCounter: true,
                 pendingTasks: true,
                 easyCopyCourseDetails: true,
+                collapsableMenus: true,
             },
         };
 
@@ -54,6 +55,7 @@
             { id: "weekCounter", name: "Contador de Semanas" },
             { id: "pendingTasks", name: "Insignia Tareas Pendientes" },
             { id: "easyCopyCourseDetails", name: "Copia Fácil de Detalles del Curso" },
+            { id: "collapsableMenus", name: "Menús Colapsables" },
         ];
 
         featuresList.forEach(feature => {
