@@ -67,6 +67,9 @@
         modulos.querySelectorAll("div > h1").forEach(section => {
             const content = section.nextElementSibling;
             content.style.display = state[section.innerText];
+            if (content.style.display === "none") {
+                section.querySelector("button").innerHTML = '<i class="fas fa-expand"></i>';
+            }
         });
     }
 
