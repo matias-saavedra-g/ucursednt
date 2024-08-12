@@ -18,12 +18,31 @@
         const modulos = document.querySelector("#modulos");
         modulos.querySelectorAll("div > h1").forEach(section => {
             const content = section.nextElementSibling;
-            section.style.cursor = "pointer";
-            section.innerHTML += " <i class='fas fa-compress'></i>";
-            section.addEventListener("click", () => {
-                content.style.display = content.style.display === "none" ? "block" : "none";
-                // Save state to local storage
-                saveCollapsableState();
+            // The click to collapse only should work when clicking the fas fa-compress button
+            const button = document.createElement("button");
+            button.innerHTML = '<i class="fas fa-compress"></i>';
+            button.classList.add("collapsable-button");
+            // Makes background of button #222
+            button.style.backgroundColor = "#222";
+            // Opacity to 0.8
+            button.style.opacity = "0.8";
+            // Padding to 2 px
+            button.style.padding = "0";
+            // No border
+            button.style.border = "none";
+            section.appendChild(button);
+            button.addEventListener("click", () => {
+                if (content.style.display === "none") {
+                    content.style.display = "block";
+                    button.innerHTML = '<i class="fas fa-compress"></i>';
+                    // Save state
+                    saveCollapsableState();
+                } else {
+                    content.style.display = "none";
+                    button.innerHTML = '<i class="fas fa-expand"></i>';
+                    // Save state
+                    saveCollapsableState();
+                }
             });
         });
     }
