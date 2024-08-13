@@ -46,7 +46,7 @@
                         color: white;
                         text-align: center;
                         text-justify: center;
-                        font-size: 17px;
+                        font-size: 12px;
                     `;
                     section.appendChild(notificationElement);
                 }
