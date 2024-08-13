@@ -59,9 +59,8 @@
         // Centra el innerHTML del botón en el centro
         courseNameButton.style.alignItems = "center";
         courseNameButton.onclick = () => copyToClipboard(courseName);
-        // Hace el fondo color #bcbcbc y opacidad 0.5
-        courseNameButton.style.backgroundColor = "#bcbcbc";
-        courseNameButton.style.opacity = "0.5";
+        // Hace el fondo color #222 y opacidad 0.2
+        courseNameButton.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
         // Remueve el borde de botón
         courseNameButton.style.border = "none";
         // Hace el boton completo más pequeño
@@ -72,8 +71,8 @@
         courseCodeButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
         courseCodeButton.style.alignItems = "center";
         courseCodeButton.onclick = () => copyToClipboard(courseCode);
-        courseCodeButton.style.backgroundColor = "#bcbcbc";
-        courseCodeButton.style.opacity = "0.5";
+        courseCodeButton.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
+        courseCodeButton.style.opacity = "0.2";
         courseCodeButton.style.border = "none";
         courseCodeButton.style.padding = "4px";
 

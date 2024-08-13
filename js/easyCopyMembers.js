@@ -71,8 +71,7 @@
             botonesContainer.style.top = '0px';
             botonesContainer.style.right = '0px';
             botonesContainer.style.zIndex = '1000';
-            botonesContainer.style.backgroundColor = '#bcbcbc';
-            botonesContainer.style.opacity = '0.5';
+            botonesContainer.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
 
             // Botón para copiar horizontalmente
             const botonHorizontal = document.createElement('button');

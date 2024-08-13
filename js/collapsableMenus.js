@@ -22,12 +22,10 @@
             const button = document.createElement("button");
             button.innerHTML = '<i class="fas fa-compress"></i>';
             button.classList.add("collapsable-button");
-            // Makes background of button #bcbcbc
-            button.style.backgroundColor = "#bcbcbc";
-            // Opacity to 0.5
-            button.style.opacity = "0.5";
-            // Padding to 1 px
-            button.style.padding = "1 px";
+            // Makes background of button #222 in rgba with opacity 0.2
+            button.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
+            // Padding to 4 px
+            button.style.padding = "4px";
             // No border
             button.style.border = "none";
             section.appendChild(button);

@@ -31,7 +31,7 @@
         if (obj) {
             obj.style.width = "100%";
             obj.style.height = "100%";
-            obj.style.borderBottom = "0.5em solid #F2F3F4";
+            obj.style.borderBottom = "0.7em solid #F2F3F4";
 
             let parent = obj.parentElement;
             if (parent) {
