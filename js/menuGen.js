@@ -25,6 +25,7 @@
                 pendingTasks: true,
                 easyCopyCourseDetails: true,
                 collapsableMenus: true,
+                pendingNotifications: true,
             },
         };
 
@@ -56,6 +57,7 @@
             { id: "pendingTasks", name: "Insignia Tareas Pendientes" },
             { id: "easyCopyCourseDetails", name: "Copia Fácil de Detalles del Curso" },
             { id: "collapsableMenus", name: "Menús Colapsables" },
+            { id: "pendingNotifications", name: "Notificaciones Pendientes" },
         ];
 
         featuresList.forEach(feature => {

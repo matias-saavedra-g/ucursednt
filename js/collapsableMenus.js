@@ -45,6 +45,15 @@
                 }
             });
         });
+        // Add mouseover event for alert
+        let firstHover = getLocalStorageItem("collapsableMenusFirstHover") !== true;
+        modulos.querySelector("button").addEventListener('mouseover', function() {
+            if (firstHover) {
+                alert("Puedes expandir o colapsar las secciones haciendo click en el botón que aparece al lado de cada título.");
+                setLocalStorageItem("collapsableMenusFirstHover", true); // Mark that the alert has been shown
+                firstHover = false; // Update the local variable to prevent further alerts
+            }
+        });
     }
 
 
@@ -73,7 +82,7 @@
         });
     }
 
-    // Verificar si la configuración de easyCopyCourseDetails está activada
+    // Verificar si la configuración de collapsableMenus está activada
     const collapsableMenusConfig = JSON.parse(localStorage.getItem("settings")).features.collapsableMenus
     if (getLocalStorageItem("settings")) {
         if (!collapsableMenusConfig) {return}

@@ -1,6 +1,6 @@
 {
   "name": "U-Cursedn't",
-  "version": "3.3",
+  "version": "3.4",
   "description": "Esta extensión agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
   "manifest_version": 3,
   "author": "matias-saavedra-g",
@@ -95,6 +95,11 @@
     {
       "matches": ["*://www.u-cursos.cl/*"],
       "js": ["js/easterEgg.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["*://www.u-cursos.cl/*"],
+      "js": ["js/pendingNotifications.js"],
       "run_at": "document_end"
     },
     {
