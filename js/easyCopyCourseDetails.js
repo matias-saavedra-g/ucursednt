@@ -59,7 +59,7 @@
         // Centra el innerHTML del botón en el centro
         courseNameButton.style.alignItems = "center";
         courseNameButton.onclick = () => copyToClipboard(courseName);
-        // Hace el fondo color #222 y opacidad 0.8
+        // Hace el fondo color #222 y opacidad 0.5
         courseNameButton.style.backgroundColor = "#222";
         courseNameButton.style.opacity = "0.5";
         // Remueve el borde de botón

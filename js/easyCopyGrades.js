@@ -67,9 +67,9 @@
         botonesContainer.style.top = '0px';
         botonesContainer.style.right = '0px';
         botonesContainer.style.zIndex = '1000';
-        // Setea el color de fondo para el contenedor de botones como #222 y su opacidad al 0.8
+        // Setea el color de fondo para el contenedor de botones como #222 y su opacidad al 0.5
         botonesContainer.style.backgroundColor = '#222';
-        botonesContainer.style.opacity = '0.8';
+        botonesContainer.style.opacity = '0.5';
 
         // Botón para copiar suma
         const botonSuma = document.createElement('button');

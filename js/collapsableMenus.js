@@ -24,10 +24,10 @@
             button.classList.add("collapsable-button");
             // Makes background of button #222
             button.style.backgroundColor = "#222";
-            // Opacity to 0.8
+            // Opacity to 0.5
             button.style.opacity = "0.5";
-            // Padding to 2 px
-            button.style.padding = "0";
+            // Padding to 1 px
+            button.style.padding = "1 px";
             // No border
             button.style.border = "none";
             section.appendChild(button);
