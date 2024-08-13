@@ -113,6 +113,17 @@ Muestra el número de tareas pendientes en una insignia de notificaciones. Este 
 
 ---
 
+## 🔔 Notificación de Pendientes
+
+<img src="images/pendingNotifications.png"/>
+
+> Por matias-saavedra-g
+
+### Descripción:
+Muestra el número de notificaciones pendientes en una insignia. Este conteo ocurre cada vez que se entra a tareas en la página [U-Cursos](https://www.u-cursos.cl/).
+
+---
+
 ## 💥 Secciones colapsables
 
 <img src="images/collapsableMenus.png"/>
