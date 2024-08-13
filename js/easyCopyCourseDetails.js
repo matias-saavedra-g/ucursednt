@@ -61,7 +61,7 @@
         courseNameButton.onclick = () => copyToClipboard(courseName);
         // Hace el fondo color #222 y opacidad 0.8
         courseNameButton.style.backgroundColor = "#222";
-        courseNameButton.style.opacity = "0.8";
+        courseNameButton.style.opacity = "0.5";
         // Remueve el borde de botón
         courseNameButton.style.border = "none";
         // Hace el boton completo más pequeño
@@ -73,7 +73,7 @@
         courseCodeButton.style.alignItems = "center";
         courseCodeButton.onclick = () => copyToClipboard(courseCode);
         courseCodeButton.style.backgroundColor = "#222";
-        courseCodeButton.style.opacity = "0.8";
+        courseCodeButton.style.opacity = "0.5";
         courseCodeButton.style.border = "none";
         courseCodeButton.style.padding = "4px";
 
