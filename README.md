@@ -120,7 +120,7 @@ Muestra el número de tareas pendientes en una insignia de notificaciones. Este 
 > Por matias-saavedra-g
 
 ### Descripción:
-Muestra el número de notificaciones pendientes en una insignia. Este conteo ocurre cada vez que se entra a tareas en la página [U-Cursos](https://www.u-cursos.cl/).
+Muestra el número de notificaciones pendientes en una insignia. Este conteo ocurre cada vez que se entra a la página [U-Cursos](https://www.u-cursos.cl/).
 
 ---
 
