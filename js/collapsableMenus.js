@@ -22,8 +22,8 @@
             const button = document.createElement("button");
             button.innerHTML = '<i class="fas fa-compress"></i>';
             button.classList.add("collapsable-button");
-            // Makes background of button #222
-            button.style.backgroundColor = "#222";
+            // Makes background of button #bcbcbc
+            button.style.backgroundColor = "#bcbcbc";
             // Opacity to 0.5
             button.style.opacity = "0.5";
             // Padding to 1 px
