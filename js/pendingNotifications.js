@@ -38,6 +38,10 @@
                         text-align: center;
                         text-justify: center;
                         font-size: 12px;
+                        line-height: 20px;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
                     `;
                     section.appendChild(notificationElement);
                 }
