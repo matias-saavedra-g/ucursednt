@@ -72,7 +72,6 @@
         courseCodeButton.style.alignItems = "center";
         courseCodeButton.onclick = () => copyToClipboard(courseCode);
         courseCodeButton.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
-        courseCodeButton.style.opacity = "0.2";
         courseCodeButton.style.border = "none";
         courseCodeButton.style.padding = "4px";
 
