@@ -47,17 +47,17 @@
         menuElement.id = "feature-menu";
 
         const featuresList = [
-            { id: "easyCopyGrades", name: "Copia Fácil de Notas" },
-            { id: "easyCopyMembers", name: "Copia Fácil de Miembros" },
-            { id: "muchoTexto", name: "Recortar Texto Largo" },
-            { id: "otrasRealizaciones", name: "Otras Realizaciones del Curso" },
-            { id: "popupGrading", name: "Ventana Emergente de Calificaciones" },
-            { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF" },
-            { id: "weekCounter", name: "Contador de Semanas" },
-            { id: "pendingTasks", name: "Insignia Tareas Pendientes" },
-            { id: "easyCopyCourseDetails", name: "Copia Fácil de Detalles del Curso" },
-            { id: "collapsableMenus", name: "Menús Colapsables" },
-            { id: "pendingNotifications", name: "Notificaciones Pendientes" },
+            { id: "easyCopyGrades", name: "Copia Fácil de Notas 📋" },
+            { id: "easyCopyMembers", name: "Copia Fácil de Miembros 👥" },
+            { id: "muchoTexto", name: "Recortar Texto Largo ➕" },
+            { id: "otrasRealizaciones", name: "Otras Realizaciones del Curso 🌐" },
+            { id: "popupGrading", name: "Ventana Emergente de Calificaciones 🎓" },
+            { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF 📑" },
+            { id: "weekCounter", name: "Contador de Semanas 📆" },
+            { id: "pendingTasks", name: "Insignia Tareas Pendientes 🔔" },
+            { id: "easyCopyCourseDetails", name: "Copia Fácil de Detalles del Curso 🏷" },
+            { id: "collapsableMenus", name: "Menús Colapsables 💥" },
+            { id: "pendingNotifications", name: "Notificaciones Pendientes 🔔" },
         ];
 
         featuresList.forEach(feature => {
@@ -94,6 +94,10 @@
 
         const bodyBlankPage = document.querySelector("#body")
 
+        // Crea un espacio para espaciar los elementos dentro de la página
+        const spacer = document.createElement('div');
+        spacer.style.height = '20px';
+
         const menuElement = createFeatureMenu();
 
         const clearButton = document.createElement('button');
@@ -113,8 +117,42 @@
             }
           });
 
+          // Crea un botón que hace alterna el mostrar el local storage
+        const showLocalStorageButton = document.createElement('button');
+        const localStorageList = document.createElement('ul');
+        showLocalStorageButton.textContent = 'Mostrar Almacenamiento Local';
+        showLocalStorageButton.id = 'showLocalStorageButton';
+        showLocalStorageButton.addEventListener('click', function() {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                // Agrega el elemento a la lista solo una vez
+                if (!localStorageList.querySelector(`#${key}`)) {
+                    const localStorageItem = document.createElement('li');
+                    localStorageItem.id = key;
+                    localStorageItem.textContent = `${key}: ${value}`;
+                    localStorageList.append(localStorageItem);
+                }
+            }
+            // Si todavía no se muestra la lista, la agrega al cuerpo de la página
+            if (!bodyBlankPage.contains(localStorageList)) {
+                bodyBlankPage.append(localStorageList);
+            }
+            // Si ya se ha mostrado la lista, la elimina del cuerpo de la página
+            else {
+                localStorageList.remove();
+            }
+        });
+
+
         bodyBlankPage.append(menuElement);
-        bodyBlankPage.append(clearButton)
+        bodyBlankPage.append(spacer);
+        bodyBlankPage.append(showLocalStorageButton);
+        bodyBlankPage.append(clearButton);
+
+        // Create a new spacer element
+        const newSpacer = spacer.cloneNode(true);
+        bodyBlankPage.append(newSpacer);
     }
 
     // Ejecutar la inicialización al cargar la página
