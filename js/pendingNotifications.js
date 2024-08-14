@@ -18,15 +18,6 @@
         return count;
     }
 
-    // This function will update the pending notifications in the menu header and will save the state in LocalStorage
-    function updatePendingNotifications() {
-        const count = countPendingNotifications();
-        const pendingNotifications = document.querySelector("#pendingNotifications");
-        pendingNotifications.textContent = count;
-        setLocalStorageItem("pendingNotifications", count);
-        return count
-    }
-
     function notifyPending(count) {
         const modulos = document.querySelector("#modulos");
         modulos.querySelectorAll("div > h1").forEach(section => {
@@ -66,14 +57,14 @@
         });
     }
 
-    // Call the init function when the page is loaded
+    // Main function to count and notify about pending notifications
     const settings = getLocalStorageItem("settings");
-    if (settings && settings.features && settings.features.pendingTasks) {
+    if (settings && settings.features && settings.features.pendingNotifications) {
         const currentUrl = /https:\/\/www\.u-cursos\.cl\/+/;
         if (currentUrl.test(window.location.href)) {
             const pendingCount = countPendingNotifications();
-            setLocalStorageItem("pendingNotifications", pendingCount);
+            setLocalStorageItem("pendingNotificationsCount", pendingCount);
         }
-        notifyPending(getLocalStorageItem("pendingNotifications")); // Notify about pending tasks;
+        notifyPending(getLocalStorageItem("pendingNotificationsCount")); // Notify about pending tasks;
     }
 })();

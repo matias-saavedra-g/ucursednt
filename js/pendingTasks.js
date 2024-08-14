@@ -72,8 +72,8 @@
         const currentUrl = /https:\/\/www\.u-cursos\.cl\/\w+\/\w+\/tareas_usuario\/+/;
         if (currentUrl.test(window.location.href)) {
             const pendingCount = countPendingTasks();
-            setLocalStorageItem("pendingTasks", pendingCount);
+            setLocalStorageItem("pendingTasksCount", pendingCount);
         }
-        notifyPendingTasks(getLocalStorageItem("pendingTasks")); // Notify about pending tasks;
+        notifyPendingTasks(getLocalStorageItem("pendingTasksCount")); // Notify about pending tasks;
     }
 })();
