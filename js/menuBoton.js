@@ -22,9 +22,15 @@
     const regex2 = /^https:\/\/www\.u-cursos\.cl\/ucursednt\/.*$/;
 
     if (regex1.test(currentUrl2) || regex2.test(currentUrl2)) {
-        // Crear el botón
+                // Crear el botón
         const listItem = document.createElement('li');
         listItem.className = 'servicio';
+
+        if (regex2.test(currentUrl2)) {
+            const servicioSel = document.querySelector('.servicio.sel');
+            servicioSel.className = 'servicio';
+            listItem.className = 'servicio sel';
+        }
 
         const button = document.createElement('a');
         button.href = 'javascript:void(0)';
