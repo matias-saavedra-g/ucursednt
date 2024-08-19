@@ -2,7 +2,6 @@
   "name": "U-Cursedn't",
   "version": "3.5",
   "description": "Esta extensión agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
-  "short_description": "Extensión para U-Cursos",
   "manifest_version": 3,
   "author": "matias-saavedra-g",
   "permissions": [
