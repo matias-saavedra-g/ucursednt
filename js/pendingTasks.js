@@ -46,6 +46,10 @@
                             color: white;
                             text-align: center;
                             font-size: 12px;
+                            line-height: 20px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
                         `;
                         item.appendChild(notificationElement);
                     }
