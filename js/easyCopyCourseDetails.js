@@ -47,7 +47,7 @@
     }
 
     // Añadir botones para copiar justo a la derecha de ambos elementos.
-    // Estos botones usan el ícono <i class="fa-regular fa-paste"></i>
+    // Estos botones usan el ícono <i class="fa-solid fa-paste"></i>
     function añadirBotones() {
         const courseName = getCourseName();
         const courseCode = getCourseCode();
@@ -55,26 +55,28 @@
         // Crear botones
         const courseNameButton = document.createElement("button");
         courseNameButton.classList.add("btn", "btn-default", "btn-sm");
-        courseNameButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
+        courseNameButton.innerHTML = `<i class="fa-solid fa-paste"></i>`;
         // Centra el innerHTML del botón en el centro
         courseNameButton.style.alignItems = "center";
         courseNameButton.onclick = () => copyToClipboard(courseName);
         // Hace el fondo color #222 y opacidad 0.2
-        courseNameButton.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
+        courseNameButton.style.backgroundColor = "rgba(34, 34, 34, 0)";
         // Remueve el borde de botón
         courseNameButton.style.border = "none";
         // Hace el boton completo más pequeño
         courseNameButton.style.padding = "7px";
+        // Inherits the color of the text
+        courseNameButton.style.color = "inherit";
 
         const courseCodeButton = document.createElement("button");
         courseCodeButton.classList.add("btn", "btn-default", "btn-sm");
-        courseCodeButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
+        courseCodeButton.innerHTML = `<i class="fa-solid fa-paste"></i>`;
         courseCodeButton.style.alignItems = "center";
         courseCodeButton.onclick = () => copyToClipboard(courseCode);
-        courseCodeButton.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
-        courseCodeButton.style.opacity = "0.2";
+        courseCodeButton.style.backgroundColor = "rgba(34, 34, 34, 0)";
         courseCodeButton.style.border = "none";
         courseCodeButton.style.padding = "4px";
+        courseCodeButton.style.color = "inherit";
 
         // Añadir botones justo a la derecha de los elementos
         const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > h1 > span");

@@ -65,39 +65,44 @@
         const botonesContainer = document.createElement('div');
         botonesContainer.style.position = 'absolute';
         botonesContainer.style.top = '0px';
-        botonesContainer.style.right = '0px';
+        botonesContainer.style.marginRight = '0px';
         botonesContainer.style.zIndex = '1000';
         // Setea el color de fondo para el contenedor de botones como #222 y su opacidad al 0.2
-        botonesContainer.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
+        botonesContainer.style.backgroundColor = "rgba(34, 34, 34, 0.0)";
+        // Inherits the color of the text
+        botonesContainer.style.color = "inherit";
 
         // Botón para copiar suma
         const botonSuma = document.createElement('button');
-        botonSuma.innerHTML = '<i class="fas fa-plus"></i>'; // Icono FontAwesome para suma
+        botonSuma.innerHTML = '<i class="fa-solid fa-plus"></i>'; // Icono FontAwesome para suma
         botonSuma.title = 'Copiar Suma';
         botonSuma.style.background = 'transparent';
         botonSuma.style.border = 'transparent';
         botonSuma.style.cursor = 'pointer';
         botonSuma.style.marginRight = '0px';
+        botonSuma.style.color = "inherit";
         botonSuma.onclick = () => copiarNotas('suma');
         botonesContainer.appendChild(botonSuma);
 
         // Botón para copiar horizontalmente
         const botonHorizontal = document.createElement('button');
-        botonHorizontal.innerHTML = '<i class="fas fa-arrows-alt-h"></i>'; // Icono FontAwesome para horizontal
+        botonHorizontal.innerHTML = '<i class="fa-solid fa-arrows-alt-h"></i>'; // Icono FontAwesome para horizontal
         botonHorizontal.title = 'Copiar Horizontal';
         botonHorizontal.style.background = 'transparent';
         botonHorizontal.style.border = 'transparent';
         botonHorizontal.style.cursor = 'pointer';
+        botonHorizontal.style.color = "inherit";
         botonHorizontal.onclick = () => copiarNotas('horizontal');
         botonesContainer.appendChild(botonHorizontal);
 
         // Botón para copiar verticalmente
         const botonVertical = document.createElement('button');
-        botonVertical.innerHTML = '<i class="fas fa-arrows-alt-v"></i>'; // Icono FontAwesome para vertical
+        botonVertical.innerHTML = '<i class="fa-solid fa-arrows-alt-v"></i>'; // Icono FontAwesome para vertical
         botonVertical.title = 'Copiar Vertical';
         botonVertical.style.background = 'transparent';
         botonVertical.style.border = 'transparent';
         botonVertical.style.cursor = 'pointer';
+        botonVertical.style.color = "inherit";
         botonVertical.onclick = () => copiarNotas('vertical');
         botonesContainer.appendChild(botonVertical);
 
@@ -114,7 +119,8 @@
     }
 
     // Verificar si estamos en la página de notas del alumno
-    const notasUrlPattern = /https:\/\/www\.u-cursos\.cl\/\w+\/\d+\/\w+\/\w+\/\w+\/notas\/\w+$/;
+    // Cualquier después de notas/ seguido de cualquier cosa
+    const notasUrlPattern = /https:\/\/www\.u-cursos\.cl\/\w+\/\d+\/\w+\/\w+\/\w+\/notas*/;
     if (notasUrlPattern.test(window.location.href)) {
         añadirBotones();
     }

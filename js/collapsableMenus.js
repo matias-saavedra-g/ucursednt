@@ -18,26 +18,28 @@
         const modulos = document.querySelector("#modulos");
         modulos.querySelectorAll("div > h1").forEach(section => {
             const content = section.nextElementSibling;
-            // The click to collapse only should work when clicking the fas fa-compress button
+            // The click to collapse only should work when clicking the fa-solid fa-compress button
             const button = document.createElement("button");
-            button.innerHTML = '<i class="fas fa-compress"></i>';
+            button.innerHTML = '<i class="fa-solid fa-compress"></i>';
             button.classList.add("collapsable-button");
             // Makes background of button #222 in rgba with opacity 0.2
-            button.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
+            button.style.backgroundColor = "rgba(34, 34, 34, 0)";
             // Padding to 4 px
             button.style.padding = "4px";
             // No border
             button.style.border = "none";
+            // Inherits the color of the text
+            button.style.color = "inherit";
             section.appendChild(button);
             button.addEventListener("click", () => {
                 if (content.style.display === "none") {
                     content.style.display = "block";
-                    button.innerHTML = '<i class="fas fa-compress"></i>';
+                    button.innerHTML = '<i class="fa-solid fa-compress"></i>';
                     // Save state
                     saveCollapsableState();
                 } else {
                     content.style.display = "none";
-                    button.innerHTML = '<i class="fas fa-expand"></i>';
+                    button.innerHTML = '<i class="fa-solid fa-expand"></i>';
                     // Save state
                     saveCollapsableState();
                 }
@@ -75,7 +77,7 @@
             const content = section.nextElementSibling;
             content.style.display = state[section.innerText];
             if (content.style.display === "none") {
-                section.querySelector("button").innerHTML = '<i class="fas fa-expand"></i>';
+                section.querySelector("button").innerHTML = '<i class="fa-solid fa-expand"></i>';
             }
         });
     }

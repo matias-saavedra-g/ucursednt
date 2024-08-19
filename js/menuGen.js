@@ -136,10 +136,12 @@
             }
             // Si todavía no se muestra la lista, la agrega al cuerpo de la página
             if (!bodyBlankPage.contains(localStorageList)) {
+                showLocalStorageButton.textContent = 'Ocultar Almacenamiento Local';
                 bodyBlankPage.append(localStorageList);
             }
             // Si ya se ha mostrado la lista, la elimina del cuerpo de la página
             else {
+                showLocalStorageButton.textContent = 'Mostrar Almacenamiento Local';
                 localStorageList.remove();
             }
         });

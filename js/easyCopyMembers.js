@@ -67,11 +67,12 @@
         // Iterar sobre las categorías, empezando desde la posición 5 y aumentando de 2 en 2
         for (let categoria = 5; categoria <= 5 + 2 * totalCategorias; categoria += 2) {
             const botonesContainer = document.createElement('div');
-            botonesContainer.style.position = "absolute";
+            botonesContainer.style.position = "";
             botonesContainer.style.top = '0px';
-            botonesContainer.style.right = '0px';
+            botonesContainer.style.marginLeft = '0px';
             botonesContainer.style.zIndex = '1000';
-            botonesContainer.style.backgroundColor = "rgba(34, 34, 34, 0.2)";
+            botonesContainer.style.backgroundColor = "rgba(34, 34, 34, 0)";
+            botonesContainer.style.color = "inherit";
 
             // Botón para copiar horizontalmente
             const botonHorizontal = document.createElement('button');
@@ -81,6 +82,7 @@
             botonHorizontal.style.border = 'transparent';
             botonHorizontal.style.cursor = 'pointer';
             botonHorizontal.style.marginRight = '0px';
+            botonHorizontal.style.color = "inherit";
             botonHorizontal.onclick = () => copiarIntegrantes('horizontal', categoria);
             botonesContainer.appendChild(botonHorizontal);
 
@@ -91,6 +93,7 @@
             botonVertical.style.background = 'transparent';
             botonVertical.style.border = 'transparent';
             botonVertical.style.cursor = 'pointer';
+            botonVertical.style.color = "inherit";
             botonVertical.onclick = () => copiarIntegrantes('vertical', categoria);
             botonesContainer.appendChild(botonVertical);
 
@@ -108,8 +111,8 @@
     }
 
     // Verificar si estamos en la página de integrantes del curso o grupo
-    const integrantesUrlPattern = /https:\/\/www\.u-cursos\.cl\/\w+\/\d+\/\w+\/\w+\/\w+\/integrantes\/$/;
-    const integrantesGrupoUrlPattern = /https:\/\/www\.u-cursos\.cl\/\w+\/\d+\/\w+\/\w+\/\w+\/\w+\/\w+\/\w+\/integrantes\/$/;
+    const integrantesUrlPattern = /https:\/\/www\.u-cursos\.cl\/\w+\/\d+\/\w+\/\w+\/\w+\/integrantes*/;
+    const integrantesGrupoUrlPattern = /https:\/\/www\.u-cursos\.cl\/\w+\/\d+\/\w+\/\w+\/\w+\/\w+\/\w+\/\w+\/integrantes*/;
     if (integrantesUrlPattern.test(window.location.href) || integrantesGrupoUrlPattern.test(window.location.href)) {
         añadirBotones();
     }
