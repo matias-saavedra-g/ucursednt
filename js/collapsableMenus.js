@@ -32,6 +32,13 @@
             button.style.color = "inherit";
             section.appendChild(button);
             button.addEventListener("click", () => {
+                // Add mouseover event for alert
+                let firstClick = getLocalStorageItem("collapsableMenusFirstClick") !== true;
+                if (firstClick) {
+                    alert("Puedes expandir o colapsar las secciones haciendo click en el botón que aparece al lado de cada título.");
+                    setLocalStorageItem("collapsableMenusFirstClick", true); // Mark that the alert has been shown
+                    firstClick = false; // Update the local variable to prevent further alerts
+                }
                 if (content.style.display === "none") {
                     content.style.display = "block";
                     button.innerHTML = '<i class="fa-solid fa-compress"></i>';
@@ -42,15 +49,6 @@
                     button.innerHTML = '<i class="fa-solid fa-expand"></i>';
                     // Save state
                     saveCollapsableState();
-                    // Add mouseover event for alert
-                    let firstClick = getLocalStorageItem("collapsableMenusFirstClick") !== true;
-                    modulos.querySelector("button").addEventListener('click', function() {
-                        if (firstClick) {
-                            alert("Puedes expandir o colapsar las secciones haciendo click en el botón que aparece al lado de cada título.");
-                            setLocalStorageItem("collapsableMenusFirstHover", true); // Mark that the alert has been shown
-                            firstClick = false; // Update the local variable to prevent further alerts
-                        }
-                    });
                 }
             });
         });

@@ -68,7 +68,7 @@
         });
         // Add mouseover event for alert
         let firstHover = getLocalStorageItem("pendingNotificationsFirstHover") !== true;
-        modulos.querySelector("h1").addEventListener('mouseover', function() {
+        modulos.addEventListener('mouseover', function() {
             if (firstHover) {
                 alert("Puedes expandir o colapsar las secciones haciendo click en el botón que aparece al lado de cada título.");
                 setLocalStorageItem("pendingNotificationsFirstHover", true); // Mark that the alert has been shown

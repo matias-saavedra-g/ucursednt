@@ -122,18 +122,23 @@
         const localStorageList = document.createElement('ul');
         showLocalStorageButton.textContent = 'Mostrar Almacenamiento Local';
         showLocalStorageButton.id = 'showLocalStorageButton';
-        showLocalStorageButton.addEventListener('click', function() {
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                const value = localStorage.getItem(key);
-                // Agrega el elemento a la lista solo una vez
-                if (!localStorageList.querySelector(`#${key}`)) {
-                    const localStorageItem = document.createElement('li');
-                    localStorageItem.id = key;
-                    localStorageItem.textContent = `${key}: ${value}`;
-                    localStorageList.append(localStorageItem);
-                }
+
+        // Crea una lista para mostrar el almacenamiento local
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            const value = localStorage.getItem(key);
+            // Agrega el elemento a la lista solo una vez
+            if (!localStorageList.contains(document.getElementById(key))) {
+                const localStorageItem = document.createElement('li');
+                localStorageItem.id = key;
+                localStorageItem.textContent = `${key}: ${value}`;
+                localStorageList.append(localStorageItem);
             }
+        }
+
+        // Agrega funcionalidad al botón
+        showLocalStorageButton.addEventListener('click', function() {
+            
             // Si todavía no se muestra la lista, la agrega al cuerpo de la página
             if (!bodyBlankPage.contains(localStorageList)) {
                 showLocalStorageButton.textContent = 'Ocultar Almacenamiento Local';

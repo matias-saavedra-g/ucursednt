@@ -18,7 +18,7 @@
         return item ? JSON.parse(item) : null;
     }
 
-    const resizePreviewPDFConfig = JSON.parse(localStorage.getItem("settings")).features.resizePreviewPDF
+    const resizePreviewPDFConfig = getLocalStorageItem("resizePreviewPDF")
     if (getLocalStorageItem("settings")) {
         if (!resizePreviewPDFConfig) {return}
     }
