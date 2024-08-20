@@ -51,6 +51,22 @@
                             white-space: nowrap;
                             text-overflow: ellipsis;
                         `;
+                        if (count > 99) {notificationElement.style.cssText = `
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                            width: 20px;
+                            height: 20px;
+                            background-color: red;
+                            border-radius: 50%;
+                            color: white;
+                            text-align: center;
+                            font-size: 8px;
+                            line-height: 20px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            `};
                         item.appendChild(notificationElement);
                     }
                     notificationElement.textContent = count;
