@@ -25,25 +25,25 @@
     // Función para obtener el nombre del curso
     function getCourseName() {
         // Obtener el elemento que coincide
-        const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > h1 > span");
+        const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h1");
 
         // Verificar si el elemento existe
         if (!courseNameElement) {return "No se pudo encontrar el nombre del curso"}
 
         // Obtener el contenido de texto del elemento
-        return courseNameElement.textContent.trim();
+        return courseNameElement.firstChild.textContent.trim();
     }
 
     // Función para obtener el código del curso
     function getCourseCode() {
         // Obtener el elemento que coincide
-        const courseCodeElement = document.querySelector("#navigation-wrapper > div.curso > div > h2");
+        const courseCodeElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h2");
 
         // Verificar si el elemento existe
         if (!courseCodeElement) {return "No se pudo encontrar el código del curso"}
 
         // Obtener el contenido de texto del elemento y luego truncar el string justo después del primer espacio
-        return courseCodeElement.textContent.trim().split(' ')[0];
+        return courseCodeElement.textContent.firstChild.trim().split(' ')[0];
     }
 
     // Añadir botones para copiar justo a la derecha de ambos elementos.
