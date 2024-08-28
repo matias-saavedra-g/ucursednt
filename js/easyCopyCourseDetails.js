@@ -43,7 +43,7 @@
         if (!courseCodeElement) {return "No se pudo encontrar el código del curso"}
 
         // Obtener el contenido de texto del elemento y luego truncar el string justo después del primer espacio
-        return courseCodeElement.textContent.firstChild.trim().split(' ')[0];
+        return courseCodeElement.firstChild.textContent.trim().split(' ')[0];
     }
 
     // Añadir botones para copiar justo a la derecha de ambos elementos.
@@ -79,11 +79,11 @@
         courseCodeButton.style.color = "inherit";
 
         // Añadir botones justo a la derecha de los elementos
-        const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > h1 > span");
+        const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h1").firstChild;
         // Verificar si el elemento existe
         if (courseNameElement) {courseNameElement.parentNode.appendChild(courseNameButton)};
 
-        const courseCodeElement = document.querySelector("#navigation-wrapper > div.curso > div > h2");
+        const courseCodeElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h2").firstChild;
         if (courseCodeElement) {courseCodeElement.parentNode.appendChild(courseCodeButton)};
     }
     
