@@ -79,12 +79,12 @@
         courseCodeButton.style.color = "inherit";
 
         // Añadir botones justo a la derecha de los elementos
-        const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h1").firstChild;
+        const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h1");
         // Verificar si el elemento existe
-        if (courseNameElement) {courseNameElement.parentNode.appendChild(courseNameButton)};
+        if (courseNameElement) {courseNameElement.firstChild.parentNode.appendChild(courseNameButton)};
 
-        const courseCodeElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h2").firstChild;
-        if (courseCodeElement) {courseCodeElement.parentNode.appendChild(courseCodeButton)};
+        const courseCodeElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h2");
+        if (courseCodeElement) {courseCodeElement.firstChild.parentNode.appendChild(courseCodeButton)};
     }
     
     // Verificar si la configuración de easyCopyCourseDetails está activada
