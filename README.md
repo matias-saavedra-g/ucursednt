@@ -6,6 +6,14 @@ Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cur
 
 ---
 
+# Índice
+
+- [Funcionalidades de las Extensiones para U-Cursos](#funcionalidades-de-las-extensiones-para-u-cursos)
+- [Instalación](#instalación)
+
+
+---
+
 # Funcionalidades de las Extensiones para [U-Cursos](https://www.u-cursos.cl/)
 
 ## 📋 Copia Fácil de Notas

@@ -70,7 +70,7 @@
         let firstHover = getLocalStorageItem("pendingNotificationsFirstHover") !== true;
         modulos.addEventListener('mouseover', function() {
             if (firstHover) {
-                alert("Puedes expandir o colapsar las secciones haciendo click en el botón que aparece al lado de cada título.");
+                alert("¡Ahora contamos notificaciones pendientes! Revisa los módulos para más información.");
                 setLocalStorageItem("pendingNotificationsFirstHover", true); // Mark that the alert has been shown
                 firstHover = false; // Update the local variable to prevent further alerts
             }
