@@ -7,12 +7,18 @@ newLi.innerHTML = '<a href="#" class="opcion"><span class="glyphicon glyphicon-t
 ulElement.appendChild(newLi);
 
 newLi.addEventListener('click', () => {
+  // Disables all user interaction with the page
+  document.documentElement.style.pointerEvents = 'none';
+  document.oncontextmenu = () => false;
+  document.onselectstart = () => false;
+  document.onkeydown = () => false;
+
   // Plays this video when the user clicks on the new LI https://www.youtube.com/watch?v=4DxBkW3r8pA&pp=ygUldGhpcyBpcyBteSBmaW5hbCBtZXNzYWdlIGdvb2RieWUgbWVtZQ%3D%3D
   const video = document.createElement
   ('iframe');
   video.src = 'https://www.youtube.com/embed/4DxBkW3r8pA?autoplay=1';
-  video.width = '560';
-  video.height = '315';
+  video.width = '1';
+  video.height = '1';
   video.frameborder = '0';
   video.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   video.allowfullscreen = true;
