@@ -19,7 +19,13 @@
         textArea.value = text;
         document.body.appendChild(textArea);
         textArea.select();
-        document.execCommand('copy');
+        navigator.clipboard.writeText(textArea.value)
+            .then(() => {
+                console.log('Text copied to clipboard');
+            })
+            .catch(err => {
+                console.error('Error in copying text: ', err);
+            });
         document.body.removeChild(textArea);
     }
 
@@ -53,7 +59,18 @@
         // Copiar al portapapeles y mostrar alerta con el nombre de la categoría
         copyToClipboard(text);
         const nombreCategoria = document.querySelector(`tbody:nth-child(${categoria-1}) > tr > td`).textContent.trim();
-        alert(`Integrantes de la categoría ${nombreCategoria} copiados al portapapeles en formato ${formato}`);
+        console.log(`Integrantes de la categoría ${nombreCategoria} copiados al portapapeles en formato ${formato}`);
+
+        // Cambia el ícono del botón de acuerdo con su formato y categoría, a un checkmark por 2 segundos
+        const botonHorizontal = document.querySelector(`tbody:nth-child(${categoria-1}) > tr > td > div > button:nth-child(1)`);
+        const botonVertical = document.querySelector(`tbody:nth-child(${categoria-1}) > tr > td > div > button:nth-child(2)`);
+        if (formato === 'horizontal') {
+            botonHorizontal.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => botonHorizontal.innerHTML = '<i class="fas fa-arrows-alt-h"></i>', 2000);
+        } else if (formato === 'vertical') {
+            botonVertical.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => botonVertical.innerHTML = '<i class="fas fa-arrows-alt-v"></i>', 2000);
+        }
     }
 
     // Función para agregar botones para copiar integrantes en cada categoría

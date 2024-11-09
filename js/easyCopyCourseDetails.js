@@ -17,9 +17,31 @@
         textArea.value = text;
         document.body.appendChild(textArea);
         textArea.select();
-        document.execCommand('copy');
+        navigator.clipboard.writeText(textArea.value)
+            .then(() => {
+                console.log('Text copied to clipboard');
+            })
+            .catch(err => {
+                console.error('Error in copying text: ', err);
+            });
         document.body.removeChild(textArea);
-        alert('Texto copiado al portapapeles');
+
+        // Cambia el ícono del botón de acuerdo con su texto (course code or course name) a un checkmark por 2 segundos
+        const courseNameButton = document.querySelector("#navigation-wrapper > div.curso > div > div > h1 > button");
+        const courseCodeButton = document.querySelector("#navigation-wrapper > div.curso > div > div > h2 > button");
+        const checkmarkIcon = `<i class="fa-solid fa-check"></i>`;
+
+        if (text === getCourseName()) {
+            courseNameButton.innerHTML = checkmarkIcon;
+            setTimeout(() => {courseNameButton.innerHTML = `<i class="fa-solid fa-paste"></i>`}, 2000);
+        } else if (text === getCourseCode()) {
+            courseCodeButton.innerHTML = checkmarkIcon;
+            setTimeout(() => {courseCodeButton.innerHTML = `<i class="fa-solid fa-paste"></i>`}, 2000);
+        } else {
+            // Renamed courses, override
+            courseNameButton.innerHTML = checkmarkIcon;
+            setTimeout(() => {courseNameButton.innerHTML = `<i class="fa-solid fa-paste"></i>`}, 2000);
+        }
     }
 
     // Función para obtener el nombre del curso

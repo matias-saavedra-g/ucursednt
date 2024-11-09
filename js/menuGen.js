@@ -26,6 +26,7 @@
                 easyCopyCourseDetails: true,
                 collapsableMenus: true,
                 pendingNotifications: true,
+                renameCourses: true,
             },
         };
 
@@ -58,6 +59,7 @@
             { id: "easyCopyCourseDetails", name: "Copia Fácil de Detalles del Curso 🏷" },
             { id: "collapsableMenus", name: "Menús Colapsables 💥" },
             { id: "pendingNotifications", name: "Notificaciones Pendientes 🔔" },
+            { id: "renameCourses", name: "Renombrar Cursos 📚" },
         ];
 
         featuresList.forEach(feature => {
