@@ -17,67 +17,61 @@
         const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h1");
 
         // Verificar si el elemento existe
-        if (!courseNameElement) {return "No se pudo encontrar el nombre del curso"}
+        if (!courseNameElement) { return "No se pudo encontrar el nombre del curso"; }
 
         // Obtener el contenido de texto del elemento
-        return courseNameElement.firstChild.textContent.trim();
+        let courseName = courseNameElement.firstChild.textContent.trim();
+
+        // Verificar si el nombre del curso ya existe en LocalStorage
+        let courseMappings = JSON.parse(localStorage.getItem('courseMappings')) || {};
+        if (courseMappings[courseName] || Object.values(courseMappings).includes(courseName)) {
+            // Si existe, recuperar el nombre original
+            courseName = Object.keys(courseMappings).find(key => courseMappings[key] === courseName) || courseName;
+        }
+
+        return courseName;
     }
 
-    // Función para renombrar todos los nombres de curso
     function renameCourse() {
         const courseName = getCourseName();
         const newCourseName = prompt("Introduce el nuevo nombre del curso:", courseName);
-
+    
         // Verificar si el usuario canceló la operación
-        if (!newCourseName) {return}
-     
-        // Obtener el objeto de cursos renombrados desde LocalStorage
-        let renamedCourses = getLocalStorageItem("renamedCourses") || {};
-
-        // Añadir o actualizar el nombre del curso en el objeto
-        renamedCourses[courseName] = newCourseName;
-
-        // Guardar el objeto actualizado en LocalStorage
-        setLocalStorageItem("renamedCourses", renamedCourses);
-
+        if (!newCourseName) { return; }
+    
+        // Guardar el nuevo nombre del curso en LocalStorage
+        let courseMappings = JSON.parse(localStorage.getItem('courseMappings')) || {};
+    
+        // Guardar el nuevo nombre del curso en el objeto de mapeo
+        courseMappings[courseName] = newCourseName;
+    
+        // Guardar el objeto de mapeo en LocalStorage
+        localStorage.setItem('courseMappings', JSON.stringify(courseMappings));
+    
         // Reemplazar el nombre del curso en todo el documento
-        replaceCourseName();
+        replaceCourseName(courseName, newCourseName);
     }
-
-    function replaceCourseName() {
-        const courseName = getCourseName();
-        const renamedCourses = getLocalStorageItem("renamedCourses");
-        const newCourseName = renamedCourses[courseName];
-        
-        // Verificar si el nombre del curso actual está renombrado
-        if (!renamedCourses[courseName]) { return }
-        
+    
+    function replaceCourseName(originalName, newName) {
         // Reemplazar el nombre del curso en todo el documento
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
         let node;
         while (node = walker.nextNode()) {
-            node.nodeValue = node.nodeValue.replaceAll(courseName, newCourseName);
+            node.nodeValue = node.nodeValue.replaceAll(originalName, newName);
         }
     }
-
-    // Función para reemplazar todo el texto que coincida con algún nombre del curso
+    
     function replaceCourseNames() {
-        const renamedCourses = getLocalStorageItem("renamedCourses");
-        
+        const renamedCourses = JSON.parse(localStorage.getItem('courseMappings'));
+    
         // Verificar si hay cursos renombrados guardados
-        if (!renamedCourses) { return }
-        
+        if (!renamedCourses) { return; }
+    
         // Iterar sobre cada nombre de curso guardado
-        Object.keys(renamedCourses).forEach(courseName => {
-            const newCourseName = renamedCourses[courseName];
-        
-            // Reemplazar el nombre del curso en todo el documento
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-            let node;
-            while (node = walker.nextNode()) {
-                node.nodeValue = node.nodeValue.replaceAll(courseName, newCourseName);
-            }
-        });    
+        Object.keys(renamedCourses).forEach(originalName => {
+            const newName = renamedCourses[originalName];
+            replaceCourseName(originalName, newName);
+        });
     }
 
     // Añadir botón para renombrar el curso

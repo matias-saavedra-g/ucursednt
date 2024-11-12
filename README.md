@@ -20,7 +20,7 @@ Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cur
   - [🔔 Notificación de Pendientes](#-notificación-de-pendientes)
   - [💥 Secciones colapsables](#-secciones-colapsables)
   - [⚙ Menú de Configuración](#-menú-de-configuración)
-  - [🖌 Renombrar Cursos (Preview)](#-renombrar-cursos-preview)
+  - [🖌 Renombrar Cursos](#-renombrar-cursos)
 - [Instalación](#instalación)
   - [Chrome](#chrome)
   - [Opera](#opera)
@@ -169,7 +169,7 @@ Añade un botón en el menú de la pantalla de inicio de [U-Cursos](https://www.
 
 ---
 
-## 🖌 Renombrar Cursos (Preview)
+## 🖌 Renombrar Cursos
 
 <img src="images/renameCourses.png"/>
 
@@ -177,7 +177,7 @@ Añade un botón en el menú de la pantalla de inicio de [U-Cursos](https://www.
 
 ### Descripción: <!-- omit in toc -->
 
-Permite renombrar los cursos (y nombre del estudiante) en todo [U-Cursos](https://www.u-cursos.cl/), y tiene memoria local para saber en qué estado quedaron en la última sesión. (No está optimizada, puede crear muchas variables locales).
+Permite renombrar los cursos (y nombre del estudiante) en todo [U-Cursos](https://www.u-cursos.cl/), y tiene memoria local para saber en qué estado quedaron en la última sesión.
 
 ---
 

@@ -133,7 +133,25 @@
             if (!localStorageList.contains(document.getElementById(key))) {
                 const localStorageItem = document.createElement('li');
                 localStorageItem.id = key;
-                localStorageItem.textContent = `${key}: ${value}`;
+                localStorageItem.textContent = `${key}: ${value} `;
+        
+                // Crear el icono de basura
+                const trashIcon = document.createElement('i');
+                trashIcon.className = 'fa-solid fa-trash';
+                trashIcon.style.cursor = 'pointer';
+                trashIcon.title = 'Eliminar este elemento';
+                trashIcon.addEventListener('click', function() {
+                    // Da una confirmación antes de eliminar el elemento
+                    const deleteConfirmed = confirm(`¿Estás seguro que quieres borrar "${key}" del almacenamiento local?`);
+                    if (!deleteConfirmed) { return; }
+                    // Eliminar el elemento de localStorage
+                    localStorage.removeItem(key);
+                    // Eliminar el elemento de la lista
+                    localStorageList.removeChild(localStorageItem);
+                });
+        
+                // Agregar el icono de basura al elemento de la lista
+                localStorageItem.appendChild(trashIcon);
                 localStorageList.append(localStorageItem);
             }
         }
