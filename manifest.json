@@ -1,6 +1,6 @@
 {
   "name": "U-Cursedn't",
-  "version": "3.6",
+  "version": "3.7",
   "description": "Esta extensión agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
   "manifest_version": 3,
   "author": "matias-saavedra-g",
@@ -66,7 +66,24 @@
     {
       "matches": [
         "*://*.u-cursos.cl/usuario/*",
-        "*://*.u-cursos.cl/ucursednt/*"
+        "*://*.u-cursos.cl/ucursednt/*",
+        "*://*.u-cursos.cl/logros/*"
+      ],
+      "js": ["js/achievementsBoton.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/logros/*"
+      ],
+      "js": ["js/achievementsGen.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/usuario/*",
+        "*://*.u-cursos.cl/ucursednt/*",
+        "*://*.u-cursos.cl/logros/*"
       ],
       "js": ["js/menuBoton.js"],
       "run_at": "document_end"

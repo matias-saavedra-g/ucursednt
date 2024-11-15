@@ -134,11 +134,22 @@
                 const localStorageItem = document.createElement('li');
                 localStorageItem.id = key;
                 localStorageItem.textContent = `${key}: ${value} `;
+                
+                // Aplicar estilos en línea al elemento de la lista
+                localStorageItem.style.display = 'flex';
+                localStorageItem.style.justifyContent = 'space-between';
+                localStorageItem.style.alignItems = 'center';
+                localStorageItem.style.padding = '10px';
+                localStorageItem.style.borderBottom = '1px solid #ccc';
+                localStorageItem.style.maxWidth = '50%';
+                localStorageItem.style.overflowX = 'auto';
         
                 // Crear el icono de basura
                 const trashIcon = document.createElement('i');
                 trashIcon.className = 'fa-solid fa-trash';
                 trashIcon.style.cursor = 'pointer';
+                trashIcon.style.marginLeft = '10px';
+                trashIcon.style.color = '#dc3545'; // Color rojo para el icono de basura
                 trashIcon.title = 'Eliminar este elemento';
                 trashIcon.addEventListener('click', function() {
                     // Da una confirmación antes de eliminar el elemento

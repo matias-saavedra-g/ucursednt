@@ -52,19 +52,10 @@
         text[i].removeChild(options); // Removed
         const text_length = countLines(text[i]);
         if (text_length > paragraph_limit) {
-            const paragraphs = text[i].innerHTML.split("<br>");
-            let short_text = paragraphs[0];
-            for (let j = 1; j <= paragraph_limit; j++) {
-                if (paragraphs[j] === "") {
-                    short_text = short_text + "<br>";
-                } else {
-                    short_text = short_text + "<br>" + paragraphs[j];
-                }
-            }
             const long_text = text[i].innerHTML;
-            text[i].innerHTML = '<div><span class="short-text">' + short_text + '</span><span class="long-text" style="display: none">' + long_text + '</span><br><button class="show-more-button" data-more="0">Mucho texto</button></div>';
+            text[i].innerHTML = '<div class="text-content" style="display: none">' + long_text + '</div><br><button class="show-more-button" data-more="0">Es Mucho Texto</button>';
 
-            // Añadir alerta la primera vez que se hace clic en el botón de "Leer más"
+            // Añadir alerta la primera vez que se hace clic en el botón de "Es Mucho Texto"
             const showMoreButton = text[i].querySelector('.show-more-button');
             showMoreButton.addEventListener('click', function () {
                 if (getLocalStorageItem("showMoreFirstClick") !== true) {
@@ -75,10 +66,10 @@
                 // Toggle de texto corto y largo
                 const moreText = this.getAttribute('data-more') === "0";
                 this.setAttribute('data-more', moreText ? "1" : "0");
-                this.innerHTML = moreText ? 'Menos texto' : 'Mucho texto';
+                this.innerHTML = moreText ? 'Menos texto' : 'Es Mucho Texto';
 
-                this.previousElementSibling.previousElementSibling.previousElementSibling.style.display = moreText ? 'none' : 'inline';
-                this.previousElementSibling.previousElementSibling.style.display = moreText ? 'inline' : 'none';
+                const textContent = this.previousElementSibling.previousElementSibling;
+                textContent.style.display = moreText ? 'block' : 'none';
             });
         }
         text[i].append(options); // Added

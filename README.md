@@ -21,6 +21,7 @@ Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cur
   - [💥 Secciones colapsables](#-secciones-colapsables)
   - [⚙ Menú de Configuración](#-menú-de-configuración)
   - [🖌 Renombrar Cursos](#-renombrar-cursos)
+  - [🏆 Logros](#-logros)
 - [Instalación](#instalación)
   - [Chrome](#chrome)
   - [Opera](#opera)
@@ -178,6 +179,18 @@ Añade un botón en el menú de la pantalla de inicio de [U-Cursos](https://www.
 ### Descripción: <!-- omit in toc -->
 
 Permite renombrar los cursos (y nombre del estudiante) en todo [U-Cursos](https://www.u-cursos.cl/), y tiene memoria local para saber en qué estado quedaron en la última sesión.
+
+---
+
+## 🏆 Logros
+
+<img src="images/achievementsGen.png"/>
+
+> Por matias-saavedra-g
+
+### Descripción: <!-- omit in toc -->
+
+Se agrega un sistema de logros por hacer cada una de las funciones de la extensión, con un menú de logros en la pantalla de inicio de [U-Cursos](https://www.u-cursos.cl/), y un contador de logros desbloqueados.
 
 ---
 

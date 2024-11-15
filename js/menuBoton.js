@@ -20,8 +20,9 @@
     const currentUrl2 = window.location.href;
     const regex1 = /^https:\/\/www\.u-cursos\.cl\/usuario\/.*$/;
     const regex2 = /^https:\/\/www\.u-cursos\.cl\/ucursednt\/.*$/;
+    const regex3 = /^https:\/\/www\.u-cursos\.cl\/logros\/.*$/;
 
-    if (regex1.test(currentUrl2) || regex2.test(currentUrl2)) {
+    if (regex1.test(currentUrl2) || regex2.test(currentUrl2) || regex3.test(currentUrl2)) {
                 // Crear el botón
         const listItem = document.createElement('li');
         listItem.className = 'servicio';
