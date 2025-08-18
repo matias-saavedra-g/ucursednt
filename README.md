@@ -4,6 +4,8 @@
 
 Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cursos](https://www.u-cursos.cl/) y respectivos logros por hacer cada una de ellas. Desarrollado por [matias-saavedra-g](https://github.com/matias-saavedra-g/), basado en la idea de [Eric K](https://github.com/Nyveon), [PuntitOWO](https://github.com/PuntitOwO), [sebcp](https://github.com/sebcp), [vmkovacs](https://github.com/vmkovacs), y [TaconeoMental](https://github.com/TaconeoMental): [tU-Cursos](https://github.com/Nyveon/tU-Cursos).
 
+<a href="https://chromewebstore.google.com/detail/u-cursednt/jappfnpemaaconilafnlhdkndccfkgen"><img src="https://developer.chrome.com/static/docs/webstore/branding/image/YT2Grfi9vEBa2wAPzhWa.png"/></a>
+
 ---
 
 # Índice <!-- omit in toc -->
@@ -22,7 +24,7 @@ Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cur
   - [⚙ Menú de Configuración](#-menú-de-configuración)
   - [🖌 Renombrar Cursos](#-renombrar-cursos)
   - [🏆 Logros](#-logros)
-- [Instalación](#instalación)
+- [Instalación Local](#instalación-local)
   - [Chrome](#chrome)
   - [Opera](#opera)
   - [Microsoft Edge](#microsoft-edge)
@@ -194,7 +196,7 @@ Se agrega un sistema de logros por hacer cada una de las funciones de la extensi
 
 ---
 
-# Instalación
+# Instalación Local
 
 ## Chrome
 
