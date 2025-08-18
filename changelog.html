@@ -3,108 +3,591 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Changelog</title>
+    <title>U-Cursedn't - Changelog</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background: #fff;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #333;
+            line-height: 1.6;
         }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-link {
+            text-decoration: none;
+            color: inherit;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .header-link:hover {
+            transform: scale(1.05);
+        }
+
+        .header-title {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            gap: 20px;
+            margin-bottom: 16px;
         }
-        .header h1 {
-            margin: 0 10px 0 0;
-            color: #333;
+
+        .header-title h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0;
         }
-        .version {
+
+        .header-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .header-icon:hover {
+            transform: rotate(360deg);
+        }
+
+        .header-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro-section {
             text-align: center;
-            font-size: 1.2em;
-            color: #555;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            border-left: 4px solid #007bff;
         }
-        .changelog-item {
-            margin-bottom: 20px;
-        }
-        .changelog-item h2 {
+
+        .intro-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            font-size: 1.2em;
-            color: #555;
+            justify-content: center;
+            gap: 12px;
         }
-        .changelog-item h2 i {
-            margin-right: 10px;
+
+        .intro-description {
+            font-size: 16px;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .changelog-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .changelog-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .changelog-item {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #28a745;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .changelog-item.new-feature {
+            border-left-color: #007bff;
+            background: linear-gradient(135deg, #ffffff, #f8f9ff);
+        }
+
+        .changelog-item.improvement {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #ffffff, #f8fff8);
+        }
+
+        .changelog-item.bugfix {
+            border-left-color: #ffc107;
+            background: linear-gradient(135deg, #ffffff, #fffbf0);
+        }
+
+        .changelog-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .changelog-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, transparent, rgba(0, 0, 0, 0.05));
+            border-radius: 0 12px 0 40px;
+        }
+
+        .item-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .item-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+
+        .changelog-item.new-feature .item-icon {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+
+        .changelog-item.improvement .item-icon {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+        }
+
+        .changelog-item.bugfix .item-icon {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+        }
+
+        .item-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+            flex: 1;
+        }
+
+        .item-type {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .type-new {
+            background: #007bff;
+            color: white;
+        }
+
+        .type-improved {
+            background: #28a745;
+            color: white;
+        }
+
+        .type-fixed {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .item-description {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-left: 56px;
+        }
+
+        .credits {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            text-align: center;
+            border-left: 4px solid #6c757d;
+        }
+
+        .credits-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .credits-text {
+            color: #6c757d;
+            margin-bottom: 16px;
+        }
+
+        .credits-link {
             color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
-        .changelog-item p {
-            margin: 5px 0 0 30px;
-            color: #666;
+
+        .credits-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
         }
-        .new-feature {
-            background-color: #e0f7fa;
-            border-left: 5px solid #007bff;
-            padding-left: 10px;
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .footer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #007bff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            background: #007bff;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header-title {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .header-title h1 {
+                font-size: 28px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .intro-section {
+                padding: 20px;
+            }
+
+            .changelog-item {
+                padding: 20px;
+            }
+
+            .item-description {
+                margin-left: 0;
+                margin-top: 12px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #0056b3, #004085);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="https://github.com/matias-saavedra-g/ucursednt" target="_blank" rel="noopener">
-            <div class="header">
-                <h1>U-Cursedn't</h1>
-                <img src="icons/icon.png" alt="U-Cursedn't" width="50" height="50">
+        <div class="header">
+            <div class="header-content">
+                <a href="https://github.com/matias-saavedra-g/ucursednt" target="_blank" rel="noopener" class="header-link">
+                    <div class="header-title">
+                        <h1>U-Cursedn't</h1>
+                        <img src="icons/icon.png" alt="U-Cursedn't" class="header-icon">
+                    </div>
+                </a>
+                <div class="header-subtitle">
+                    Extensión para mejorar tu experiencia en U-Cursos
+                </div>
             </div>
-        </a>
-        <h2>¡Gracias por usar nuestra extensión!</h2>
-        <h3>Changelog</h3>
-        <div class="version">Versión 3.7</div>
-        <div class="changelog-item new-feature">
-            <h2><i class="fas fa-paint-trophy"></i> Logros</h2>
-            <p>U-Cursos ahora cuenta con un sistema de logros que premia a los usuarios por realizar ciertas acciones dentro de la plataforma.</p>
         </div>
-        <div class="changelog-item new-feature">
-            <h2><i class="fas fa-paint-brush"></i> Renombrar Cursos</h2>
-            <p>Los usuarios ahora pueden renombrar los cursos en los que están inscritos.</p>
-        </div>
-        <div class="changelog-item">
-            <h2><i class="fas fa-clipboard"></i> Copia Fácil de Notas</h2>
-            <p>Se ha mejorado la funcionalidad de Copia Fácil de Notas.</p>
-        </div>
-        <div class="changelog-item">
-            <h2><i class="fas fa-clipboard"></i> Copia Fácil de Miembros</h2>
-            <p>Se ha mejorado la funcionalidad de Copia Fácil de Miembros.</p>
-        </div>
-        <div class="changelog-item">
-            <h2><i class="fas fa-clipboard"></i> Copia Fácil de Datos del Curso</h2>
-            <p>Se ha mejorado la funcionalidad de Copia Fácil de Datos del Curso.</p>
-        </div>
-        <div class="changelog-item">
-            <h2><i class="fas fa-book"></i> Recortar Texto Largo</h2>
-            <p>Se ha mejorado la funcionalidad de Recortar Texto Largo.</p>
-        </div>
-        <div class="changelog-item">
-            <h2><i class="fas fa-ruler-combined"></i> Redimensionar Vista Previa de PDF</h2>
-            <p>Se ha mejorado la funcionalidad de Redimensionar Vista Previa de PDF.</p>
-        </div>
-        <div class="changelog-item">
-            <h2><i class="fas fa-cogs"></i> Menú de Configuración</h2>
-            <p>Se ha mejorado el menú de configuración de la extensión.</p>
-        </div>
-        <div class="credits">
-            <p>Desarrollado por <a href="github.com/matias-saavedra-g" target="_blank" rel="noopener">Matías Saavedra.</a></p>
+
+        <div class="content">
+            <div class="intro-section">
+                <div class="intro-title">
+                    <i class="fas fa-heart"></i>
+                    ¡Gracias por usar nuestra extensión!
+                </div>
+                <div class="intro-description">
+                    Aquí puedes ver todas las novedades y mejoras de la última versión
+                </div>
+                <div class="version-badge">
+                    <i class="fas fa-tag"></i>
+                    Versión 3.7
+                </div>
+            </div>
+
+            <div class="changelog-section">
+                <div class="section-title">
+                    <i class="fas fa-sparkles"></i>
+                    Nuevas Características
+                </div>
+                <div class="changelog-grid">
+                    <div class="changelog-item new-feature">
+                        <div class="item-header">
+                            <div class="item-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <h3 class="item-title">Sistema de Logros</h3>
+                            <span class="item-type type-new">Nuevo</span>
+                        </div>
+                        <p class="item-description">
+                            U-Cursos ahora cuenta con un sistema de logros gamificado que premia a los usuarios por realizar ciertas acciones dentro de la plataforma. ¡Desbloquea todos los logros explorando las características de la extensión!
+                        </p>
+                    </div>
+
+                    <div class="changelog-item new-feature">
+                        <div class="item-header">
+                            <div class="item-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <h3 class="item-title">Renombrar Cursos</h3>
+                            <span class="item-type type-new">Nuevo</span>
+                        </div>
+                        <p class="item-description">
+                            Los usuarios ahora pueden personalizar los nombres de los cursos en los que están inscritos, facilitando la organización y identificación rápida de materias.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="changelog-section">
+                <div class="section-title">
+                    <i class="fas fa-tools"></i>
+                    Mejoras y Optimizaciones
+                </div>
+                <div class="changelog-grid">
+                    <div class="changelog-item improvement">
+                        <div class="item-header">
+                            <div class="item-icon">
+                                <i class="fas fa-clipboard"></i>
+                            </div>
+                            <h3 class="item-title">Copia Fácil de Notas</h3>
+                            <span class="item-type type-improved">Mejorado</span>
+                        </div>
+                        <p class="item-description">
+                            Se ha optimizado la funcionalidad de Copia Fácil de Notas con mejor detección de tablas y formato mejorado para hojas de cálculo.
+                        </p>
+                    </div>
+
+                    <div class="changelog-item improvement">
+                        <div class="item-header">
+                            <div class="item-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="item-title">Copia Fácil de Miembros</h3>
+                            <span class="item-type type-improved">Mejorado</span>
+                        </div>
+                        <p class="item-description">
+                            Mejoras en la funcionalidad de Copia Fácil de Miembros con soporte para diferentes formatos de listado de estudiantes.
+                        </p>
+                    </div>
+
+                    <div class="changelog-item improvement">
+                        <div class="item-header">
+                            <div class="item-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <h3 class="item-title">Copia Fácil de Datos del Curso</h3>
+                            <span class="item-type type-improved">Mejorado</span>
+                        </div>
+                        <p class="item-description">
+                            Se ha mejorado la extracción y copiado de información relevante de los cursos con mayor precisión.
+                        </p>
+                    </div>
+
+                    <div class="changelog-item improvement">
+                        <div class="item-header">
+                            <div class="item-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <h3 class="item-title">Recortar Texto Largo</h3>
+                            <span class="item-type type-improved">Mejorado</span>
+                        </div>
+                        <p class="item-description">
+                            Optimización en la detección y recorte de textos largos en foros con mejor manejo de formato y estructura.
+                        </p>
+                    </div>
+
+                    <div class="changelog-item improvement">
+                        <div class="item-header">
+                            <div class="item-icon">
+                                <i class="fas fa-expand"></i>
+                            </div>
+                            <h3 class="item-title">Redimensionar Vista Previa de PDF</h3>
+                            <span class="item-type type-improved">Mejorado</span>
+                        </div>
+                        <p class="item-description">
+                            Mejoras en la funcionalidad de redimensionamiento de PDFs con mejor detección de elementos y estabilidad.
+                        </p>
+                    </div>
+
+                    <div class="changelog-item improvement">
+                        <div class="item-header">
+                            <div class="item-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h3 class="item-title">Menú de Configuración</h3>
+                            <span class="item-type type-improved">Modernizado</span>
+                        </div>
+                        <p class="item-description">
+                            Interfaz completamente renovada del menú de configuración con diseño moderno, mejor organización y experiencia de usuario mejorada.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="credits">
+                <div class="credits-title">
+                    <i class="fas fa-code"></i>
+                    Créditos y Desarrollo
+                </div>
+                <p class="credits-text">
+                    Desarrollado con ❤️ por <a href="https://github.com/matias-saavedra-g" target="_blank" rel="noopener" class="credits-link">Matías Saavedra</a>
+                </p>
+                <div class="footer-links">
+                    <a href="https://github.com/matias-saavedra-g/ucursednt" target="_blank" rel="noopener" class="footer-link">
+                        <i class="fab fa-github"></i>
+                        Código Fuente
+                    </a>
+                    <a href="https://github.com/matias-saavedra-g/ucursednt/issues" target="_blank" rel="noopener" class="footer-link">
+                        <i class="fas fa-bug"></i>
+                        Reportar Problemas
+                    </a>
+                    <a href="https://github.com/matias-saavedra-g/ucursednt/releases" target="_blank" rel="noopener" class="footer-link">
+                        <i class="fas fa-download"></i>
+                        Descargas
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </body>

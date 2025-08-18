@@ -35,6 +35,257 @@
         }
     }
 
+    // Add modern CSS styles to the page
+    function addModernStyles() {
+        // Add FontAwesome if not already present
+        if (!document.querySelector('link[href*="font-awesome"]')) {
+            const fontAwesome = document.createElement('link');
+            fontAwesome.rel = 'stylesheet';
+            fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
+            document.head.appendChild(fontAwesome);
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            /* Modern U-Cursos-like styling for the settings menu */
+            #feature-menu {
+                background: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                margin: 20px 0;
+                max-width: 800px;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            }
+
+            .feature-group {
+                margin-bottom: 16px;
+                padding: 16px;
+                background: #f8f9fa;
+                border-radius: 6px;
+                border-left: 4px solid #007bff;
+                transition: all 0.2s ease-in-out;
+                cursor: pointer;
+            }
+
+            .feature-group:hover {
+                background: #e9ecef;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                transform: translateY(-1px);
+            }
+
+            .feature-group.enabled {
+                border-left-color: #28a745;
+                background: #d4edda;
+            }
+
+            .feature-group.enabled:hover {
+                background: #c3e6cb;
+            }
+
+            .feature-checkbox {
+                margin-right: 12px;
+                width: 18px;
+                height: 18px;
+                accent-color: #007bff;
+                cursor: pointer;
+            }
+
+            .feature-label {
+                font-size: 14px;
+                font-weight: 500;
+                color: #495057;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                user-select: none;
+            }
+
+            .feature-group.enabled .feature-label {
+                color: #155724;
+            }
+
+            .feature-status {
+                margin-left: auto;
+                font-size: 12px;
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .feature-status.enabled {
+                background: #28a745;
+                color: white;
+            }
+
+            .feature-status.disabled {
+                background: #6c757d;
+                color: white;
+            }
+
+            .settings-header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #e9ecef;
+            }
+
+            .settings-title {
+                font-size: 24px;
+                font-weight: 600;
+                color: #212529;
+                margin-bottom: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .settings-subtitle {
+                font-size: 14px;
+                color: #6c757d;
+                font-weight: 400;
+            }
+
+            .action-buttons {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                margin-top: 30px;
+                flex-wrap: wrap;
+            }
+
+            .modern-button {
+                padding: 12px 24px;
+                border: none;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+                min-width: 140px;
+                justify-content: center;
+            }
+
+            .btn-primary {
+                background: #007bff;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background: #0056b3;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+            }
+
+            .btn-secondary {
+                background: #6c757d;
+                color: white;
+            }
+
+            .btn-secondary:hover {
+                background: #545b62;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+            }
+
+            .btn-danger {
+                background: #dc3545;
+                color: white;
+            }
+
+            .btn-danger:hover {
+                background: #c82333;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+            }
+
+            .storage-list {
+                background: #f8f9fa;
+                border-radius: 6px;
+                margin-top: 20px;
+                max-height: 300px;
+                overflow-y: auto;
+                border: 1px solid #dee2e6;
+            }
+
+            .storage-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 16px;
+                border-bottom: 1px solid #dee2e6;
+                font-family: 'Courier New', monospace;
+                font-size: 12px;
+                background: white;
+                transition: background-color 0.2s ease;
+            }
+
+            .storage-item:hover {
+                background: #e9ecef;
+            }
+
+            .storage-item:last-child {
+                border-bottom: none;
+            }
+
+            .storage-key {
+                font-weight: 600;
+                color: #495057;
+                margin-right: 8px;
+            }
+
+            .storage-value {
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                max-width: 300px;
+                color: #6c757d;
+            }
+
+            .delete-storage-btn {
+                padding: 4px 8px;
+                background: #dc3545;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-size: 12px;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+
+            .delete-storage-btn:hover {
+                background: #c82333;
+            }
+
+            /* Responsive design */
+            @media (max-width: 768px) {
+                #feature-menu {
+                    margin: 10px;
+                    padding: 16px;
+                }
+
+                .action-buttons {
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .modern-button {
+                    width: 100%;
+                    max-width: 300px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
     // Crear el menú de características
     /**
      * Creates a feature menu based on the settings stored in local storage.
@@ -47,40 +298,82 @@
         const menuElement = document.createElement("div");
         menuElement.id = "feature-menu";
 
+        // Add header
+        const header = document.createElement("div");
+        header.className = "settings-header";
+        
+        const title = document.createElement("div");
+        title.className = "settings-title";
+        title.innerHTML = `<i class="fas fa-cogs"></i> Configuración de U-Cursedn't`;
+        
+        const subtitle = document.createElement("div");
+        subtitle.className = "settings-subtitle";
+        subtitle.textContent = "Personaliza las características de la extensión según tus necesidades";
+        
+        header.appendChild(title);
+        header.appendChild(subtitle);
+        menuElement.appendChild(header);
+
         const featuresList = [
-            { id: "easyCopyGrades", name: "Copia Fácil de Notas 📋" },
-            { id: "easyCopyMembers", name: "Copia Fácil de Miembros 👥" },
-            { id: "muchoTexto", name: "Recortar Texto Largo ➕" },
-            { id: "otrasRealizaciones", name: "Otras Realizaciones del Curso 🌐" },
-            { id: "popupGrading", name: "Ventana Emergente de Calificaciones 🎓" },
-            { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF 📑" },
-            { id: "weekCounter", name: "Contador de Semanas 📆" },
-            { id: "pendingTasks", name: "Insignia Tareas Pendientes 🔔" },
-            { id: "easyCopyCourseDetails", name: "Copia Fácil de Detalles del Curso 🏷" },
-            { id: "collapsableMenus", name: "Menús Colapsables 💥" },
-            { id: "pendingNotifications", name: "Notificaciones Pendientes 🔔" },
-            { id: "renameCourses", name: "Renombrar Cursos 📚" },
+            { id: "easyCopyGrades", name: "Copia Fácil de Notas", icon: "📋", description: "Botones para copiar notas en diferentes formatos" },
+            { id: "easyCopyMembers", name: "Copia Fácil de Miembros", icon: "👥", description: "Copiar listado de miembros del curso" },
+            { id: "muchoTexto", name: "Recortar Texto Largo", icon: "➕", description: "Colapsar textos largos en foros" },
+            { id: "otrasRealizaciones", name: "Otras Realizaciones del Curso", icon: "🌐", description: "Acceso rápido a otras realizaciones" },
+            { id: "popupGrading", name: "Ventana Emergente de Calificaciones", icon: "🎓", description: "Editor de calificaciones en popup" },
+            { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF", icon: "📑", description: "Ajustar tamaño de vista previa PDF" },
+            { id: "weekCounter", name: "Contador de Semanas", icon: "📆", description: "Mostrar semana actual del semestre" },
+            { id: "pendingTasks", name: "Insignia Tareas Pendientes", icon: "🔔", description: "Contador de tareas pendientes" },
+            { id: "easyCopyCourseDetails", name: "Copia Fácil de Detalles del Curso", icon: "🏷", description: "Copiar nombre y código del curso" },
+            { id: "collapsableMenus", name: "Menús Colapsables", icon: "💥", description: "Colapsar secciones en página principal" },
+            { id: "pendingNotifications", name: "Notificaciones Pendientes", icon: "🔔", description: "Contador de notificaciones pendientes" },
+            { id: "renameCourses", name: "Renombrar Cursos", icon: "📚", description: "Personalizar nombres de cursos" },
         ];
 
         featuresList.forEach(feature => {
             const featureElement = document.createElement("div");
+            featureElement.className = `feature-group ${features[feature.id] ? 'enabled' : ''}`;
 
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
             checkbox.checked = features[feature.id];
             checkbox.id = feature.id;
+            checkbox.className = "feature-checkbox";
             checkbox.addEventListener("change", (e) => {
                 features[feature.id] = e.target.checked;
                 setLocalStorageItem("settings", settings);
+                featureElement.className = `feature-group ${e.target.checked ? 'enabled' : ''}`;
+                statusSpan.textContent = e.target.checked ? 'Activado' : 'Desactivado';
+                statusSpan.className = `feature-status ${e.target.checked ? 'enabled' : 'disabled'}`;
             });
 
             const label = document.createElement("label");
-            label.textContent = feature.name;
+            label.className = "feature-label";
             label.setAttribute("for", feature.id);
+            label.innerHTML = `
+                <span style="margin-right: 8px; font-size: 16px;">${feature.icon}</span>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; margin-bottom: 2px;">${feature.name}</div>
+                    <div style="font-size: 12px; color: #6c757d; font-weight: 400;">${feature.description}</div>
+                </div>
+            `;
 
-            featureElement.append(checkbox);
-            featureElement.append(label);
-            menuElement.append(featureElement);
+            const statusSpan = document.createElement("span");
+            statusSpan.className = `feature-status ${features[feature.id] ? 'enabled' : 'disabled'}`;
+            statusSpan.textContent = features[feature.id] ? 'Activado' : 'Desactivado';
+
+            label.appendChild(statusSpan);
+
+            featureElement.appendChild(checkbox);
+            featureElement.appendChild(label);
+            
+            // Make the entire card clickable
+            featureElement.addEventListener('click', (e) => {
+                if (e.target !== checkbox) {
+                    checkbox.click();
+                }
+            });
+
+            menuElement.appendChild(featureElement);
         });
 
         return menuElement;
@@ -88,6 +381,8 @@
 
     // Inicializar la página
     function initPage() {
+        addModernStyles(); // Add modern CSS styles
+        
         const errorDisplay = document.querySelector("#error");
         errorDisplay.innerHTML = "";
 
@@ -96,14 +391,15 @@
 
         const bodyBlankPage = document.querySelector("#body")
 
-        // Crea un espacio para espaciar los elementos dentro de la página
-        const spacer = document.createElement('div');
-        spacer.style.height = '20px';
-
         const menuElement = createFeatureMenu();
 
+        // Create action buttons container
+        const actionContainer = document.createElement('div');
+        actionContainer.className = 'action-buttons';
+
         const clearButton = document.createElement('button');
-        clearButton.textContent = 'Borrar Almacenamiento Local';
+        clearButton.innerHTML = '<i class="fas fa-trash-alt"></i> Borrar Almacenamiento Local';
+        clearButton.className = 'modern-button btn-danger';
         clearButton.id = 'clearLocalStorageButton';
 
         clearButton.addEventListener('click', function() {
@@ -114,83 +410,77 @@
               console.log('Local storage cleared!');
               initSettings();
               console.log('Settings initialized!');
+              location.reload(); // Refresh to show updated settings
             } else {
               console.log('Local storage clearing cancelled.');
             }
-          });
+        });
 
-          // Crea un botón que hace alterna el mostrar el local storage
+        // Crea un botón que hace alterna el mostrar el local storage
         const showLocalStorageButton = document.createElement('button');
         const localStorageList = document.createElement('ul');
-        showLocalStorageButton.textContent = 'Mostrar Almacenamiento Local';
+        showLocalStorageButton.innerHTML = '<i class="fas fa-database"></i> Mostrar Almacenamiento Local';
+        showLocalStorageButton.className = 'modern-button btn-secondary';
         showLocalStorageButton.id = 'showLocalStorageButton';
 
-        // Crea una lista para mostrar el almacenamiento local
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            const value = localStorage.getItem(key);
-            // Agrega el elemento a la lista solo una vez
-            if (!localStorageList.contains(document.getElementById(key))) {
-                const localStorageItem = document.createElement('li');
-                localStorageItem.id = key;
-                localStorageItem.textContent = `${key}: ${value} `;
+        localStorageList.className = 'storage-list';
+
+        // Función para actualizar la lista del almacenamiento local
+        function updateLocalStorageList() {
+            localStorageList.innerHTML = '';
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
                 
-                // Aplicar estilos en línea al elemento de la lista
-                localStorageItem.style.display = 'flex';
-                localStorageItem.style.justifyContent = 'space-between';
-                localStorageItem.style.alignItems = 'center';
-                localStorageItem.style.padding = '10px';
-                localStorageItem.style.borderBottom = '1px solid #ccc';
-                localStorageItem.style.maxWidth = '50%';
-                localStorageItem.style.overflowX = 'auto';
-        
-                // Crear el icono de basura
-                const trashIcon = document.createElement('i');
-                trashIcon.className = 'fa-solid fa-trash';
-                trashIcon.style.cursor = 'pointer';
-                trashIcon.style.marginLeft = '10px';
-                trashIcon.style.color = '#dc3545'; // Color rojo para el icono de basura
-                trashIcon.title = 'Eliminar este elemento';
-                trashIcon.addEventListener('click', function() {
-                    // Da una confirmación antes de eliminar el elemento
+                const localStorageItem = document.createElement('li');
+                localStorageItem.className = 'storage-item';
+                
+                const keySpan = document.createElement('span');
+                keySpan.className = 'storage-key';
+                keySpan.textContent = key;
+                
+                const valueSpan = document.createElement('span');
+                valueSpan.className = 'storage-value';
+                valueSpan.textContent = value;
+                valueSpan.title = value; // Show full value on hover
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-storage-btn';
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                deleteBtn.title = 'Eliminar este elemento';
+                deleteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     const deleteConfirmed = confirm(`¿Estás seguro que quieres borrar "${key}" del almacenamiento local?`);
-                    if (!deleteConfirmed) { return; }
-                    // Eliminar el elemento de localStorage
-                    localStorage.removeItem(key);
-                    // Eliminar el elemento de la lista
-                    localStorageList.removeChild(localStorageItem);
+                    if (deleteConfirmed) {
+                        localStorage.removeItem(key);
+                        updateLocalStorageList();
+                    }
                 });
-        
-                // Agregar el icono de basura al elemento de la lista
-                localStorageItem.appendChild(trashIcon);
-                localStorageList.append(localStorageItem);
+                
+                localStorageItem.appendChild(keySpan);
+                localStorageItem.appendChild(valueSpan);
+                localStorageItem.appendChild(deleteBtn);
+                localStorageList.appendChild(localStorageItem);
             }
         }
 
         // Agrega funcionalidad al botón
         showLocalStorageButton.addEventListener('click', function() {
-            
-            // Si todavía no se muestra la lista, la agrega al cuerpo de la página
             if (!bodyBlankPage.contains(localStorageList)) {
-                showLocalStorageButton.textContent = 'Ocultar Almacenamiento Local';
-                bodyBlankPage.append(localStorageList);
-            }
-            // Si ya se ha mostrado la lista, la elimina del cuerpo de la página
-            else {
-                showLocalStorageButton.textContent = 'Mostrar Almacenamiento Local';
+                showLocalStorageButton.innerHTML = '<i class="fas fa-eye-slash"></i> Ocultar Almacenamiento Local';
+                updateLocalStorageList();
+                bodyBlankPage.appendChild(localStorageList);
+            } else {
+                showLocalStorageButton.innerHTML = '<i class="fas fa-database"></i> Mostrar Almacenamiento Local';
                 localStorageList.remove();
             }
         });
 
+        actionContainer.appendChild(showLocalStorageButton);
+        actionContainer.appendChild(clearButton);
 
-        bodyBlankPage.append(menuElement);
-        bodyBlankPage.append(spacer);
-        bodyBlankPage.append(showLocalStorageButton);
-        bodyBlankPage.append(clearButton);
-
-        // Create a new spacer element
-        const newSpacer = spacer.cloneNode(true);
-        bodyBlankPage.append(newSpacer);
+        bodyBlankPage.appendChild(menuElement);
+        bodyBlankPage.appendChild(actionContainer);
     }
 
     // Ejecutar la inicialización al cargar la página
