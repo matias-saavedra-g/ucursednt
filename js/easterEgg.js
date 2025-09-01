@@ -3,7 +3,7 @@
 const ulElement = document.querySelector("#menu_curso"); // Replace with your selector
 
 const newLi = document.createElement('li');
-newLi.innerHTML = '<a href="#" class="opcion"><span class="glyphicon glyphicon-trash"></span><span> Borrar U-Cursos</span></a>';
+newLi.innerHTML = '<a href="#" class="opcion"><i class="fa-solid fa-trash"></i><span> Borrar U-Cursos</span></a>';
 ulElement.appendChild(newLi);
 
 newLi.addEventListener('click', () => {
