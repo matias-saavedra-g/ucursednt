@@ -18,7 +18,7 @@
                     return;
                 }
                 
-                chrome.storage.local.set({ [key]: value }, () => {
+                chrome.storage.sync.set({ [key]: value }, () => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -42,7 +42,7 @@
                     return;
                 }
                 
-                chrome.storage.local.get([key], (result) => {
+                chrome.storage.sync.get([key], (result) => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {

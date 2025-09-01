@@ -5,7 +5,7 @@
 function setChromeStorageItem(key, value) {
     return new Promise((resolve, reject) => {
         try {
-            chrome.storage.local.set({ [key]: value }, () => {
+            chrome.storage.sync.set({ [key]: value }, () => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -22,7 +22,7 @@ function setChromeStorageItem(key, value) {
 function getChromeStorageItem(key) {
     return new Promise((resolve, reject) => {
         try {
-            chrome.storage.local.get([key], (result) => {
+            chrome.storage.sync.get([key], (result) => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -39,7 +39,7 @@ function getChromeStorageItem(key) {
 function getChromeStorageItems(keys) {
     return new Promise((resolve, reject) => {
         try {
-            chrome.storage.local.get(keys, (result) => {
+            chrome.storage.sync.get(keys, (result) => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -56,7 +56,7 @@ function getChromeStorageItems(keys) {
 function removeChromeStorageItem(key) {
     return new Promise((resolve, reject) => {
         try {
-            chrome.storage.local.remove([key], () => {
+            chrome.storage.sync.remove([key], () => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -73,7 +73,7 @@ function removeChromeStorageItem(key) {
 function clearChromeStorage() {
     return new Promise((resolve, reject) => {
         try {
-            chrome.storage.local.clear(() => {
+            chrome.storage.sync.clear(() => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {

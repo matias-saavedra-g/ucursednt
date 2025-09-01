@@ -5,7 +5,7 @@
     // Función para establecer un dato en Chrome Storage
     async function setChromeStorageItem(key, value) {
         try {
-            await chrome.storage.local.set({ [key]: value });
+            await chrome.storage.sync.set({ [key]: value });
         } catch (error) {
             console.error('Error setting Chrome storage item:', error);
         }
@@ -14,7 +14,7 @@
     // Función para obtener un dato de Chrome Storage
     async function getChromeStorageItem(key) {
         try {
-            const result = await chrome.storage.local.get([key]);
+            const result = await chrome.storage.sync.get([key]);
             return result[key] || null;
         } catch (error) {
             console.error('Error getting Chrome storage item:', error);

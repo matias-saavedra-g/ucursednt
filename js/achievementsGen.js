@@ -4,7 +4,7 @@
     function setChromeStorageItem(key, value) {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.local.set({ [key]: value }, () => {
+                chrome.storage.sync.set({ [key]: value }, () => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -21,7 +21,7 @@
     function getChromeStorageItem(key) {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.local.get([key], (result) => {
+                chrome.storage.sync.get([key], (result) => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -38,7 +38,7 @@
     function getAllChromeStorageItems() {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.local.get(null, (result) => {
+                chrome.storage.sync.get(null, (result) => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -450,7 +450,8 @@
             { id: "pendingTasksFirstHover", name: "Primer Hover en Tareas Pendientes", description: "Logro por hacer el primer hover en tareas pendientes", icon: "fa-tasks", unlocked: storageItems['pendingTasksFirstHover'] === true, category: "interactions", rarity: "rare" },
             { id: "achievementsBotonFirstClick", name: "Primer Click en Botón de Logros", description: "Logro por hacer el primer click en el botón de logros", icon: "fa-trophy", unlocked: storageItems['achievementsBotonFirstClick'] === true, category: "interactions", rarity: "legendary" },
             { id: "scheduleDateFirstHover", name: "Primer Hover en Fecha de Programación", description: "Logro por hacer el primer hover en la fecha de programación", icon: "fa-calendar", unlocked: storageItems['scheduleDateFirstHover'] === true, category: "interactions", rarity: "epic" },
-            { id: "collapsableMenusFirstClick", name: "Primer Click en Menús Colapsables", description: "Logro por hacer el primer click en menús colapsables", icon: "fa-hand-pointer", unlocked: storageItems['collapsableMenusFirstClick'] === true, category: "interactions", rarity: "rare" }
+            { id: "collapsableMenusFirstClick", name: "Primer Click en Menús Colapsables", description: "Logro por hacer el primer click en menús colapsables", icon: "fa-hand-pointer", unlocked: storageItems['collapsableMenusFirstClick'] === true, category: "interactions", rarity: "rare" },
+            { id: "navigationAnimations", name: "Animaciones de Navegación", description: "Logro por activar las animaciones de navegación", icon: "fa-animation", unlocked: storageItems['navigationAnimations'] === true, category: "interactions", rarity: "legendary" }
         ];
     
         const totalAchievements = achievements.length;
