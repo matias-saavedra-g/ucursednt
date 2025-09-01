@@ -142,6 +142,11 @@
       "matches": ["*://www.u-cursos.cl/*/*/*/*/*/tareas/detalle*"],
       "js": ["js/taskSubmissionSound.js"],
       "run_at": "document_end"
+    },
+    {
+      "matches": ["*://www.u-cursos.cl/*"],
+      "js": ["js/footerCredit.js"],
+      "run_at": "document_end"
     }
   ],
   "action": {

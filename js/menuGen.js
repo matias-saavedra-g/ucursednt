@@ -103,6 +103,7 @@
                 renameCourses: true,
                 navigationAnimations: true,
                 taskSubmissionSound: true,
+                footerCredit: true,
             },
         };
 
@@ -405,6 +406,7 @@
             { id: "renameCourses", name: "Renombrar Cursos", icon: "📚", description: "Personalizar nombres de cursos" },
             { id: "navigationAnimations", name: "Animaciones de Navegación", icon: "✨", description: "Efectos visuales suaves en el menú de navegación" },
             { id: "taskSubmissionSound", name: "Sonido de Entrega de Tareas", icon: "🔊", description: "Sonido de dopamina al entregar tareas" },
+            { id: "footerCredit", name: "Crédito en el Pie de Página", icon: "❤️", description: "Mostrar crédito del desarrollador en el pie de página" },
         ];
 
         featuresList.forEach(feature => {
