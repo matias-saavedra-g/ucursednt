@@ -137,6 +137,11 @@
       "matches": ["*://www.u-cursos.cl/*"],
       "js": ["js/navigationAnimations.js"],
       "run_at": "document_end"
+    },
+    {
+      "matches": ["*://www.u-cursos.cl/*/*/*/*/*/tareas/detalle*"],
+      "js": ["js/taskSubmissionSound.js"],
+      "run_at": "document_end"
     }
   ],
   "action": {

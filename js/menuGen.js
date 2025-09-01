@@ -102,6 +102,7 @@
                 pendingNotifications: true,
                 renameCourses: true,
                 navigationAnimations: true,
+                taskSubmissionSound: true,
             },
         };
 
@@ -403,6 +404,7 @@
             { id: "pendingNotifications", name: "Notificaciones Pendientes", icon: "🔔", description: "Contador de notificaciones pendientes" },
             { id: "renameCourses", name: "Renombrar Cursos", icon: "📚", description: "Personalizar nombres de cursos" },
             { id: "navigationAnimations", name: "Animaciones de Navegación", icon: "✨", description: "Efectos visuales suaves en el menú de navegación" },
+            { id: "taskSubmissionSound", name: "Sonido de Entrega de Tareas", icon: "🔊", description: "Sonido de dopamina al entregar tareas" },
         ];
 
         featuresList.forEach(feature => {
