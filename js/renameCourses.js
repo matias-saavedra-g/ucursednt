@@ -1,18 +1,41 @@
-(function() {
+(async function() {
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Función para obtener un dato de LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
     // Función para obtener el nombre del curso
-    function getCourseName() {
+    async function getCourseName() {
         // Obtener el elemento que coincide
         const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h1");
 
@@ -22,8 +45,8 @@
         // Obtener el contenido de texto del elemento
         let courseName = courseNameElement.firstChild.textContent.trim();
 
-        // Verificar si el nombre del curso ya existe en LocalStorage
-        let courseMappings = JSON.parse(localStorage.getItem('courseMappings')) || {};
+        // Verificar si el nombre del curso ya existe en Chrome Storage
+        let courseMappings = await getChromeStorageItem('courseMappings') || {};
         if (courseMappings[courseName] || Object.values(courseMappings).includes(courseName)) {
             // Si existe, recuperar el nombre original
             courseName = Object.keys(courseMappings).find(key => courseMappings[key] === courseName) || courseName;
@@ -32,21 +55,21 @@
         return courseName;
     }
 
-    function renameCourse() {
-        const courseName = getCourseName();
+    async function renameCourse() {
+        const courseName = await getCourseName();
         const newCourseName = prompt("Introduce el nuevo nombre del curso:", courseName);
     
         // Verificar si el usuario canceló la operación
         if (!newCourseName) { return; }
     
-        // Guardar el nuevo nombre del curso en LocalStorage
-        let courseMappings = JSON.parse(localStorage.getItem('courseMappings')) || {};
+        // Guardar el nuevo nombre del curso en Chrome Storage
+        let courseMappings = await getChromeStorageItem('courseMappings') || {};
     
         // Guardar el nuevo nombre del curso en el objeto de mapeo
         courseMappings[courseName] = newCourseName;
     
-        // Guardar el objeto de mapeo en LocalStorage
-        localStorage.setItem('courseMappings', JSON.stringify(courseMappings));
+        // Guardar el objeto de mapeo en Chrome Storage
+        await setChromeStorageItem('courseMappings', courseMappings);
     
         // Reemplazar el nombre del curso en todo el documento
         replaceCourseName(courseName, newCourseName);
@@ -61,8 +84,8 @@
         }
     }
     
-    function replaceCourseNames() {
-        const renamedCourses = JSON.parse(localStorage.getItem('courseMappings'));
+    async function replaceCourseNames() {
+        const renamedCourses = await getChromeStorageItem('courseMappings');
     
         // Verificar si hay cursos renombrados guardados
         if (!renamedCourses) { return; }
@@ -91,8 +114,9 @@
     }
     
     // Verificar si la configuración de renameCourses está activada
-    const renameCoursesSetting = JSON.parse(localStorage.getItem("settings")).features.renameCourses
-    if (getLocalStorageItem("settings")) {
+    const settings = await getChromeStorageItem("settings");
+    if (settings) {
+        const renameCoursesSetting = settings.features.renameCourses;
         if (!renameCoursesSetting) {return}
     }
 
@@ -100,5 +124,5 @@
     añadirBotones();
 
     // Ejecutar la función para renombrar el curso
-    replaceCourseNames();
+    await replaceCourseNames();
 })();

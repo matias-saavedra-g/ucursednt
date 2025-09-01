@@ -1,14 +1,54 @@
-(function() {
+(async function() {
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Función para obtener un dato de LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    // Function to get all Chrome Storage items
+    function getAllChromeStorageItems() {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get(null, (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
     // Add modern CSS styles for achievements
@@ -386,8 +426,10 @@
     }
 
     // Función para crear el showroom de logros
-    function createAdvancementsShowroom() {
-        const settings = JSON.parse(localStorage.getItem('settings'));
+    async function createAdvancementsShowroom() {
+        const settings = await getChromeStorageItem('settings');
+        const storageItems = await getAllChromeStorageItems();
+        
         const achievements = [
             { id: "easyCopyGrades", name: "Copia Fácil de Notas", description: "Logro por activar la copia fácil de notas", icon: "fa-clipboard", unlocked: settings.features.easyCopyGrades, category: "features", rarity: "common" },
             { id: "easyCopyMembers", name: "Copia Fácil de Miembros", description: "Logro por activar la copia fácil de miembros", icon: "fa-users", unlocked: settings.features.easyCopyMembers, category: "features", rarity: "common" },
@@ -401,14 +443,14 @@
             { id: "collapsableMenus", name: "Secciones colapsables", description: "Logro por activar las secciones colapsables", icon: "fa-bars", unlocked: settings.features.collapsableMenus, category: "features", rarity: "common" },
             { id: "pendingNotifications", name: "Notificación de Pendientes", description: "Logro por activar la notificación de pendientes", icon: "fa-bell", unlocked: settings.features.pendingNotifications, category: "features", rarity: "common" },
             { id: "renameCourses", name: "Renombrar Cursos", description: "Logro por activar la funcionalidad de renombrar cursos", icon: "fa-edit", unlocked: settings.features.renameCourses, category: "features", rarity: "epic" },
-            { id: "menuBotonFirstClick", name: "Primer Click en Menú", description: "Logro por hacer el primer click en el botón del menú", icon: "fa-mouse-pointer", unlocked: localStorage.getItem('menuBotonFirstClick') === 'true', category: "interactions", rarity: "rare" },
-            { id: "showMoreFirstClick", name: "Primer Click en Mostrar Más", description: "Logro por hacer el primer click en mostrar más", icon: "fa-plus-circle", unlocked: localStorage.getItem('showMoreFirstClick') === 'true', category: "interactions", rarity: "rare" },
-            { id: "resizableFirstHover", name: "Primer Hover en Redimensionable", description: "Logro por hacer el primer hover en un elemento redimensionable", icon: "fa-arrows-alt", unlocked: localStorage.getItem('resizableFirstHover') === 'true', category: "interactions", rarity: "rare" },
-            { id: "otherRealizationsFirstClick", name: "Primer Click en Otras Realizaciones", description: "Logro por hacer el primer click en otras realizaciones", icon: "fa-external-link-alt", unlocked: localStorage.getItem('otherRealizationsFirstClick') === 'true', category: "interactions", rarity: "epic" },
-            { id: "pendingTasksFirstHover", name: "Primer Hover en Tareas Pendientes", description: "Logro por hacer el primer hover en tareas pendientes", icon: "fa-tasks", unlocked: localStorage.getItem('pendingTasksFirstHover') === 'true', category: "interactions", rarity: "rare" },
-            { id: "achievementsBotonFirstClick", name: "Primer Click en Botón de Logros", description: "Logro por hacer el primer click en el botón de logros", icon: "fa-trophy", unlocked: localStorage.getItem('achievementsBotonFirstClick') === 'true', category: "interactions", rarity: "legendary" },
-            { id: "scheduleDateFirstHover", name: "Primer Hover en Fecha de Programación", description: "Logro por hacer el primer hover en la fecha de programación", icon: "fa-calendar", unlocked: localStorage.getItem('scheduleDateFirstHover') === 'true', category: "interactions", rarity: "epic" },
-            { id: "collapsableMenusFirstClick", name: "Primer Click en Menús Colapsables", description: "Logro por hacer el primer click en menús colapsables", icon: "fa-hand-pointer", unlocked: localStorage.getItem('collapsableMenusFirstClick') === 'true', category: "interactions", rarity: "rare" }
+            { id: "menuBotonFirstClick", name: "Primer Click en Menú", description: "Logro por hacer el primer click en el botón del menú", icon: "fa-mouse-pointer", unlocked: storageItems['menuBotonFirstClick'] === true, category: "interactions", rarity: "rare" },
+            { id: "showMoreFirstClick", name: "Primer Click en Mostrar Más", description: "Logro por hacer el primer click en mostrar más", icon: "fa-plus-circle", unlocked: storageItems['showMoreFirstClick'] === true, category: "interactions", rarity: "rare" },
+            { id: "resizableFirstHover", name: "Primer Hover en Redimensionable", description: "Logro por hacer el primer hover en un elemento redimensionable", icon: "fa-arrows-alt", unlocked: storageItems['resizableFirstHover'] === true, category: "interactions", rarity: "rare" },
+            { id: "otherRealizationsFirstClick", name: "Primer Click en Otras Realizaciones", description: "Logro por hacer el primer click en otras realizaciones", icon: "fa-external-link-alt", unlocked: storageItems['otherRealizationsFirstClick'] === true, category: "interactions", rarity: "epic" },
+            { id: "pendingTasksFirstHover", name: "Primer Hover en Tareas Pendientes", description: "Logro por hacer el primer hover en tareas pendientes", icon: "fa-tasks", unlocked: storageItems['pendingTasksFirstHover'] === true, category: "interactions", rarity: "rare" },
+            { id: "achievementsBotonFirstClick", name: "Primer Click en Botón de Logros", description: "Logro por hacer el primer click en el botón de logros", icon: "fa-trophy", unlocked: storageItems['achievementsBotonFirstClick'] === true, category: "interactions", rarity: "legendary" },
+            { id: "scheduleDateFirstHover", name: "Primer Hover en Fecha de Programación", description: "Logro por hacer el primer hover en la fecha de programación", icon: "fa-calendar", unlocked: storageItems['scheduleDateFirstHover'] === true, category: "interactions", rarity: "epic" },
+            { id: "collapsableMenusFirstClick", name: "Primer Click en Menús Colapsables", description: "Logro por hacer el primer click en menús colapsables", icon: "fa-hand-pointer", unlocked: storageItems['collapsableMenusFirstClick'] === true, category: "interactions", rarity: "rare" }
         ];
     
         const totalAchievements = achievements.length;
@@ -556,7 +598,7 @@
     }
 
     // Inicializar la página
-    function initPage() {
+    async function initPage() {
         addModernAchievementStyles(); // Add modern CSS styles
         
         const errorDisplay = document.querySelector("#error");
@@ -566,17 +608,18 @@
         menuTitle.textContent = "Logros";
 
         const bodyBlankPage = document.querySelector("#body")
-        const menuElement = createAdvancementsShowroom();
+        const menuElement = await createAdvancementsShowroom();
         bodyBlankPage.appendChild(menuElement);
     }
 
     // Ejecutar la inicialización al cargar la página
-    initPage();
+    await initPage();
 
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        const value = localStorage.getItem(key);
+    // Log all storage items for debugging
+    const storageItems = await getAllChromeStorageItems();
+    Object.keys(storageItems).forEach(key => {
+        const value = JSON.stringify(storageItems[key]);
         console.log(`Key: ${key}, Value: ${value}`);
-    }
+    });
 
 })();

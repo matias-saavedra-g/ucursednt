@@ -6,7 +6,8 @@
   "author": "matias-saavedra-g",
   "permissions": [
     "activeTab",
-    "clipboardWrite"
+    "clipboardWrite",
+    "storage"
   ],
   "content_scripts": [
     {

@@ -1,16 +1,25 @@
 // easyCopyMembers.js
 
-(function() {
+(async function() {
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    // Función para establecer un dato en Chrome Storage
+    async function setChromeStorageItem(key, value) {
+        try {
+            await chrome.storage.sync.set({ [key]: value });
+        } catch (error) {
+            console.error('Error setting Chrome storage item:', error);
+        }
     }
 
-    // Función para obtener un dato de LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Función para obtener un dato de Chrome Storage
+    async function getChromeStorageItem(key) {
+        try {
+            const result = await chrome.storage.sync.get([key]);
+            return result[key] || null;
+        } catch (error) {
+            console.error('Error getting Chrome storage item:', error);
+            return null;
+        }
     }
 
     // Función para copiar texto al portapapeles
@@ -122,9 +131,10 @@
         }
     }
 
-    const easyCopyMembersConfig = JSON.parse(localStorage.getItem("settings")).features.easyCopyMembers
-    if (getLocalStorageItem("settings")) {
-        if (!easyCopyMembersConfig) {return}
+    const settings = await getChromeStorageItem("settings");
+    const easyCopyMembersConfig = settings?.features?.easyCopyMembers;
+    if (!settings || !easyCopyMembersConfig) {
+        return;
     }
 
     // Verificar si estamos en la página de integrantes del curso o grupo

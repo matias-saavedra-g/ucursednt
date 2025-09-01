@@ -1,25 +1,49 @@
 // Basado en https://github.com/Nyveon/tU-Cursos - Modificado por matias-saavedra-g el 2024.07.16
 
-(function() {
+(async function() {
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Función para obtener un dato de LocalStorage
+    // Function to get an item from Chrome Storage
     /**
-     * Retrieves the value associated with the specified key from the local storage.
+     * Retrieves the value associated with the specified key from the Chrome storage.
      * @param {string} key - The key to retrieve the value for.
-     * @returns {any} The value associated with the key, or null if the key does not exist.
+     * @returns {Promise<any>} The value associated with the key, or null if the key does not exist.
      */
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    const popupGradingConfig = JSON.parse(localStorage.getItem("settings")).features.popupGrading
-    if (getLocalStorageItem("settings")) {
+    const settings = await getChromeStorageItem("settings");
+    if (settings) {
+        const popupGradingConfig = settings.features.popupGrading;
         if (!popupGradingConfig) {return}
     }
 

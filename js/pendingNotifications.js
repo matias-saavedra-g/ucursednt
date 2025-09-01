@@ -1,13 +1,36 @@
-(function() {
-    // Function to set an item in LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+(async function() {
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Function to get an item from LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
     /// This script will iterate over menu elements (modulos) and retrieve the pending notifications and will display them in the menu header
@@ -18,9 +41,9 @@
         return count;
     }
 
-    function notifyPending(count) {
+    async function notifyPending(count) {
         const modulos = document.querySelector("#modulos");
-        modulos.querySelectorAll("div > h1").forEach(section => {
+        modulos.querySelectorAll("div > h1").forEach(async (section) => {
             let notificationElement = section.querySelector("#pending-notifications");
             if (count > 0) {
                 if (!notificationElement) {
@@ -67,24 +90,25 @@
             }
         });
         // Add mouseover event for alert
-        let firstHover = getLocalStorageItem("pendingNotificationsFirstHover") !== true;
-        modulos.addEventListener('mouseover', function() {
+        let firstHover = await getChromeStorageItem("pendingNotificationsFirstHover") !== true;
+        modulos.addEventListener('mouseover', async function() {
             if (firstHover) {
                 alert("¡Ahora contamos notificaciones pendientes! Revisa los módulos para más información.");
-                setLocalStorageItem("pendingNotificationsFirstHover", true); // Mark that the alert has been shown
+                await setChromeStorageItem("pendingNotificationsFirstHover", true); // Mark that the alert has been shown
                 firstHover = false; // Update the local variable to prevent further alerts
             }
         });
     }
 
     // Main function to count and notify about pending notifications
-    const settings = getLocalStorageItem("settings");
+    const settings = await getChromeStorageItem("settings");
     if (settings && settings.features && settings.features.pendingNotifications) {
         const currentUrl = /https:\/\/www\.u-cursos\.cl\/+/;
         if (currentUrl.test(window.location.href)) {
             const pendingCount = countPendingNotifications();
-            setLocalStorageItem("pendingNotificationsCount", pendingCount);
+            await setChromeStorageItem("pendingNotificationsCount", pendingCount);
         }
-        notifyPending(getLocalStorageItem("pendingNotificationsCount")); // Notify about pending tasks;
+        const pendingNotificationsCount = await getChromeStorageItem("pendingNotificationsCount");
+        await notifyPending(pendingNotificationsCount); // Notify about pending tasks;
     }
 })();

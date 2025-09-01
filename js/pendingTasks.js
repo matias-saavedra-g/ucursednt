@@ -1,13 +1,36 @@
-(function() {
-    // Function to set an item in LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+(async function() {
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Function to get an item from LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
     // Function to count pending tasks
@@ -25,9 +48,9 @@
     }
 
     // Function to notify about pending tasks
-    function notifyPendingTasks(count) {
+    async function notifyPendingTasks(count) {
         const navigationItems = document.querySelectorAll("#navigation-wrapper > ul > li.servicio");
-        navigationItems.forEach(item => {
+        navigationItems.forEach(async (item) => {
             const navText = item.innerText.trim();
             if (navText === "Homeworks" || navText === "Tareas") {
                 let notificationElement = item.querySelector("#pending-tasks-notification");
@@ -75,11 +98,11 @@
                 }
 
                 // Add mouseover event for alert
-                let firstHover = getLocalStorageItem("pendingTasksFirstHover") !== true;
-                item.addEventListener('mouseover', function() {
+                let firstHover = await getChromeStorageItem("pendingTasksFirstHover") !== true;
+                item.addEventListener('mouseover', async function() {
                     if (firstHover) {
                         alert('¡Ahora te notificamos de tus tareas pendientes! Sugerimos definir "Tareas" como la página de inicio de U-Cursos.');
-                        setLocalStorageItem("pendingTasksFirstHover", true); // Mark that the alert has been shown
+                        await setChromeStorageItem("pendingTasksFirstHover", true); // Mark that the alert has been shown
                         firstHover = false; // Update the local variable to prevent further alerts
                     }
                 });
@@ -87,13 +110,14 @@
         });
     }
 
-    const settings = getLocalStorageItem("settings");
+    const settings = await getChromeStorageItem("settings");
     if (settings && settings.features && settings.features.pendingTasks) {
         const currentUrl = /https:\/\/www\.u-cursos\.cl\/\w+\/\w+\/tareas_usuario\/+/;
         if (currentUrl.test(window.location.href)) {
             const pendingCount = countPendingTasks();
-            setLocalStorageItem("pendingTasksCount", pendingCount);
+            await setChromeStorageItem("pendingTasksCount", pendingCount);
         }
-        notifyPendingTasks(getLocalStorageItem("pendingTasksCount")); // Notify about pending tasks;
+        const pendingTasksCount = await getChromeStorageItem("pendingTasksCount");
+        await notifyPendingTasks(pendingTasksCount); // Notify about pending tasks;
     }
 })();

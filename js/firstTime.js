@@ -1,25 +1,36 @@
 // content.js
 
-// Función para establecer un dato en LocalStorage
-function setLocalStorageItem(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+(async function() {
+
+// Función para establecer un dato en Chrome Storage
+async function setChromeStorageItem(key, value) {
+    try {
+        await chrome.storage.sync.set({ [key]: value });
+    } catch (error) {
+        console.error('Error setting Chrome storage item:', error);
+    }
 }
 
-// Función para obtener un dato de LocalStorage
-function getLocalStorageItem(key) {
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : null;
+// Función para obtener un dato de Chrome Storage
+async function getChromeStorageItem(key) {
+    try {
+        const result = await chrome.storage.sync.get([key]);
+        return result[key] || null;
+    } catch (error) {
+        console.error('Error getting Chrome storage item:', error);
+        return null;
+    }
 }
 
 // Verificar si es la primera visita
-const firstVisit = getLocalStorageItem('firstVisit');
+const firstVisit = await getChromeStorageItem('firstVisit');
 
 if (!firstVisit) {
     // Redirigir a la página especificada
     window.location.href = "https://www.u-cursos.cl/ucursednt/";
     
-    // Establecer el indicador de primera visita en localStorage
-    setLocalStorageItem('firstVisit', true);
+    // Establecer el indicador de primera visita en Chrome Storage
+    await setChromeStorageItem('firstVisit', true);
     
     // Mostrar el changelog popup
     showChangeLogPopup();
@@ -38,3 +49,5 @@ function showChangeLogPopup() {
         alert('Please allow popups for this website to see the changelog.');
     }
 }
+
+})();

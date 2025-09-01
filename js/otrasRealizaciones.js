@@ -1,23 +1,47 @@
-(function() {
+(async function() {
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Función para obtener un dato de LocalStorage
+    // Function to get an item from Chrome Storage
     /**
-     * Retrieves an item from the local storage based on the provided key.
-     * @param {string} key - The key of the item to retrieve from the local storage.
-     * @returns {any} - The retrieved item, or null if the item does not exist.
+     * Retrieves an item from the Chrome storage based on the provided key.
+     * @param {string} key - The key of the item to retrieve from the Chrome storage.
+     * @returns {Promise<any>} - The retrieved item, or null if the item does not exist.
      */
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    const otrasRealizacionesConfig = JSON.parse(localStorage.getItem("settings")).features.otrasRealizaciones
-    if (getLocalStorageItem("settings")) {
+    const settings = await getChromeStorageItem("settings");
+    if (settings) {
+        const otrasRealizacionesConfig = settings.features.otrasRealizaciones;
         if (!otrasRealizacionesConfig) {return}
     }
 
@@ -38,7 +62,7 @@
         `;
 
         // Añadir funcionalidad al botón
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async () => {
             // Obtener partes de la URL actual
             const parts = currentUrl.split('/');
             const faculty = parts[3];
@@ -49,10 +73,10 @@
             window.location.href = newUrl;
 
             // Mostrar una alerta la primera vez que se hace clic en el botón
-            let firstClick = getLocalStorageItem("otherRealizationsFirstClick") !== true;
+            let firstClick = await getChromeStorageItem("otherRealizationsFirstClick") !== true;
             if (firstClick) {
                 alert("¡Nuevo atajo desbloqueado!");
-                setLocalStorageItem("otherRealizationsFirstClick", true); // Marcar que ya se mostró la alerta
+                await setChromeStorageItem("otherRealizationsFirstClick", true); // Marcar que ya se mostró la alerta
             }
         });
 

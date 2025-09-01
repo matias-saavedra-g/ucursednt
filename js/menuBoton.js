@@ -1,19 +1,28 @@
-(function() {
+(async function() {
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    // Función para establecer un dato en Chrome Storage
+    async function setChromeStorageItem(key, value) {
+        try {
+            await chrome.storage.sync.set({ [key]: value });
+        } catch (error) {
+            console.error('Error setting Chrome storage item:', error);
+        }
     }
 
-    // Función para obtener un dato de LocalStorage
+    // Función para obtener un dato de Chrome Storage
     /**
-     * Retrieves the value associated with the specified key from the local storage.
+     * Retrieves the value associated with the specified key from the Chrome storage.
      * @param {string} key - The key to retrieve the value for.
      * @returns {any} - The value associated with the key, or null if the key does not exist.
      */
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    async function getChromeStorageItem(key) {
+        try {
+            const result = await chrome.storage.sync.get([key]);
+            return result[key] || null;
+        } catch (error) {
+            console.error('Error getting Chrome storage item:', error);
+            return null;
+        }
     }
 
     // Verificar si estamos en la URL del homepage de u-cursos
@@ -41,7 +50,7 @@
         `;
 
         // Añadir funcionalidad al botón
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async () => {
             // Obtener partes de la URL actual
             const newUrl = `https://www.u-cursos.cl/ucursednt`;
 
@@ -49,10 +58,10 @@
             window.location.href = newUrl;
 
             // Mostrar una alerta la primera vez que se hace clic en el botón
-            let firstClick = getLocalStorageItem("menuBotonFirstClick") !== true;
+            let firstClick = await getChromeStorageItem("menuBotonFirstClick") !== true;
             if (firstClick) {
                 alert("Este es el menú de configuración de U-Cursedn't.");
-                setLocalStorageItem("menuBotonFirstClick", true); // Marcar que ya se mostró la alerta
+                await setChromeStorageItem("menuBotonFirstClick", true); // Marcar que ya se mostró la alerta
             }
 
         });

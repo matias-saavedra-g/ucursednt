@@ -1,18 +1,92 @@
-(function() {
+(async function() {
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Función para obtener un dato de LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    // Function to get all Chrome Storage items
+    function getAllChromeStorageItems() {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get(null, (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    // Function to remove an item from Chrome Storage
+    function removeChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.remove([key], () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    // Function to clear all Chrome Storage
+    function clearChromeStorage() {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.clear(() => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
     // Inicializar configuraciones
-    function initSettings() {
+    async function initSettings() {
         const defaultSettings = {
             features: {
                 easyCopyGrades: true,
@@ -30,8 +104,8 @@
             },
         };
 
-        if (!getLocalStorageItem("settings")) {
-            setLocalStorageItem("settings", defaultSettings);
+        if (!await getChromeStorageItem("settings")) {
+            await setChromeStorageItem("settings", defaultSettings);
         }
     }
 
@@ -288,11 +362,11 @@
 
     // Crear el menú de características
     /**
-     * Creates a feature menu based on the settings stored in local storage.
-     * @returns {HTMLElement} The created feature menu element.
+     * Creates a feature menu based on the settings stored in Chrome storage.
+     * @returns {Promise<HTMLElement>} The created feature menu element.
      */
-    function createFeatureMenu() {
-        const settings = getLocalStorageItem("settings");
+    async function createFeatureMenu() {
+        const settings = await getChromeStorageItem("settings");
         const features = settings.features;
 
         const menuElement = document.createElement("div");
@@ -338,9 +412,9 @@
             checkbox.checked = features[feature.id];
             checkbox.id = feature.id;
             checkbox.className = "feature-checkbox";
-            checkbox.addEventListener("change", (e) => {
+            checkbox.addEventListener("change", async (e) => {
                 features[feature.id] = e.target.checked;
-                setLocalStorageItem("settings", settings);
+                await setChromeStorageItem("settings", settings);
                 featureElement.className = `feature-group ${e.target.checked ? 'enabled' : ''}`;
                 statusSpan.textContent = e.target.checked ? 'Activado' : 'Desactivado';
                 statusSpan.className = `feature-status ${e.target.checked ? 'enabled' : 'disabled'}`;
@@ -380,7 +454,7 @@
     }
 
     // Inicializar la página
-    function initPage() {
+    async function initPage() {
         addModernStyles(); // Add modern CSS styles
         
         const errorDisplay = document.querySelector("#error");
@@ -391,7 +465,7 @@
 
         const bodyBlankPage = document.querySelector("#body")
 
-        const menuElement = createFeatureMenu();
+        const menuElement = await createFeatureMenu();
 
         // Create action buttons container
         const actionContainer = document.createElement('div');
@@ -400,40 +474,41 @@
         const clearButton = document.createElement('button');
         clearButton.innerHTML = '<i class="fas fa-trash-alt"></i> Borrar Almacenamiento Local';
         clearButton.className = 'modern-button btn-danger';
-        clearButton.id = 'clearLocalStorageButton';
+        clearButton.id = 'clearChromeStorageButton';
 
-        clearButton.addEventListener('click', function() {
+        clearButton.addEventListener('click', async function() {
             const clearConfirmed = confirm('¿Estás seguro que quieres borrar el almacenamiento interno? Esta acción no puede revertirse.');
         
             if (clearConfirmed) {
-              localStorage.clear();
-              console.log('Local storage cleared!');
-              initSettings();
-              console.log('Settings initialized!');
-              location.reload(); // Refresh to show updated settings
+                await clearChromeStorage();
+                console.log('Chrome storage cleared!');
+                await initSettings();
+                console.log('Settings initialized!');
+                location.reload(); // Refresh to show updated settings
             } else {
-              console.log('Local storage clearing cancelled.');
+                console.log('Chrome storage clearing cancelled.');
             }
         });
 
-        // Crea un botón que hace alterna el mostrar el local storage
-        const showLocalStorageButton = document.createElement('button');
-        const localStorageList = document.createElement('ul');
-        showLocalStorageButton.innerHTML = '<i class="fas fa-database"></i> Mostrar Almacenamiento Local';
-        showLocalStorageButton.className = 'modern-button btn-secondary';
-        showLocalStorageButton.id = 'showLocalStorageButton';
+        // Crea un botón que hace alterna el mostrar el Chrome storage
+        const showChromeStorageButton = document.createElement('button');
+        const chromeStorageList = document.createElement('ul');
+        showChromeStorageButton.innerHTML = '<i class="fas fa-database"></i> Mostrar Almacenamiento Local';
+        showChromeStorageButton.className = 'modern-button btn-secondary';
+        showChromeStorageButton.id = 'showChromeStorageButton';
 
-        localStorageList.className = 'storage-list';
+        chromeStorageList.className = 'storage-list';
 
-        // Función para actualizar la lista del almacenamiento local
-        function updateLocalStorageList() {
-            localStorageList.innerHTML = '';
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                const value = localStorage.getItem(key);
+        // Función para actualizar la lista del almacenamiento Chrome
+        async function updateChromeStorageList() {
+            chromeStorageList.innerHTML = '';
+            const storageItems = await getAllChromeStorageItems();
+            
+            Object.keys(storageItems).forEach(key => {
+                const value = JSON.stringify(storageItems[key]);
                 
-                const localStorageItem = document.createElement('li');
-                localStorageItem.className = 'storage-item';
+                const storageItem = document.createElement('li');
+                storageItem.className = 'storage-item';
                 
                 const keySpan = document.createElement('span');
                 keySpan.className = 'storage-key';
@@ -448,35 +523,35 @@
                 deleteBtn.className = 'delete-storage-btn';
                 deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
                 deleteBtn.title = 'Eliminar este elemento';
-                deleteBtn.addEventListener('click', function(e) {
+                deleteBtn.addEventListener('click', async function(e) {
                     e.stopPropagation();
                     const deleteConfirmed = confirm(`¿Estás seguro que quieres borrar "${key}" del almacenamiento local?`);
                     if (deleteConfirmed) {
-                        localStorage.removeItem(key);
-                        updateLocalStorageList();
+                        await removeChromeStorageItem(key);
+                        await updateChromeStorageList();
                     }
                 });
                 
-                localStorageItem.appendChild(keySpan);
-                localStorageItem.appendChild(valueSpan);
-                localStorageItem.appendChild(deleteBtn);
-                localStorageList.appendChild(localStorageItem);
-            }
+                storageItem.appendChild(keySpan);
+                storageItem.appendChild(valueSpan);
+                storageItem.appendChild(deleteBtn);
+                chromeStorageList.appendChild(storageItem);
+            });
         }
 
         // Agrega funcionalidad al botón
-        showLocalStorageButton.addEventListener('click', function() {
-            if (!bodyBlankPage.contains(localStorageList)) {
-                showLocalStorageButton.innerHTML = '<i class="fas fa-eye-slash"></i> Ocultar Almacenamiento Local';
-                updateLocalStorageList();
-                bodyBlankPage.appendChild(localStorageList);
+        showChromeStorageButton.addEventListener('click', async function() {
+            if (!bodyBlankPage.contains(chromeStorageList)) {
+                showChromeStorageButton.innerHTML = '<i class="fas fa-eye-slash"></i> Ocultar Almacenamiento Local';
+                await updateChromeStorageList();
+                bodyBlankPage.appendChild(chromeStorageList);
             } else {
-                showLocalStorageButton.innerHTML = '<i class="fas fa-database"></i> Mostrar Almacenamiento Local';
-                localStorageList.remove();
+                showChromeStorageButton.innerHTML = '<i class="fas fa-database"></i> Mostrar Almacenamiento Local';
+                chromeStorageList.remove();
             }
         });
 
-        actionContainer.appendChild(showLocalStorageButton);
+        actionContainer.appendChild(showChromeStorageButton);
         actionContainer.appendChild(clearButton);
 
         bodyBlankPage.appendChild(menuElement);
@@ -484,13 +559,14 @@
     }
 
     // Ejecutar la inicialización al cargar la página
-    initSettings();
-    initPage();
+    await initSettings();
+    await initPage();
 
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        const value = localStorage.getItem(key);
+    // Log all storage items for debugging
+    const storageItems = await getAllChromeStorageItems();
+    Object.keys(storageItems).forEach(key => {
+        const value = JSON.stringify(storageItems[key]);
         console.log(`Key: ${key}, Value: ${value}`);
-    }
+    });
 
 })();

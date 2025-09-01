@@ -1,13 +1,36 @@
-(function() {
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+(async function() {
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Función para obtener un dato de LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     
     // Make every section collapsable and adds a button next to each section to collapse it using fa-compress
@@ -31,45 +54,45 @@
             // Inherits the color of the text
             button.style.color = "inherit";
             section.appendChild(button);
-            button.addEventListener("click", () => {
+            button.addEventListener("click", async () => {
                 // Add mouseover event for alert
-                let firstClick = getLocalStorageItem("collapsableMenusFirstClick") !== true;
+                let firstClick = await getChromeStorageItem("collapsableMenusFirstClick") !== true;
                 if (firstClick) {
                     alert("Puedes expandir o colapsar las secciones haciendo click en el botón que aparece al lado de cada título.");
-                    setLocalStorageItem("collapsableMenusFirstClick", true); // Mark that the alert has been shown
+                    await setChromeStorageItem("collapsableMenusFirstClick", true); // Mark that the alert has been shown
                     firstClick = false; // Update the local variable to prevent further alerts
                 }
                 if (content.style.display === "none") {
                     content.style.display = "block";
                     button.innerHTML = '<i class="fa-solid fa-minus"></i>';
                     // Save state
-                    saveCollapsableState();
+                    await saveCollapsableState();
                 } else {
                     content.style.display = "none";
                     button.innerHTML = '<i class="fa-solid fa-plus"></i>';
                     // Save state
-                    saveCollapsableState();
+                    await saveCollapsableState();
                 }
             });
         });
     }
 
 
-    // Save every collapsable state in LocalStorage
-    function saveCollapsableState() {
+    // Save every collapsable state in Chrome Storage
+    async function saveCollapsableState() {
         const modulos = document.querySelector("#modulos");
         const state = {};
         modulos.querySelectorAll("div > h1").forEach(section => {
             const content = section.nextElementSibling;
             state[section.innerText] = content.style.display;
         });
-        setLocalStorageItem("collapsableState", state);
+        await setChromeStorageItem("collapsableState", state);
     }
 
-    // Load every collapsable state from LocalStorage
-    function loadCollapsableState() {
+    // Load every collapsable state from Chrome Storage
+    async function loadCollapsableState() {
         const modulos = document.querySelector("#modulos");
-        const state = getLocalStorageItem("collapsableState");
+        const state = await getChromeStorageItem("collapsableState");
         if (!state) {return}
         modulos.querySelectorAll("div > h1").forEach(section => {
             const content = section.nextElementSibling;
@@ -81,14 +104,15 @@
     }
 
     // Verificar si la configuración de collapsableMenus está activada
-    const collapsableMenusConfig = JSON.parse(localStorage.getItem("settings")).features.collapsableMenus
-    if (getLocalStorageItem("settings")) {
+    const settings = await getChromeStorageItem("settings");
+    if (settings) {
+        const collapsableMenusConfig = settings.features.collapsableMenus;
         if (!collapsableMenusConfig) {return}
     }
 
     // Call the functions
     makeCollapsable();
-    loadCollapsableState();
+    await loadCollapsableState();
     window.addEventListener("beforeunload", saveCollapsableState);
 
 })();

@@ -1,16 +1,39 @@
 // easyCopyGrades.js
 
-(function() {
+(async function() {
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Función para obtener un dato de LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
     // Función para copiar texto al portapapeles
@@ -134,9 +157,10 @@
         }
     }
 
-    const easyCopyGradesConfig = JSON.parse(localStorage.getItem("settings")).features.easyCopyGrades
-    if (getLocalStorageItem("settings")) {
-        if (!easyCopyGradesConfig) {return}
+    const settings = await getChromeStorageItem("settings");
+    const easyCopyGradesConfig = settings?.features?.easyCopyGrades;
+    if (!settings || !easyCopyGradesConfig) {
+        return;
     }
 
     // Verificar si estamos en la página de notas del alumno

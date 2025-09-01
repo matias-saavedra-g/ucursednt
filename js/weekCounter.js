@@ -1,7 +1,41 @@
 // Basado en https://github.com/Nyveon/tU-Cursos - Modificado por matias-saavedra-g el 2024.07.16
 // Se halló la solución del problema del contador al usar U-Cursos en inglés.
 
-(function() {
+(async function() {
+
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
 
     /**
      * Function that returns an array of Dates representing each day of the week
@@ -110,17 +144,6 @@
         return recess_weeks;
     }
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
-    }
-
-    // Función para obtener un dato de LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
-    }
-
     // Función principal para agregar contador
     /**
      * Adds a counter to the schedule date element on the page.
@@ -128,17 +151,17 @@
      *
      * @param {string} file - The iCal file containing the calendar events.
      */
-    function addCounter(file) {
+    async function addCounter(file) {
         var schedule_date_dom = document.getElementById("body").getElementsByTagName("h1")[0];
 
         // Verificar si ya se ha mostrado la alerta para schedule_date_dom
-        let firstHoverScheduleDate = getLocalStorageItem("scheduleDateFirstHover") !== true;
+        let firstHoverScheduleDate = await getChromeStorageItem("scheduleDateFirstHover") !== true;
 
         // Función para mostrar la alerta
-        function showAlert() {
+        async function showAlert() {
             if (firstHoverScheduleDate) {
                 alert("¡Ahora contamos semanas!");
-                setLocalStorageItem("scheduleDateFirstHover", true); // Marcar que ya se mostró la alerta
+                await setChromeStorageItem("scheduleDateFirstHover", true); // Marcar que ya se mostró la alerta
                 firstHoverScheduleDate = false; // Asegurar que la alerta se muestre solo una vez
             }
         }
@@ -199,8 +222,9 @@
         schedule_date_dom.append(add);
     }
 
-    const weekCounterConfig = JSON.parse(localStorage.getItem("settings")).features.weekCounter
-    if (getLocalStorageItem("settings")) {
+    const settings = await getChromeStorageItem("settings");
+    if (settings) {
+        const weekCounterConfig = settings.features.weekCounter;
         if (!weekCounterConfig) {return}
     }
 

@@ -1,16 +1,39 @@
 // Basado en https://github.com/Nyveon/tU-Cursos - Modificado por matias-saavedra-g el 2024.07.16
 
-(function() {
+(async function() {
 
-    // Función para establecer un dato en LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Función para obtener un dato de LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
     const paragraph_limit = 5;
@@ -35,8 +58,9 @@
         }
     }
 
-    const muchoTextoConfig = JSON.parse(localStorage.getItem("settings")).features.muchoTexto
-    if (getLocalStorageItem("settings")) {
+    const settings = await getChromeStorageItem("settings");
+    if (settings) {
+        const muchoTextoConfig = settings.features.muchoTexto;
         if (!muchoTextoConfig) {return}
     }
 
@@ -57,10 +81,10 @@
 
             // Añadir alerta la primera vez que se hace clic en el botón de "Es Mucho Texto"
             const showMoreButton = text[i].querySelector('.show-more-button');
-            showMoreButton.addEventListener('click', function () {
-                if (getLocalStorageItem("showMoreFirstClick") !== true) {
+            showMoreButton.addEventListener('click', async function () {
+                if (await getChromeStorageItem("showMoreFirstClick") !== true) {
                     alert("Mucho texto...");
-                    setLocalStorageItem("showMoreFirstClick", true); // Marcar que ya se mostró la alerta
+                    await setChromeStorageItem("showMoreFirstClick", true); // Marcar que ya se mostró la alerta
                 }
                 
                 // Toggle de texto corto y largo

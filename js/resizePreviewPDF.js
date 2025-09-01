@@ -1,13 +1,36 @@
-(function() {
-    // Function to set an item in LocalStorage
-    function setLocalStorageItem(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+(async function() {
+    // Function to set an item in Chrome Storage
+    function setChromeStorageItem(key, value) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.set({ [key]: value }, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    // Function to get an item from LocalStorage
-    function getLocalStorageItem(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
+    // Function to get an item from Chrome Storage
+    function getChromeStorageItem(key) {
+        return new Promise((resolve, reject) => {
+            try {
+                chrome.storage.sync.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    } else {
+                        resolve(result[key] !== undefined ? result[key] : null);
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
     // Check if the page URL matches the PDF viewer pattern
@@ -31,12 +54,12 @@
             pdfContainer.children[0].style.overflow = "auto";
 
             // Show an alert message only once on hover
-            let firstHover = getLocalStorageItem("resizableFirstHover") !== true;
+            let firstHover = await getChromeStorageItem("resizableFirstHover") !== true;
 
-            pdfContainer.addEventListener("mouseover", function() {
+            pdfContainer.addEventListener("mouseover", async function() {
                 if (firstHover) {
                     alert("¡Puedes cambiar el tamaño del visor PDF desde la esquina inferior derecha!");
-                    setLocalStorageItem("resizableFirstHover", true);
+                    await setChromeStorageItem("resizableFirstHover", true);
                     firstHover = false;
                 }
             });
