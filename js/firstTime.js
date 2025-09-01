@@ -1,4 +1,4 @@
-// content.js
+// content.js - Handles first-time visit logic
 
 (async function() {
 
@@ -21,6 +21,21 @@ async function getChromeStorageItem(key) {
         return null;
     }
 }
+
+// Function to build the correct tasks URL
+async function getTasksUrl() {
+    const userId = await getChromeStorageItem('userId');
+    
+    if (userId) {
+        return `https://www.u-cursos.cl/usuario/${userId}/tareas_usuario/`;
+    }
+    
+    // Fallback URLs if userId is not available
+    return null;
+}
+
+// Note: User data extraction is now handled by userDataCapture.js
+// This file only handles first-time visit logic
 
 // Verificar si es la primera visita
 const firstVisit = await getChromeStorageItem('firstVisit');

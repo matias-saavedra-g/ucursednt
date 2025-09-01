@@ -33,11 +33,21 @@
         });
     }
 
-    /// This script will iterate over menu elements (modulos) and retrieve the pending notifications and will display them in the menu header
+    // Function to request background fetch of notifications
+    async function requestBackgroundFetch() {
+        try {
+            await chrome.runtime.sendMessage({ action: 'fetchNotifications' });
+        } catch (error) {
+            console.log('Could not request background fetch:', error);
+        }
+    }
+
+    // This script will iterate over menu elements (modulos) and retrieve the pending notifications and will display them in the menu header
     function countPendingNotifications() {
         // Counts the number of pending notifications by iterating over document.querySelectorAll("a.nuevo")
         // and summing the textContent (converted to number) of each element
         const count = Array.from(document.querySelectorAll("a.nuevo")).reduce((acc, el) => acc + Number(el.textContent), 0);
+        console.log('Content: Found', count, 'pending notifications on page');
         return count;
     }
 
@@ -100,15 +110,40 @@
         });
     }
 
+    // Function to refresh notifications display
+    async function refreshNotifications() {
+        const pendingNotificationsCount = await getChromeStorageItem("pendingNotificationsCount");
+        if (pendingNotificationsCount !== null) {
+            await notifyPending(pendingNotificationsCount);
+        }
+    }
+
+    // Listen for updates from background worker
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.action === 'refreshNotifications') {
+            refreshNotifications();
+            sendResponse({ received: true });
+        }
+    });
+
     // Main function to count and notify about pending notifications
     const settings = await getChromeStorageItem("settings");
     if (settings && settings.features && settings.features.pendingNotifications) {
         const currentUrl = /https:\/\/www\.u-cursos\.cl\/+/;
+        
+        // If we're on the main u-cursos page, count and store locally, then trigger background fetch
         if (currentUrl.test(window.location.href)) {
             const pendingCount = countPendingNotifications();
             await setChromeStorageItem("pendingNotificationsCount", pendingCount);
+            // Request background worker to fetch updated data
+            await requestBackgroundFetch();
         }
+        
+        // Always display current stored count
         const pendingNotificationsCount = await getChromeStorageItem("pendingNotificationsCount");
-        await notifyPending(pendingNotificationsCount); // Notify about pending tasks;
+        await notifyPending(pendingNotificationsCount || 0);
+        
+        // Request fresh data from background worker
+        await requestBackgroundFetch();
     }
 })();

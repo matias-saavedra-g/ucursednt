@@ -7,8 +7,15 @@
   "permissions": [
     "activeTab",
     "clipboardWrite",
-    "storage"
+    "storage",
+    "alarms"
   ],
+  "host_permissions": [
+    "*://*.u-cursos.cl/*"
+  ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -16,7 +23,7 @@
     },
     {
       "matches": ["*://*.u-cursos.cl/*"],
-      "js": ["js/otrasRealizaciones.js"]
+      "js": ["js/userDataCapture.js", "js/otrasRealizaciones.js"]
     },
     {
       "matches": ["*://*.u-cursos.cl/*/*/*/*/*/notas/*"],
@@ -93,7 +100,7 @@
       "matches": [
         "*://*.u-cursos.cl/ucursednt/*"
       ],
-      "js": ["js/menuGen.js"],
+      "js": ["js/menuGen.js", "js/backgroundSettings.js"],
       "run_at": "document_end"
     },
     {
@@ -102,7 +109,7 @@
     },
     {
       "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/pendingTasks.js"],
+      "js": ["js/notificationUtils.js", "js/pendingTasks.js"],
       "run_at": "document_end"
     },
     {
@@ -122,7 +129,7 @@
     },
     {
       "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/pendingNotifications.js"],
+      "js": ["js/notificationUtils.js", "js/pendingNotifications.js"],
       "run_at": "document_end"
     },
     {

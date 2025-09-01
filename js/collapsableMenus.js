@@ -1,8 +1,23 @@
 (async function() {
+    // Check if extension context is still valid
+    function isExtensionContextValid() {
+        try {
+            return chrome.runtime && chrome.runtime.id;
+        } catch (error) {
+            return false;
+        }
+    }
+
     // Function to set an item in Chrome Storage
     function setChromeStorageItem(key, value) {
         return new Promise((resolve, reject) => {
             try {
+                if (!isExtensionContextValid()) {
+                    console.log('Extension context invalidated, skipping storage operation');
+                    resolve();
+                    return;
+                }
+                
                 chrome.storage.sync.set({ [key]: value }, () => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
@@ -11,7 +26,8 @@
                     }
                 });
             } catch (error) {
-                reject(error);
+                console.log('Extension context error in setChromeStorageItem:', error);
+                resolve(); // Don't reject to avoid breaking the script
             }
         });
     }
@@ -20,6 +36,12 @@
     function getChromeStorageItem(key) {
         return new Promise((resolve, reject) => {
             try {
+                if (!isExtensionContextValid()) {
+                    console.log('Extension context invalidated, returning null');
+                    resolve(null);
+                    return;
+                }
+                
                 chrome.storage.sync.get([key], (result) => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
@@ -28,7 +50,8 @@
                     }
                 });
             } catch (error) {
-                reject(error);
+                console.log('Extension context error in getChromeStorageItem:', error);
+                resolve(null); // Return null instead of rejecting
             }
         });
     }
@@ -103,16 +126,22 @@
         });
     }
 
-    // Verificar si la configuración de collapsableMenus está activada
-    const settings = await getChromeStorageItem("settings");
-    if (settings) {
-        const collapsableMenusConfig = settings.features.collapsableMenus;
-        if (!collapsableMenusConfig) {return}
-    }
+    // Main execution with error handling
+    try {
+        // Verificar si la configuración de collapsableMenus está activada
+        const settings = await getChromeStorageItem("settings");
+        if (settings) {
+            const collapsableMenusConfig = settings.features.collapsableMenus;
+            if (!collapsableMenusConfig) {return}
+        }
 
-    // Call the functions
-    makeCollapsable();
-    await loadCollapsableState();
-    window.addEventListener("beforeunload", saveCollapsableState);
+        // Call the functions
+        makeCollapsable();
+        await loadCollapsableState();
+        window.addEventListener("beforeunload", saveCollapsableState);
+    } catch (error) {
+        console.log('Error in collapsableMenus script:', error);
+        // Don't throw the error to avoid breaking other scripts
+    }
 
 })();

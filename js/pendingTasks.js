@@ -33,7 +33,16 @@
         });
     }
 
-    // Function to count pending tasks
+    // Function to request background fetch of notifications
+    async function requestBackgroundFetch() {
+        try {
+            await chrome.runtime.sendMessage({ action: 'fetchNotifications' });
+        } catch (error) {
+            console.log('Could not request background fetch:', error);
+        }
+    }
+
+    // Function to count pending tasks (used when on the tasks page)
     function countPendingTasks() {
         const pendingTasks = document.querySelectorAll("tbody > tr > td.rel > h1");
         let count = 0;
@@ -43,7 +52,7 @@
                 count++;
             }
         });
-        console.log(count);
+        console.log('Content: Found', count, 'pending tasks on page');
         return count;
     }
 
@@ -110,14 +119,44 @@
         });
     }
 
+    // Function to refresh notifications display
+    async function refreshNotifications() {
+        const pendingTasksCount = await getChromeStorageItem("pendingTasksCount");
+        if (pendingTasksCount !== null) {
+            await notifyPendingTasks(pendingTasksCount);
+        }
+    }
+
+    // Listen for updates from background worker
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.action === 'refreshNotifications') {
+            refreshNotifications();
+            sendResponse({ received: true });
+        }
+    });
+
     const settings = await getChromeStorageItem("settings");
     if (settings && settings.features && settings.features.pendingTasks) {
-        const currentUrl = /https:\/\/www\.u-cursos\.cl\/\w+\/\w+\/tareas_usuario\/+/;
-        if (currentUrl.test(window.location.href)) {
+        // URL pattern for tasks page (user ID format only)
+        const tasksUrlPattern = /https:\/\/www\.u-cursos\.cl\/usuario\/[a-f0-9]+\/tareas_usuario/;
+        
+        // Check if we're on the tasks page
+        const isOnTasksPage = tasksUrlPattern.test(window.location.href);
+        
+        // If we're on the tasks page, count and store locally, then trigger background fetch
+        if (isOnTasksPage) {
+            console.log('On tasks page, counting local tasks');
             const pendingCount = countPendingTasks();
             await setChromeStorageItem("pendingTasksCount", pendingCount);
+            // Request background worker to fetch updated data
+            await requestBackgroundFetch();
         }
+        
+        // Always display current stored count
         const pendingTasksCount = await getChromeStorageItem("pendingTasksCount");
-        await notifyPendingTasks(pendingTasksCount); // Notify about pending tasks;
+        await notifyPendingTasks(pendingTasksCount || 0);
+        
+        // Request fresh data from background worker
+        await requestBackgroundFetch();
     }
 })();
