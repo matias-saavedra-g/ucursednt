@@ -104,6 +104,7 @@
                 navigationAnimations: true,
                 taskSubmissionSound: true,
                 footerCredit: true,
+                aiChatPopup: true,
             },
         };
 
@@ -342,6 +343,145 @@
                 background: #c82333;
             }
 
+            /* AI Configuration Section Styles */
+            .ai-config-section {
+                margin-top: 30px;
+                padding: 20px;
+                background: #f0f7ff;
+                border-radius: 8px;
+                border-left: 4px solid #007bff;
+            }
+
+            .ai-config-header {
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .ai-config-header h3 {
+                color: #007bff;
+                margin: 0 0 8px 0;
+                font-size: 18px;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .ai-config-header p {
+                color: #6c757d;
+                margin: 0;
+                font-size: 14px;
+            }
+
+            .config-group {
+                margin-bottom: 16px;
+            }
+
+            .config-label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600;
+                color: #495057;
+                font-size: 14px;
+            }
+
+            .config-select,
+            .config-input,
+            .config-textarea {
+                width: 100%;
+                padding: 10px 12px;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
+                font-size: 14px;
+                background: white;
+                transition: border-color 0.2s ease;
+                font-family: inherit;
+                height: 45px;
+            }
+
+            .config-select:focus,
+            .config-input:focus,
+            .config-textarea:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+            }
+
+            .config-textarea {
+                resize: vertical;
+                min-height: 120px;
+            }
+
+            .system-buttons-container {
+                margin-top: 8px;
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .reset-default-btn {
+                font-size: 12px;
+                padding: 6px 12px;
+                margin-bottom: 8px;
+            }
+
+            .config-helper {
+                margin-top: 4px;
+                padding: 8px;
+                background: #f8f9fa;
+                border-radius: 4px;
+                border-left: 3px solid #17a2b8;
+            }
+
+            .config-helper small {
+                color: #6c757d;
+                font-size: 11px;
+                line-height: 1.4;
+            }
+
+            .api-key-container {
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+
+            .api-key-input {
+                flex: 1;
+            }
+
+            .toggle-key-btn {
+                padding: 10px 12px;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
+                background: #f8f9fa;
+                color: #6c757d;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                min-width: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .toggle-key-btn:hover {
+                background: #e9ecef;
+                color: #495057;
+            }
+
+            .save-ai-config-btn {
+                width: 100%;
+                margin-top: 16px;
+            }
+
+            .btn-success {
+                background: #28a745;
+                color: white;
+            }
+
+            .btn-success:hover {
+                background: #218838;
+            }
+
             /* Responsive design */
             @media (max-width: 768px) {
                 #feature-menu {
@@ -407,6 +547,7 @@
             { id: "navigationAnimations", name: "Animaciones de Navegación", icon: "✨", description: "Efectos visuales suaves en el menú de navegación" },
             { id: "taskSubmissionSound", name: "Sonido de Entrega de Tareas", icon: "🔊", description: "Sonido de dopamina al entregar tareas" },
             { id: "footerCredit", name: "Crédito en el Pie de Página", icon: "❤️", description: "Mostrar crédito del desarrollador en el pie de página" },
+            { id: "aiChatPopup", name: "Chat IA Flotante", icon: "🤖", description: "Popup flotante con UCursitos para chat con IA" },
         ];
 
         featuresList.forEach(feature => {
@@ -456,7 +597,303 @@
             menuElement.appendChild(featureElement);
         });
 
+        // Add AI Chat Configuration Section
+        const aiConfigSection = await createAIConfigSection();
+        menuElement.appendChild(aiConfigSection);
+
         return menuElement;
+    }
+
+    // Create AI Chat Configuration Section
+    async function createAIConfigSection() {
+        const aiConfigContainer = document.createElement('div');
+        aiConfigContainer.className = 'ai-config-section';
+        
+        // Section header
+        const sectionHeader = document.createElement('div');
+        sectionHeader.className = 'ai-config-header';
+        sectionHeader.innerHTML = `
+            <h3><i class="fas fa-robot"></i> Configuración de Chat IA</h3>
+            <p>Configura tu proveedor de IA preferido y API key para el chat flotante</p>
+        `;
+
+        // Provider selection
+        const providerGroup = document.createElement('div');
+        providerGroup.className = 'config-group';
+        
+        const providerLabel = document.createElement('label');
+        providerLabel.className = 'config-label';
+        providerLabel.innerHTML = '<i class="fas fa-brain"></i> Proveedor de IA:';
+
+        const providerSelect = document.createElement('select');
+        providerSelect.className = 'config-select';
+        providerSelect.id = 'ai-provider-select';
+
+        // Add provider options
+        const providers = [
+            { value: 'chatgpt', label: '🤖 ChatGPT (gratuito)', free: true },
+            { value: 'claude', label: '🧠 Claude (gratuito)', free: true },
+            { value: 'gemini', label: '✨ Gemini (gratuito)', free: true },
+            { value: 'custom', label: '🔧 API Personalizada (requiere key)', free: false }
+        ];
+
+        providers.forEach(provider => {
+            const option = document.createElement('option');
+            option.value = provider.value;
+            option.textContent = provider.label;
+            providerSelect.appendChild(option);
+        });
+
+        // API Key input
+        const apiKeyGroup = document.createElement('div');
+        apiKeyGroup.className = 'config-group';
+        apiKeyGroup.id = 'api-key-group';
+        
+        const apiKeyLabel = document.createElement('label');
+        apiKeyLabel.className = 'config-label';
+        apiKeyLabel.innerHTML = '<i class="fas fa-key"></i> API Key:';
+
+        const apiKeyContainer = document.createElement('div');
+        apiKeyContainer.className = 'api-key-container';
+
+        const apiKeyInput = document.createElement('input');
+        apiKeyInput.type = 'password';
+        apiKeyInput.className = 'config-input api-key-input';
+        apiKeyInput.id = 'ai-api-key';
+        apiKeyInput.placeholder = 'Ingresa tu API key aquí...';
+
+        const toggleKeyBtn = document.createElement('button');
+        toggleKeyBtn.className = 'toggle-key-btn';
+        toggleKeyBtn.type = 'button';
+        toggleKeyBtn.innerHTML = '<i class="fas fa-eye"></i>';
+        toggleKeyBtn.title = 'Mostrar/Ocultar API Key';
+
+        // Base URL input
+        const baseUrlGroup = document.createElement('div');
+        baseUrlGroup.className = 'config-group';
+        baseUrlGroup.id = 'base-url-group';
+        
+        const baseUrlLabel = document.createElement('label');
+        baseUrlLabel.className = 'config-label';
+        baseUrlLabel.innerHTML = '<i class="fas fa-link"></i> Base URL:';
+
+        const baseUrlInput = document.createElement('input');
+        baseUrlInput.type = 'text';
+        baseUrlInput.className = 'config-input';
+        baseUrlInput.id = 'ai-base-url';
+        baseUrlInput.placeholder = 'https://api.openai.com/v1/chat/completions';
+
+        // Add helper text for common APIs
+        const baseUrlHelper = document.createElement('div');
+        baseUrlHelper.className = 'config-helper';
+        baseUrlHelper.innerHTML = `
+            <small>APIs compatibles:</small><br>
+            <small>• OpenAI: https://api.openai.com/v1/chat/completions</small><br>
+            <small>• Gemini: https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent</small><br>
+            <small>• Anthropic: https://api.anthropic.com/v1/messages</small>
+        `;
+
+        // Model input
+        const modelGroup = document.createElement('div');
+        modelGroup.className = 'config-group';
+        modelGroup.id = 'model-group';
+        
+        const modelLabel = document.createElement('label');
+        modelLabel.className = 'config-label';
+        modelLabel.innerHTML = '<i class="fas fa-brain"></i> Modelo:';
+
+        const modelInput = document.createElement('input');
+        modelInput.type = 'text';
+        modelInput.className = 'config-input';
+        modelInput.id = 'ai-model';
+        modelInput.placeholder = 'gpt-3.5-turbo';
+
+        // System Instructions
+        const systemGroup = document.createElement('div');
+        systemGroup.className = 'config-group';
+        systemGroup.id = 'system-group';
+        
+        const systemLabel = document.createElement('label');
+        systemLabel.className = 'config-label';
+        systemLabel.innerHTML = '<i class="fas fa-robot"></i> Instrucciones del Sistema:';
+
+        const systemTextarea = document.createElement('textarea');
+        systemTextarea.className = 'config-textarea';
+        systemTextarea.id = 'ai-system-instructions';
+        systemTextarea.placeholder = 'Instrucciones para el comportamiento del asistente IA...';
+        systemTextarea.rows = 8;
+
+        const systemButtonsContainer = document.createElement('div');
+        systemButtonsContainer.className = 'system-buttons-container';
+
+        const resetToDefaultBtn = document.createElement('button');
+        resetToDefaultBtn.className = 'modern-button btn-secondary reset-default-btn';
+        resetToDefaultBtn.type = 'button';
+        resetToDefaultBtn.innerHTML = '<i class="fas fa-undo"></i> Restaurar Recomendadas';
+        resetToDefaultBtn.title = 'Restaurar las instrucciones recomendadas para U-Cursos';
+
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'modern-button btn-primary save-ai-config-btn';
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar Configuración';
+
+        // Load existing settings
+        const aiSettings = await getChromeStorageItem('aiChatSettings') || {};
+        const defaultSystemInstructions = window.aiChatPopup?.getDefaultSystemInstructions?.() || `System Prompt: Asistente Virtual de U-Cursos
+
+1. PERSONA
+Eres "Asistente U-Cursos", un asistente virtual experto integrado en la plataforma U-Cursos de la Universidad de Chile. Tu propósito principal es ayudar a estudiantes y académicos a navegar y utilizar la plataforma de manera eficiente, resolviendo sus dudas y facilitando su experiencia académica. Eres un guía amigable, conocedor y siempre dispuesto a ayudar. Tu identidad está ligada exclusivamente a la Universidad de Chile y sus procesos internos gestionados a través de U-Cursos.
+
+2. TAREA
+Tu tarea es responder preguntas y proporcionar orientación sobre las funcionalidades y el contenido de la plataforma U-Cursos. Debes ser capaz de:
+- Responder preguntas directas: Contestar dudas específicas sobre cómo usar la plataforma (ej: "¿Cómo puedo enviar una tarea?", "¿Dónde veo mis calificaciones?").
+- Proporcionar guías paso a paso: Ofrecer instrucciones claras y secuenciales para realizar acciones dentro de la plataforma.
+- Resumir información: Sintetizar el contenido de anuncios, foros o materiales si se te proporciona el contexto.
+- Localizar información: Ayudar a los usuarios a encontrar dónde se ubican ciertas secciones o materiales dentro de sus cursos.
+- Resolver problemas comunes: Ofrecer soluciones a problemas frecuentes que los usuarios puedan encontrar.
+
+Límites y restricciones:
+- No inventes información: Si no tienes la respuesta o la información no está disponible en el contexto proporcionado, indícalo claramente. Sugiere al usuario consultar directamente con su docente o con el soporte técnico de U-Cursos.
+- Privacidad: No tienes acceso a información personal, privada o sensible de los usuarios, como calificaciones específicas, mensajes privados o datos de contacto. No debes solicitarla ni procesarla.
+- Mantente en el tema: Limita tus respuestas al ecosistema de U-Cursos y la vida académica en la Universidad de Chile. Evita responder preguntas de conocimiento general que no estén relacionadas.
+
+3. CONTEXTO
+Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cursos. La información clave que debes manejar es:
+- Plataforma: U-Cursos, un campus virtual y sistema de gestión de aprendizaje desarrollado por el Centro Tecnológico Ucampus para la Universidad de Chile.
+- Audiencia: Estudiantes y académicos de la Universidad de Chile.
+- Funcionalidades Clave:
+  * Sitios de Cursos: Cada curso tiene un sitio web dedicado y administrado por el profesor.
+  * Materiales Educativos: Los estudiantes pueden ver y descargar apuntes, bibliografía y otros materiales. Los profesores pueden subir contenido en múltiples formatos.
+  * Herramientas de Comunicación: Foros para interactuar y sistema de correo para que los profesores envíen anuncios a todo el curso.
+  * Gestión de Tareas y Calificaciones: Los estudiantes pueden enviar tareas y consultar sus notas parciales. Los profesores pueden administrar y calificar estas entregas.
+  * Calendario y Planificación: Agenda electrónica para planificar y visualizar las actividades del curso.
+  * Aplicación Móvil: Existe una app oficial para Android y iOS que envía notificaciones push en tiempo real.
+  * Perfil Personal: Cada usuario puede gestionar su perfil, revisar sus tareas, cursos, calendario y configurar notificaciones.
+
+4. FORMATO
+- Claridad y Concisión: Responde de manera directa y fácil de entender.
+- Estructura: Utiliza listas (con viñetas o numeradas) para desglosar pasos o enumerar características.
+- Énfasis: Usa negrita para resaltar acciones clave, nombres de secciones o botones (ej: "Ve a la sección **Tareas** y haz clic en **Enviar**").
+- Lenguaje: Responde siempre en español de Chile, utilizando terminología común en el ámbito académico chileno (ej: "ramo" en lugar de "asignatura", "nota" en lugar de "calificación").
+
+5. TONO
+- Servicial y Profesional: Mantén un tono amable, respetuoso y formal, adecuado para un entorno universitario.
+- Seguro y Confiable: Proporciona información con seguridad, pero sé humilde cuando no conoces una respuesta.
+- Proactivo y Orientador: No te limites a responder; si es pertinente, ofrece consejos adicionales o sugiere funcionalidades relacionadas que podrían ser útiles para el usuario.`;
+        
+        providerSelect.value = aiSettings.provider || 'chatgpt';
+        apiKeyInput.value = aiSettings.apiKey || '';
+        baseUrlInput.value = aiSettings.baseUrl || 'https://api.openai.com/v1/chat/completions';
+        modelInput.value = aiSettings.modelName || 'gpt-3.5-turbo';
+        systemTextarea.value = aiSettings.systemInstructions || defaultSystemInstructions;
+
+        // Update API key visibility based on provider
+        function updateAPIKeyVisibility() {
+            const isCustom = providerSelect.value === 'custom';
+            apiKeyGroup.style.display = isCustom ? 'block' : 'none';
+            baseUrlGroup.style.display = isCustom ? 'block' : 'none';
+            modelGroup.style.display = isCustom ? 'block' : 'none';
+            systemGroup.style.display = isCustom ? 'block' : 'none';
+        }
+
+        updateAPIKeyVisibility();
+
+        // Event listeners
+        providerSelect.addEventListener('change', updateAPIKeyVisibility);
+
+        toggleKeyBtn.addEventListener('click', () => {
+            const isPassword = apiKeyInput.type === 'password';
+            apiKeyInput.type = isPassword ? 'text' : 'password';
+            toggleKeyBtn.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+        });
+
+        resetToDefaultBtn.addEventListener('click', () => {
+            const confirmReset = confirm('¿Estás seguro de que quieres restaurar las instrucciones recomendadas para U-Cursos? Esto sobrescribirá tus instrucciones personalizadas actuales.');
+            if (confirmReset) {
+                if (window.aiChatPopup?.resetToDefaultInstructions) {
+                    const defaultInstructions = window.aiChatPopup.resetToDefaultInstructions();
+                    systemTextarea.value = defaultInstructions;
+                } else {
+                    systemTextarea.value = defaultSystemInstructions;
+                }
+                
+                // Show success message temporarily
+                resetToDefaultBtn.innerHTML = '<i class="fas fa-check"></i> ¡Restaurado!';
+                resetToDefaultBtn.classList.remove('btn-secondary');
+                resetToDefaultBtn.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    resetToDefaultBtn.innerHTML = '<i class="fas fa-undo"></i> Restaurar Recomendadas';
+                    resetToDefaultBtn.classList.remove('btn-success');
+                    resetToDefaultBtn.classList.add('btn-secondary');
+                }, 2000);
+            }
+        });
+
+        saveBtn.addEventListener('click', async () => {
+            const settings = {
+                provider: providerSelect.value,
+                apiKey: apiKeyInput.value,
+                baseUrl: baseUrlInput.value || 'https://api.openai.com/v1/chat/completions',
+                modelName: modelInput.value || 'gpt-3.5-turbo',
+                systemInstructions: systemTextarea.value.trim() || defaultSystemInstructions,
+                isMinimized: true
+            };
+
+            await setChromeStorageItem('aiChatSettings', settings);
+            
+            // Update the chat popup if it exists
+            if (window.aiChatPopup) {
+                window.aiChatPopup.setProvider(settings.provider);
+                window.aiChatPopup.setApiKey(settings.apiKey);
+                window.aiChatPopup.setBaseUrl(settings.baseUrl);
+                window.aiChatPopup.setModel(settings.modelName);
+                window.aiChatPopup.setSystemInstructions(settings.systemInstructions);
+            }
+
+            // Show success message
+            saveBtn.innerHTML = '<i class="fas fa-check"></i> ¡Guardado!';
+            saveBtn.classList.remove('btn-primary');
+            saveBtn.classList.add('btn-success');
+            
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar Configuración';
+                saveBtn.classList.remove('btn-success');
+                saveBtn.classList.add('btn-primary');
+            }, 2000);
+        });
+
+        // Assemble the components
+        apiKeyContainer.appendChild(apiKeyInput);
+        apiKeyContainer.appendChild(toggleKeyBtn);
+
+        providerGroup.appendChild(providerLabel);
+        providerGroup.appendChild(providerSelect);
+
+        apiKeyGroup.appendChild(apiKeyLabel);
+        apiKeyGroup.appendChild(apiKeyContainer);
+
+        baseUrlGroup.appendChild(baseUrlLabel);
+        baseUrlGroup.appendChild(baseUrlInput);
+        baseUrlGroup.appendChild(baseUrlHelper);
+
+        modelGroup.appendChild(modelLabel);
+        modelGroup.appendChild(modelInput);
+
+        systemGroup.appendChild(systemLabel);
+        systemGroup.appendChild(systemTextarea);
+        systemGroup.appendChild(systemButtonsContainer);
+
+        systemButtonsContainer.appendChild(resetToDefaultBtn);
+
+        aiConfigContainer.appendChild(sectionHeader);
+        aiConfigContainer.appendChild(providerGroup);
+        aiConfigContainer.appendChild(apiKeyGroup);
+        aiConfigContainer.appendChild(baseUrlGroup);
+        aiConfigContainer.appendChild(modelGroup);
+        aiConfigContainer.appendChild(systemGroup);
+        aiConfigContainer.appendChild(saveBtn);
+
+        return aiConfigContainer;
     }
 
     // Inicializar la página

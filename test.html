@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U-Cursedn't - Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 U-Cursedn't AI Chat Test</h1>
+        <p>Esta página simula U-Cursos para probar la funcionalidad del chat IA flotante.</p>
+        
+        <button class="test-button" onclick="testAIChat()">🤖 Inicializar Chat IA</button>
+        <button class="test-button" onclick="toggleFeature()">✅ Activar/Desactivar Feature</button>
+        <button class="test-button" onclick="showSettings()">⚙️ Mostrar Configuración</button>
+        <button class="test-button" onclick="testCustomAPI()">🔧 Probar API Personalizada</button>
+        <button class="test-button" onclick="testExternalProvider()">🌐 Probar Proveedor Externo</button>
+        <button class="test-button" onclick="testResetInstructions()">🔄 Probar Reset Instrucciones</button>
+        <button class="test-button" onclick="testGeminiAPI()">✨ Probar Gemini API</button>
+        
+        <div id="debug-info" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px; font-family: monospace; font-size: 12px;">
+            <strong>Debug Info:</strong><br>
+            <span id="debug-text">Página cargada</span>
+        </div>
+    </div>
+
+    <!-- Simulate chrome.storage for testing -->
+    <script>
+        // Mock Chrome Storage API for testing
+        if (!window.chrome) {
+            window.chrome = {
+                storage: {
+                    sync: {
+                        data: {},
+                        get: function(keys, callback) {
+                            const result = {};
+                            if (Array.isArray(keys)) {
+                                keys.forEach(key => {
+                                    if (this.data[key] !== undefined) {
+                                        result[key] = this.data[key];
+                                    }
+                                });
+                            } else if (typeof keys === 'string') {
+                                if (this.data[keys] !== undefined) {
+                                    result[keys] = this.data[keys];
+                                }
+                            }
+                            setTimeout(() => callback(result), 10);
+                        },
+                        set: function(items, callback) {
+                            Object.assign(this.data, items);
+                            setTimeout(() => callback && callback(), 10);
+                        }
+                    }
+                },
+                runtime: {
+                    getURL: function(path) {
+                        return './' + path;
+                    }
+                }
+            };
+        }
+
+        // Mock U-Cursos hostname
+        Object.defineProperty(window.location, 'hostname', {
+            writable: true,
+            value: 'www.u-cursos.cl'
+        });
+
+        // Initialize default settings
+        chrome.storage.sync.set({
+            'settings': {
+                features: {
+                    aiChatPopup: true
+                }
+            },
+            'aiChatSettings': {
+                provider: 'custom',
+                apiKey: 'test-key-12345',
+                baseUrl: 'https://api.openai.com/v1/chat/completions',
+                modelName: 'gpt-3.5-turbo',
+                systemInstructions: `System Prompt: Asistente Virtual de U-Cursos
+
+1. PERSONA
+Eres "Asistente U-Cursos", un asistente virtual experto integrado en la plataforma U-Cursos de la Universidad de Chile. Tu propósito principal es ayudar a estudiantes y académicos a navegar y utilizar la plataforma de manera eficiente, resolviendo sus dudas y facilitando su experiencia académica. Eres un guía amigable, conocedor y siempre dispuesto a ayudar. Tu identidad está ligada exclusivamente a la Universidad de Chile y sus procesos internos gestionados a través de U-Cursos.
+
+2. TAREA
+Tu tarea es responder preguntas y proporcionar orientación sobre las funcionalidades y el contenido de la plataforma U-Cursos. Debes ser capaz de:
+- Responder preguntas directas: Contestar dudas específicas sobre cómo usar la plataforma (ej: "¿Cómo puedo enviar una tarea?", "¿Dónde veo mis calificaciones?").
+- Proporcionar guías paso a paso: Ofrecer instrucciones claras y secuenciales para realizar acciones dentro de la plataforma.
+- Resumir información: Sintetizar el contenido de anuncios, foros o materiales si se te proporciona el contexto.
+- Localizar información: Ayudar a los usuarios a encontrar dónde se ubican ciertas secciones o materiales dentro de sus cursos.
+- Resolver problemas comunes: Ofrecer soluciones a problemas frecuentes que los usuarios puedan encontrar.
+
+Límites y restricciones:
+- No inventes información: Si no tienes la respuesta o la información no está disponible en el contexto proporcionado, indícalo claramente. Sugiere al usuario consultar directamente con su docente o con el soporte técnico de U-Cursos.
+- Privacidad: No tienes acceso a información personal, privada o sensible de los usuarios, como calificaciones específicas, mensajes privados o datos de contacto. No debes solicitarla ni procesarla.
+- Mantente en el tema: Limita tus respuestas al ecosistema de U-Cursos y la vida académica en la Universidad de Chile. Evita responder preguntas de conocimiento general que no estén relacionadas.
+
+3. CONTEXTO
+Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cursos. La información clave que debes manejar es:
+- Plataforma: U-Cursos, un campus virtual y sistema de gestión de aprendizaje desarrollado por el Centro Tecnológico Ucampus para la Universidad de Chile.
+- Audiencia: Estudiantes y académicos de la Universidad de Chile.
+- Funcionalidades Clave:
+  * Sitios de Cursos: Cada curso tiene un sitio web dedicado y administrado por el profesor.
+  * Materiales Educativos: Los estudiantes pueden ver y descargar apuntes, bibliografía y otros materiales. Los profesores pueden subir contenido en múltiples formatos.
+  * Herramientas de Comunicación: Foros para interactuar y sistema de correo para que los profesores envíen anuncios a todo el curso.
+  * Gestión de Tareas y Calificaciones: Los estudiantes pueden enviar tareas y consultar sus notas parciales. Los profesores pueden administrar y calificar estas entregas.
+  * Calendario y Planificación: Agenda electrónica para planificar y visualizar las actividades del curso.
+  * Aplicación Móvil: Existe una app oficial para Android y iOS que envía notificaciones push en tiempo real.
+  * Perfil Personal: Cada usuario puede gestionar su perfil, revisar sus tareas, cursos, calendario y configurar notificaciones.
+
+4. FORMATO
+- Claridad y Concisión: Responde de manera directa y fácil de entender.
+- Estructura: Utiliza listas (con viñetas o numeradas) para desglosar pasos o enumerar características.
+- Énfasis: Usa negrita para resaltar acciones clave, nombres de secciones o botones (ej: "Ve a la sección **Tareas** y haz clic en **Enviar**").
+- Lenguaje: Responde siempre en español de Chile, utilizando terminología común en el ámbito académico chileno (ej: "ramo" en lugar de "asignatura", "nota" en lugar de "calificación").
+
+5. TONO
+- Servicial y Profesional: Mantén un tono amable, respetuoso y formal, adecuado para un entorno universitario.
+- Seguro y Confiable: Proporciona información con seguridad, pero sé humilde cuando no conoces una respuesta.
+- Proactivo y Orientador: No te limites a responder; si es pertinente, ofrece consejos adicionales o sugiere funcionalidades relacionadas que podrían ser útiles para el usuario.`,
+                isMinimized: true
+            }
+        });
+
+        function updateDebug(message) {
+            document.getElementById('debug-text').innerHTML += '<br>' + message;
+        }
+
+        function testAIChat() {
+            updateDebug('Cargando extensionUtils...');
+            
+            // Load extension utils first
+            const script1 = document.createElement('script');
+            script1.src = './js/extensionUtils.js';
+            script1.onload = () => {
+                updateDebug('extensionUtils cargado');
+                
+                // Then load AI chat popup
+                const script2 = document.createElement('script');
+                script2.src = './js/aiChatPopup.js';
+                script2.onload = () => {
+                    updateDebug('aiChatPopup cargado - Chat IA debe aparecer');
+                };
+                script2.onerror = () => {
+                    updateDebug('Error cargando aiChatPopup.js');
+                };
+                document.head.appendChild(script2);
+            };
+            script1.onerror = () => {
+                updateDebug('Error cargando extensionUtils.js');
+            };
+            document.head.appendChild(script1);
+        }
+
+        async function toggleFeature() {
+            const result = await new Promise(resolve => {
+                chrome.storage.sync.get(['settings'], resolve);
+            });
+            
+            const settings = result.settings || { features: {} };
+            settings.features.aiChatPopup = !settings.features.aiChatPopup;
+            
+            chrome.storage.sync.set({ settings }, () => {
+                updateDebug(`Feature aiChatPopup: ${settings.features.aiChatPopup ? 'ACTIVADO' : 'DESACTIVADO'}`);
+            });
+        }
+
+        async function showSettings() {
+            const result = await new Promise(resolve => {
+                chrome.storage.sync.get(null, resolve);
+            });
+            updateDebug('Configuración actual: ' + JSON.stringify(result, null, 2).replace(/\n/g, '<br>').replace(/ /g, '&nbsp;'));
+        }
+
+        async function testCustomAPI() {
+            chrome.storage.sync.set({
+                'aiChatSettings': {
+                    provider: 'custom',
+                    apiKey: 'test-key-12345',
+                    baseUrl: 'https://api.openai.com/v1/chat/completions',
+                    modelName: 'gpt-3.5-turbo',
+                    systemInstructions: 'Eres un helpful assistant para estudiantes.',
+                    isMinimized: false
+                }
+            }, () => {
+                updateDebug('Configuración cambiada a API personalizada');
+                if (window.aiChatPopup) {
+                    window.aiChatPopup.update();
+                }
+            });
+        }
+
+        async function testExternalProvider() {
+            chrome.storage.sync.set({
+                'aiChatSettings': {
+                    provider: 'chatgpt',
+                    apiKey: '',
+                    isMinimized: false
+                }
+            }, () => {
+                updateDebug('Configuración cambiada a ChatGPT externo');
+                if (window.aiChatPopup) {
+                    window.aiChatPopup.update();
+                }
+            });
+        }
+
+        async function testResetInstructions() {
+            if (window.aiChatPopup && window.aiChatPopup.resetToDefaultInstructions) {
+                const defaultInstructions = window.aiChatPopup.resetToDefaultInstructions();
+                updateDebug('Instrucciones restauradas a las recomendadas para U-Cursos');
+                updateDebug('Longitud de instrucciones: ' + defaultInstructions.length + ' caracteres');
+            } else {
+                updateDebug('ERROR: aiChatPopup no está disponible o no tiene resetToDefaultInstructions');
+            }
+        }
+
+        async function testGeminiAPI() {
+            chrome.storage.sync.set({
+                'aiChatSettings': {
+                    provider: 'custom',
+                    apiKey: 'your-gemini-api-key-here',
+                    baseUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+                    modelName: 'gemini-pro',
+                    systemInstructions: defaultSystemInstructions,
+                    isMinimized: false
+                }
+            }, () => {
+                updateDebug('Configuración cambiada a Gemini API');
+                updateDebug('NOTA: Necesitas una API key válida de Google AI Studio');
+                if (window.aiChatPopup) {
+                    window.aiChatPopup.update();
+                }
+            });
+        }
+
+        updateDebug('Mock Chrome API inicializado');
+    </script>
+</body>
+</html>

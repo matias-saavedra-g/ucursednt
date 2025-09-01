@@ -73,4 +73,12 @@ if (typeof module !== 'undefined' && module.exports) {
         safeChromeStorageGet,
         safeSendRuntimeMessage
     };
+} else {
+    // Browser global export
+    window.extensionUtils = {
+        isExtensionContextValid,
+        safeChromeStorageSet,
+        safeChromeStorageGet,
+        safeSendRuntimeMessage
+    };
 }

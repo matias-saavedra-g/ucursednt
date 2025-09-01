@@ -10,8 +10,14 @@
     "storage"
   ],
   "host_permissions": [
-    "*://*.u-cursos.cl/*"
+    "*://*.u-cursos.cl/*",
+    "https://api.openai.com/*",
+    "https://api.anthropic.com/*",
+    "https://generativelanguage.googleapis.com/*"
   ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -145,6 +151,11 @@
     },
     {
       "matches": ["*://www.u-cursos.cl/*"],
+      "js": ["js/extensionUtils.js", "js/aiChatPopup.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["*://www.u-cursos.cl/*"],
       "js": ["js/footerCredit.js"],
       "run_at": "document_end"
     }
@@ -164,6 +175,10 @@
     },
     {
       "resources": ["changelog.html"],
+      "matches": ["*://www.u-cursos.cl/*"]
+    },
+    {
+      "resources": ["images/ucursitos.png"],
       "matches": ["*://www.u-cursos.cl/*"]
     }
   ],
