@@ -7,15 +7,11 @@
   "permissions": [
     "activeTab",
     "clipboardWrite",
-    "storage",
-    "alarms"
+    "storage"
   ],
   "host_permissions": [
     "*://*.u-cursos.cl/*"
   ],
-  "background": {
-    "service_worker": "js/background.js"
-  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -135,6 +131,11 @@
     {
       "matches": ["*://www.u-cursos.cl/*"],
       "js": ["js/collapsableMenus.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["*://www.u-cursos.cl/*"],
+      "js": ["js/navigationAnimations.js"],
       "run_at": "document_end"
     }
   ],

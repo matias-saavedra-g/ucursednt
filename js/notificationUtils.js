@@ -4,7 +4,7 @@
 function setChromeStorageItem(key, value) {
     return new Promise((resolve, reject) => {
         try {
-            chrome.storage.sync.set({ [key]: value }, () => {
+            chrome.storage.local.set({ [key]: value }, () => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -20,7 +20,7 @@ function setChromeStorageItem(key, value) {
 function getChromeStorageItem(key) {
     return new Promise((resolve, reject) => {
         try {
-            chrome.storage.sync.get([key], (result) => {
+            chrome.storage.local.get([key], (result) => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -33,23 +33,16 @@ function getChromeStorageItem(key) {
     });
 }
 
-// Function to request background fetch of notifications
+// Function to request background fetch of notifications (removed - no background worker)
 async function requestBackgroundFetch() {
-    try {
-        await chrome.runtime.sendMessage({ action: 'fetchNotifications' });
-    } catch (error) {
-        console.log('Could not request background fetch:', error);
-    }
+    // Background worker removed - this function is now a no-op
+    console.log('Background fetch disabled - no background worker');
 }
 
-// Function to listen for notification updates from background
+// Function to listen for notification updates from background (removed - no background worker)
 function setupNotificationListener(callback) {
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message.action === 'refreshNotifications') {
-            callback();
-            sendResponse({ received: true });
-        }
-    });
+    // Background worker removed - no listener needed
+    console.log('Notification listener disabled - no background worker');
 }
 
 // Export functions for use in content scripts

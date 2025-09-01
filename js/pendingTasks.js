@@ -3,7 +3,7 @@
     function setChromeStorageItem(key, value) {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.sync.set({ [key]: value }, () => {
+                chrome.storage.local.set({ [key]: value }, () => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -20,7 +20,7 @@
     function getChromeStorageItem(key) {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.sync.get([key], (result) => {
+                chrome.storage.local.get([key], (result) => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -33,13 +33,10 @@
         });
     }
 
-    // Function to request background fetch of notifications
+    // Function to request background fetch of notifications (removed - no background worker)
     async function requestBackgroundFetch() {
-        try {
-            await chrome.runtime.sendMessage({ action: 'fetchNotifications' });
-        } catch (error) {
-            console.log('Could not request background fetch:', error);
-        }
+        // Background worker removed - this function is now a no-op
+        console.log('Background fetch disabled - no background worker');
     }
 
     // Function to count pending tasks (used when on the tasks page)
@@ -127,13 +124,8 @@
         }
     }
 
-    // Listen for updates from background worker
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message.action === 'refreshNotifications') {
-            refreshNotifications();
-            sendResponse({ received: true });
-        }
-    });
+    // Listen for updates from background worker (removed - no background worker)
+    // chrome.runtime.onMessage.addListener removed
 
     const settings = await getChromeStorageItem("settings");
     if (settings && settings.features && settings.features.pendingTasks) {
@@ -143,20 +135,18 @@
         // Check if we're on the tasks page
         const isOnTasksPage = tasksUrlPattern.test(window.location.href);
         
-        // If we're on the tasks page, count and store locally, then trigger background fetch
+        // If we're on the tasks page, count and store locally (no background fetch)
         if (isOnTasksPage) {
             console.log('On tasks page, counting local tasks');
             const pendingCount = countPendingTasks();
             await setChromeStorageItem("pendingTasksCount", pendingCount);
-            // Request background worker to fetch updated data
-            await requestBackgroundFetch();
+            // Background worker removed - no background fetch
         }
         
         // Always display current stored count
         const pendingTasksCount = await getChromeStorageItem("pendingTasksCount");
         await notifyPendingTasks(pendingTasksCount || 0);
         
-        // Request fresh data from background worker
-        await requestBackgroundFetch();
+        // Background worker removed - no fresh data requests
     }
 })();

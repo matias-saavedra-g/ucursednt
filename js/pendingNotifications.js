@@ -3,7 +3,7 @@
     function setChromeStorageItem(key, value) {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.sync.set({ [key]: value }, () => {
+                chrome.storage.local.set({ [key]: value }, () => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -20,7 +20,7 @@
     function getChromeStorageItem(key) {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.sync.get([key], (result) => {
+                chrome.storage.local.get([key], (result) => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -33,13 +33,10 @@
         });
     }
 
-    // Function to request background fetch of notifications
+    // Function to request background fetch of notifications (removed - no background worker)
     async function requestBackgroundFetch() {
-        try {
-            await chrome.runtime.sendMessage({ action: 'fetchNotifications' });
-        } catch (error) {
-            console.log('Could not request background fetch:', error);
-        }
+        // Background worker removed - this function is now a no-op
+        console.log('Background fetch disabled - no background worker');
     }
 
     // This script will iterate over menu elements (modulos) and retrieve the pending notifications and will display them in the menu header
@@ -118,32 +115,25 @@
         }
     }
 
-    // Listen for updates from background worker
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message.action === 'refreshNotifications') {
-            refreshNotifications();
-            sendResponse({ received: true });
-        }
-    });
+    // Listen for updates from background worker (removed - no background worker)
+    // chrome.runtime.onMessage.addListener removed
 
     // Main function to count and notify about pending notifications
     const settings = await getChromeStorageItem("settings");
     if (settings && settings.features && settings.features.pendingNotifications) {
         const currentUrl = /https:\/\/www\.u-cursos\.cl\/+/;
         
-        // If we're on the main u-cursos page, count and store locally, then trigger background fetch
+        // If we're on the main u-cursos page, count and store locally (no background fetch)
         if (currentUrl.test(window.location.href)) {
             const pendingCount = countPendingNotifications();
             await setChromeStorageItem("pendingNotificationsCount", pendingCount);
-            // Request background worker to fetch updated data
-            await requestBackgroundFetch();
+            // Background worker removed - no background fetch
         }
         
         // Always display current stored count
         const pendingNotificationsCount = await getChromeStorageItem("pendingNotificationsCount");
         await notifyPending(pendingNotificationsCount || 0);
         
-        // Request fresh data from background worker
-        await requestBackgroundFetch();
+        // Background worker removed - no fresh data requests
     }
 })();

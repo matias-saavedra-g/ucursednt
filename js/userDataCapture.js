@@ -4,7 +4,7 @@
     // Storage utility functions
     async function setChromeStorageItem(key, value) {
         try {
-            await chrome.storage.sync.set({ [key]: value });
+            await chrome.storage.local.set({ [key]: value });
         } catch (error) {
             console.error('Error setting Chrome storage item:', error);
         }
@@ -12,7 +12,7 @@
 
     async function getChromeStorageItem(key) {
         try {
-            const result = await chrome.storage.sync.get([key]);
+            const result = await chrome.storage.local.get([key]);
             return result[key] || null;
         } catch (error) {
             console.error('Error getting Chrome storage item:', error);
@@ -46,15 +46,7 @@
             console.log('User ID detected and stored:', userId);
             await setChromeStorageItem('userId', userId);
             
-            // Notify background worker to update URLs
-            try {
-                await chrome.runtime.sendMessage({ 
-                    action: 'userIdUpdated', 
-                    userId: userId 
-                });
-            } catch (error) {
-                console.log('Could not notify background worker:', error);
-            }
+            // Background worker removed - no notification needed
             
             return userId;
         }
@@ -95,15 +87,7 @@
                 timestamp: Date.now()
             });
             
-            // Notify background worker to update URLs
-            try {
-                await chrome.runtime.sendMessage({ 
-                    action: 'campusUpdated', 
-                    campus: campus 
-                });
-            } catch (error) {
-                console.log('Could not notify background worker:', error);
-            }
+            // Background worker removed - no notification needed
             
             return campus;
         }

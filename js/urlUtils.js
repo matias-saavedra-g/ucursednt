@@ -3,7 +3,7 @@
 // Storage utility functions
 async function getChromeStorageItem(key) {
     try {
-        const result = await chrome.storage.sync.get([key]);
+        const result = await chrome.storage.local.get([key]);
         return result[key] || null;
     } catch (error) {
         console.error('Error getting Chrome storage item:', error);
@@ -72,7 +72,7 @@ function extractCourseInfoFromUrl(url = window.location.href) {
 // Function to reset user data capture (for debugging)
 async function resetUserDataCapture() {
     try {
-        await chrome.storage.sync.remove(['userId', 'campus', 'userDataCaptured', 'lastCourseInfo', 'currentAcademicInfo']);
+        await chrome.storage.local.remove(['userId', 'campus', 'userDataCaptured', 'lastCourseInfo', 'currentAcademicInfo']);
         console.log('User data capture reset - data will be captured again on next page visit');
         return true;
     } catch (error) {

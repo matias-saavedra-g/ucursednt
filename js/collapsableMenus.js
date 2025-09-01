@@ -18,7 +18,7 @@
                     return;
                 }
                 
-                chrome.storage.sync.set({ [key]: value }, () => {
+                chrome.storage.local.set({ [key]: value }, () => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -42,7 +42,7 @@
                     return;
                 }
                 
-                chrome.storage.sync.get([key], (result) => {
+                chrome.storage.local.get([key], (result) => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -57,13 +57,66 @@
     }
     
     // Make every section collapsable and adds a button next to each section to collapse it using fa-compress
-    // and fa-expand icons
+    // and fa-expand icons with sleek animations
     // Each section is identified by document.querySelector("#modulos")
     // Where each div inside "#modulos" has an h1 which is the title of the section. We want to collapse everything except the title
     function makeCollapsable() {
+        // Add CSS for smooth animations
+        const style = document.createElement('style');
+        style.textContent = `
+            .collapsable-content {
+                overflow: hidden;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                transform-origin: top;
+            }
+            
+            .collapsable-content.collapsed {
+                max-height: 0 !important;
+                opacity: 0;
+                transform: scaleY(0);
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }
+            
+            .collapsable-content.expanded {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+            
+            .collapsable-button {
+                transition: all 0.2s ease-in-out;
+                transform: scale(1);
+            }
+            
+            .collapsable-button:hover {
+                transform: scale(1.1);
+                background-color: rgba(34, 34, 34, 0.1) !important;
+                border-radius: 3px;
+            }
+            
+            .collapsable-button:active {
+                transform: scale(0.95);
+            }
+            
+            .collapsable-button i {
+                transition: all 0.2s ease-in-out;
+            }
+        `;
+        document.head.appendChild(style);
+
         const modulos = document.querySelector("#modulos");
         modulos.querySelectorAll("div > h1").forEach(section => {
             const content = section.nextElementSibling;
+            
+            // Set up content for animation
+            content.classList.add("collapsable-content", "expanded");
+            
+            // Store original height for animation
+            const originalHeight = content.scrollHeight;
+            content.style.maxHeight = originalHeight + "px";
+            
             // The click to collapse only should work when clicking the fa-solid fa-minus button
             const button = document.createElement("button");
             button.innerHTML = '<i class="fa-solid fa-minus"></i>';
@@ -76,6 +129,9 @@
             button.style.border = "none";
             // Inherits the color of the text
             button.style.color = "inherit";
+            // Add cursor pointer
+            button.style.cursor = "pointer";
+            
             section.appendChild(button);
             button.addEventListener("click", async () => {
                 // Add mouseover event for alert
@@ -85,17 +141,42 @@
                     await setChromeStorageItem("collapsableMenusFirstClick", true); // Mark that the alert has been shown
                     firstClick = false; // Update the local variable to prevent further alerts
                 }
-                if (content.style.display === "none") {
-                    content.style.display = "block";
-                    button.innerHTML = '<i class="fa-solid fa-minus"></i>';
-                    // Save state
-                    await saveCollapsableState();
+                
+                // Smooth animation toggle
+                if (content.classList.contains("collapsed")) {
+                    // Expand animation
+                    content.classList.remove("collapsed");
+                    content.classList.add("expanded");
+                    
+                    // Update max height for smooth expansion
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    
+                    // Change icon with animation
+                    const icon = button.querySelector("i");
+                    icon.style.transform = "rotate(180deg)";
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fa-solid fa-minus"></i>';
+                        icon.style.transform = "rotate(0deg)";
+                    }, 100);
+                    
                 } else {
-                    content.style.display = "none";
-                    button.innerHTML = '<i class="fa-solid fa-plus"></i>';
-                    // Save state
-                    await saveCollapsableState();
+                    // Collapse animation
+                    content.classList.remove("expanded");
+                    content.classList.add("collapsed");
+                    
+                    // Change icon with animation
+                    const icon = button.querySelector("i");
+                    icon.style.transform = "rotate(180deg)";
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                        icon.style.transform = "rotate(0deg)";
+                    }, 100);
                 }
+                
+                // Save state after animation
+                setTimeout(async () => {
+                    await saveCollapsableState();
+                }, 300);
             });
         });
     }
@@ -104,24 +185,46 @@
     // Save every collapsable state in Chrome Storage
     async function saveCollapsableState() {
         const modulos = document.querySelector("#modulos");
+        if (!modulos) return;
+        
         const state = {};
         modulos.querySelectorAll("div > h1").forEach(section => {
             const content = section.nextElementSibling;
-            state[section.innerText] = content.style.display;
+            // Save based on CSS classes instead of display style
+            state[section.innerText] = content.classList.contains("collapsed") ? "collapsed" : "expanded";
         });
         await setChromeStorageItem("collapsableState", state);
+        console.log('Saved collapsable state:', state);
     }
 
     // Load every collapsable state from Chrome Storage
     async function loadCollapsableState() {
         const modulos = document.querySelector("#modulos");
+        if (!modulos) return;
+        
         const state = await getChromeStorageItem("collapsableState");
-        if (!state) {return}
+        if (!state) return;
+        
+        console.log('Loading collapsable state:', state);
         modulos.querySelectorAll("div > h1").forEach(section => {
             const content = section.nextElementSibling;
-            content.style.display = state[section.innerText];
-            if (content.style.display === "none") {
-                section.querySelector("button").innerHTML = '<i class="fa-solid fa-plus"></i>';
+            const button = section.querySelector("button");
+            
+            if (state[section.innerText] === "collapsed") {
+                // Apply collapsed state
+                content.classList.remove("expanded");
+                content.classList.add("collapsed");
+                if (button) {
+                    button.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                }
+            } else {
+                // Apply expanded state (default)
+                content.classList.remove("collapsed");
+                content.classList.add("expanded");
+                content.style.maxHeight = content.scrollHeight + "px";
+                if (button) {
+                    button.innerHTML = '<i class="fa-solid fa-minus"></i>';
+                }
             }
         });
     }

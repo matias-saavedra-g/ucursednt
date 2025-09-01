@@ -1,24 +1,23 @@
-# Background Notification System
+# Notification System (Background Worker Removed)
 
-This document explains how the background notification system works for pending tasks and notifications, including automatic user ID and campus detection.
+This document explains how the notification system works for pending tasks and notifications. **Note: The background service worker has been removed as of the latest version.**
 
 ## Overview
 
-The background notification system automatically fetches notification counts from U-Cursos every 5 minutes without requiring the user to visit specific pages. This provides real-time updates for:
+The notification system displays notification counts from U-Cursos when users visit specific pages. This provides updates for:
 
-- **Pending Tasks**: Homework assignments that are "En Plazo" (On time)
-- **Pending Notifications**: Unread notifications from the main U-Cursos page
+- **Pending Tasks**: Homework assignments that are "En Plazo" (On time) - counted when visiting the tasks page
+- **Pending Notifications**: Unread notifications from the main U-Cursos page - counted when visiting the homepage
 
-The system now automatically detects and uses the user's specific ID and campus information to build accurate URLs for fetching data.
+The system automatically detects and uses the user's specific ID and campus information.
 
-## Architecture
+## Architecture (Updated - Background Worker Removed)
 
-### 1. Background Service Worker (`js/background.js`)
-- Runs independently of web pages
-- Fetches notification data every 5 minutes using Chrome alarms
-- Uses stored user ID and campus information to build accurate URLs
-- Stores counts in Chrome storage
-- Notifies all open U-Cursos tabs when data is updated
+### 1. ~~Background Service Worker~~ (REMOVED)
+- ~~The background service worker (`js/background.js`) has been completely removed~~
+- ~~No more automatic fetching every 5 minutes~~
+- ~~No more Chrome alarms~~
+- **Notifications are now counted only when users visit the relevant pages**
 
 ### 2. User Data Capture (`js/userDataCapture.js`)
 - Automatically detects user ID from URLs like `https://www.u-cursos.cl/usuario/<user_id>/*`

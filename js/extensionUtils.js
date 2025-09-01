@@ -19,7 +19,7 @@ function safeChromeStorageSet(key, value) {
                 return;
             }
             
-            chrome.storage.sync.set({ [key]: value }, () => {
+            chrome.storage.local.set({ [key]: value }, () => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -42,7 +42,7 @@ function safeChromeStorageGet(key) {
                 return;
             }
             
-            chrome.storage.sync.get([key], (result) => {
+            chrome.storage.local.get([key], (result) => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -59,25 +59,9 @@ function safeChromeStorageGet(key) {
 // Safe runtime message sending
 function safeSendRuntimeMessage(message) {
     return new Promise((resolve) => {
-        try {
-            if (!isExtensionContextValid()) {
-                console.log('Extension context invalidated, skipping runtime message');
-                resolve({ success: false, error: 'context_invalidated' });
-                return;
-            }
-            
-            chrome.runtime.sendMessage(message, (response) => {
-                if (chrome.runtime.lastError) {
-                    console.log('Runtime message error:', chrome.runtime.lastError);
-                    resolve({ success: false, error: chrome.runtime.lastError });
-                } else {
-                    resolve(response || { success: true });
-                }
-            });
-        } catch (error) {
-            console.log('Extension context error in safeSendRuntimeMessage:', error);
-            resolve({ success: false, error: error });
-        }
+        // Background worker removed - runtime messages no longer supported
+        console.log('Runtime messages disabled - background worker removed');
+        resolve({ success: false, error: 'background_worker_removed' });
     });
 }
 

@@ -4,7 +4,7 @@
     function setChromeStorageItem(key, value) {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.sync.set({ [key]: value }, () => {
+                chrome.storage.local.set({ [key]: value }, () => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -21,7 +21,7 @@
     function getChromeStorageItem(key) {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.sync.get([key], (result) => {
+                chrome.storage.local.get([key], (result) => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -38,7 +38,7 @@
     function getAllChromeStorageItems() {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.sync.get(null, (result) => {
+                chrome.storage.local.get(null, (result) => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -55,7 +55,7 @@
     function removeChromeStorageItem(key) {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.sync.remove([key], () => {
+                chrome.storage.local.remove([key], () => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -72,7 +72,7 @@
     function clearChromeStorage() {
         return new Promise((resolve, reject) => {
             try {
-                chrome.storage.sync.clear(() => {
+                chrome.storage.local.clear(() => {
                     if (chrome.runtime.lastError) {
                         reject(chrome.runtime.lastError);
                     } else {
@@ -101,6 +101,7 @@
                 collapsableMenus: true,
                 pendingNotifications: true,
                 renameCourses: true,
+                navigationAnimations: true,
             },
         };
 
@@ -401,6 +402,7 @@
             { id: "collapsableMenus", name: "Menús Colapsables", icon: "💥", description: "Colapsar secciones en página principal" },
             { id: "pendingNotifications", name: "Notificaciones Pendientes", icon: "🔔", description: "Contador de notificaciones pendientes" },
             { id: "renameCourses", name: "Renombrar Cursos", icon: "📚", description: "Personalizar nombres de cursos" },
+            { id: "navigationAnimations", name: "Animaciones de Navegación", icon: "✨", description: "Efectos visuales suaves en el menú de navegación" },
         ];
 
         featuresList.forEach(feature => {
