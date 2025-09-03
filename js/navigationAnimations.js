@@ -40,21 +40,16 @@
             /* Smooth transitions for the entire navigation */
             #navigation-wrapper > ul.modulos {
                 transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                min-height: 80px !important;
                 height: auto !important;
-                padding: 8px 0 !important;
-                margin-bottom: 16px !important;
                 display: flex !important;
                 flex-wrap: wrap !important;
                 align-items: flex-start !important;
-                gap: 4px !important;
             }
             
             /* Individual menu items animations */
             #navigation-wrapper > ul.modulos > li.servicio {
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 position: relative;
-                min-height: 65px !important;
                 height: auto !important;
                 margin: 2px !important;
                 flex-shrink: 0 !important;
@@ -88,7 +83,6 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                padding: 8px 12px;
                 border-radius: 6px;
                 position: relative;
                 text-align: center;
@@ -96,15 +90,9 @@
             
             /* Ensure text spans are visible */
             #navigation-wrapper > ul.modulos > li.servicio > a > span {
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-                overflow: visible !important;
-                text-overflow: unset !important;
-                white-space: normal !important;
-                font-size: inherit !important;
-                color: inherit !important;
-                transform: none !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                white-space: nowrap !important;
             }
             
             /* Image/Icon animations */
