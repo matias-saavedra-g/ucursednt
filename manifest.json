@@ -7,12 +7,11 @@
   "permissions": [
     "activeTab",
     "clipboardWrite",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "host_permissions": [
     "*://*.u-cursos.cl/*",
-    "https://api.openai.com/*",
-    "https://api.anthropic.com/*",
     "https://generativelanguage.googleapis.com/*"
   ],
   "background": {
@@ -102,7 +101,7 @@
       "matches": [
         "*://*.u-cursos.cl/ucursednt/*"
       ],
-      "js": ["js/menuGen.js", "js/backgroundSettings.js"],
+      "js": ["js/menuGen.js"],
       "run_at": "document_end"
     },
     {
@@ -111,7 +110,7 @@
     },
     {
       "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/notificationUtils.js", "js/pendingTasks.js"],
+      "js": ["js/pendingTasks.js"],
       "run_at": "document_end"
     },
     {
@@ -131,7 +130,7 @@
     },
     {
       "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/notificationUtils.js", "js/pendingNotifications.js"],
+      "js": ["js/pendingNotifications.js"],
       "run_at": "document_end"
     },
     {
@@ -171,6 +170,10 @@
   "web_accessible_resources": [
     {
       "resources": ["popup.html"],
+      "matches": ["<all_urls>"]
+    },
+    {
+      "resources": ["aipopup.html", "js/aipopup.js", "js/extensionUtils.js", "css/aipopup.css"],
       "matches": ["<all_urls>"]
     },
     {

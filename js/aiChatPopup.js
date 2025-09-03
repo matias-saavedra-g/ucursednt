@@ -1,4 +1,4 @@
-// aiChatPopup.js - Floating AI Chat Popup with UCursitos mascot
+// aiChatPopup.js - Floating AI Chat Popup with UCursitos mascot - Gemini AI Only
 
 (async function() {
     'use strict';
@@ -14,6 +14,19 @@
         isExtensionContextValid: () => true
     };
 
+    // Helper functions for local storage (chat history)
+    const safeChromeLocalGet = (key) => new Promise(resolve => {
+        chrome.storage.sync.get([key], result => resolve(result[key] || null));
+    });
+
+    const safeChromeLocalSet = (key, value) => new Promise(resolve => {
+        chrome.storage.sync.set({ [key]: value }, resolve);
+    });
+
+    const safeChromeLocalRemove = (key) => new Promise(resolve => {
+        chrome.storage.sync.remove([key], resolve);
+    });
+
     // Check if already loaded to prevent duplicate initialization
     if (window.aiChatPopupLoaded) {
         return;
@@ -22,10 +35,9 @@
 
     let isPopupVisible = false;
     let isMinimized = true;
-    let currentProvider = 'chatgpt';
     let apiKey = '';
-    let baseUrl = 'https://api.openai.com/v1/chat/completions';
-    let modelName = 'gpt-3.5-turbo';
+    let chatHistory = []; // Array to store chat messages
+    let systemMessageCollapsed = true; // State of system message collapse
     
     // Default system instructions for U-Cursos Assistant
     const DEFAULT_SYSTEM_INSTRUCTIONS = `System Prompt: Asistente Virtual de U-Cursos
@@ -72,44 +84,14 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 
     let systemInstructions = DEFAULT_SYSTEM_INSTRUCTIONS;
 
-    // AI Provider configurations
-    const AI_PROVIDERS = {
-        chatgpt: {
-            name: 'ChatGPT',
-            url: 'https://chatgpt.com/',
-            icon: '🤖',
-            description: 'Abre ChatGPT en nueva ventana'
-        },
-        claude: {
-            name: 'Claude',
-            url: 'https://claude.ai/',
-            icon: '🧠',
-            description: 'Abre Claude en nueva ventana'
-        },
-        gemini: {
-            name: 'Gemini',
-            url: 'https://gemini.google.com/',
-            icon: '✨',
-            description: 'Abre Gemini en nueva ventana'
-        },
-        custom: {
-            name: 'API Personalizada',
-            url: 'custom',
-            icon: '🔧',
-            description: 'Chat integrado con API personalizada'
-        }
-    };
-
     // Load stored settings
     async function loadAIChatSettings() {
         try {
             const settings = await safeChromeStorageGet('aiChatSettings') || {};
-            currentProvider = settings.provider || 'chatgpt';
             apiKey = settings.apiKey || '';
-            baseUrl = settings.baseUrl || 'https://api.openai.com/v1/chat/completions';
-            modelName = settings.modelName || 'gpt-3.5-turbo';
             systemInstructions = settings.systemInstructions || DEFAULT_SYSTEM_INSTRUCTIONS;
             isMinimized = settings.isMinimized !== false; // Default to minimized
+            systemMessageCollapsed = settings.systemMessageCollapsed !== false; // Default to collapsed
         } catch (error) {
             console.error('Error loading AI chat settings:', error);
         }
@@ -119,20 +101,49 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
     async function saveAIChatSettings() {
         try {
             await safeChromeStorageSet('aiChatSettings', {
-                provider: currentProvider,
                 apiKey: apiKey,
-                baseUrl: baseUrl,
-                modelName: modelName,
                 systemInstructions: systemInstructions,
-                isMinimized: isMinimized
+                isMinimized: isMinimized,
+                systemMessageCollapsed: systemMessageCollapsed
             });
         } catch (error) {
             console.error('Error saving AI chat settings:', error);
         }
     }
 
+    // Load chat history from local storage
+    async function loadChatHistory() {
+        try {
+            const history = await safeChromeLocalGet('aiChatHistory') || [];
+            chatHistory = history;
+            return history;
+        } catch (error) {
+            console.error('Error loading chat history:', error);
+            return [];
+        }
+    }
+
+    // Save chat history to local storage
+    async function saveChatHistory() {
+        try {
+            await safeChromeLocalSet('aiChatHistory', chatHistory);
+        } catch (error) {
+            console.error('Error saving chat history:', error);
+        }
+    }
+
+    // Clear chat history
+    async function clearChatHistory() {
+        try {
+            chatHistory = [];
+            await safeChromeLocalRemove('aiChatHistory');
+        } catch (error) {
+            console.error('Error clearing chat history:', error);
+        }
+    }
+
     // Create the floating chat popup
-    function createAIChatPopup() {
+    async function createAIChatPopup() {
         // Main container
         const chatContainer = document.createElement('div');
         chatContainer.id = 'ai-chat-popup';
@@ -144,7 +155,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         mascotButton.innerHTML = `
             <img src="${chrome.runtime.getURL('images/ucursitos.png')}" 
                  alt="UCursitos" 
-                 title="Chat con IA - Haz clic para expandir/contraer">
+                 title="Chat con IA Gemini - Haz clic para expandir/contraer">
         `;
 
         // Chat iframe container
@@ -157,9 +168,15 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         chatHeader.className = 'ai-chat-header';
         chatHeader.innerHTML = `
             <div class="chat-header-content">
-                <span class="provider-icon">${AI_PROVIDERS[currentProvider].icon}</span>
-                <span class="provider-name">${AI_PROVIDERS[currentProvider].name}</span>
+                <span class="provider-icon">✨</span>
+                <span class="provider-name">U-Cursedn't AI</span>
                 <div class="chat-controls">
+                    <button class="chat-control-btn open-tab-btn" title="Abrir en Nueva Pestaña">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
+                    <button class="chat-control-btn clear-history-btn" title="Borrar Historial">
+                        <i class="fas fa-trash"></i>
+                    </button>
                     <button class="chat-control-btn minimize-btn" title="Minimizar">
                         <i class="fas fa-minus"></i>
                     </button>
@@ -174,18 +191,27 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         const chatContent = document.createElement('div');
         chatContent.className = 'ai-chat-content';
 
-        if (currentProvider === 'custom' && apiKey) {
-            // Custom API interface
-            createCustomAPIInterface(chatContent);
-        } else if (currentProvider !== 'custom') {
-            // External providers - open in new window instead of iframe
-            createExternalProviderInterface(chatContent);
+        if (apiKey) {
+            // Gemini API interface
+            await createGeminiAPIInterface(chatContent);
         } else {
             // No API key configured
             chatContent.innerHTML = `
                 <div class="api-config-notice">
-                    <h3>🔧 API Personalizada</h3>
-                    <p>Configura tu API key en el menú de configuración para usar esta función.</p>
+                    <p>Para usar el chat integrado, configura tu API key de Google AI Studio.</p>
+                    <div class="api-setup-info">
+                        <h4>📝 Cómo obtener tu API key:</h4>
+                        <ul>
+                            <li>Ve a <a href="https://aistudio.google.com" target="_blank" style="color: #4285f4; text-decoration: underline;">AI Studio</a></li>
+                            <li>Inicia sesión con tu cuenta de Google</li>
+                            <li>Ve a "Get API key" en el menú lateral</li>
+                            <li>Crea una nueva API key</li>
+                            <li>Copia la key y pégala en configuración</li>
+                        </ul>
+                        <div class="api-warning">
+                            <strong>⚠️ Advertencia:</strong> Exponer una clave de API en una aplicación del lado del cliente no es una práctica recomendada para su uso en producción, ya que puede ser sustraída por actores maliciosos. Este método solo es adecuado para pruebas iniciales y la creación de prototipos.
+                        </div>
+                    </div>
                     <button class="config-button" onclick="window.open('/ucursednt/', '_blank')">
                         <i class="fas fa-cog"></i> Ir a Configuración
                     </button>
@@ -203,6 +229,8 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 
         // Add event listeners
         mascotButton.addEventListener('click', toggleChatPopup);
+        chatHeader.querySelector('.open-tab-btn').addEventListener('click', openChatInNewTab);
+        chatHeader.querySelector('.clear-history-btn').addEventListener('click', handleClearHistory);
         chatHeader.querySelector('.minimize-btn').addEventListener('click', minimizeChatPopup);
         chatHeader.querySelector('.close-btn').addEventListener('click', closeChatPopup);
 
@@ -212,68 +240,62 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         return chatContainer;
     }
 
-    // Create external provider interface
-    function createExternalProviderInterface(container) {
-        const provider = AI_PROVIDERS[currentProvider];
-        container.innerHTML = `
-            <div class="external-provider-interface">
-                <div class="provider-info">
-                    <div class="provider-icon-large">${provider.icon}</div>
-                    <h3>${provider.name}</h3>
-                    <p>${provider.description}</p>
-                </div>
-                <div class="provider-actions">
-                    <button class="provider-btn primary" onclick="window.open('${provider.url}', '_blank')">
-                        <i class="fas fa-external-link-alt"></i>
-                        Abrir ${provider.name}
-                    </button>
-                    <button class="provider-btn secondary" onclick="window.aiChatPopup.switchToCustom()">
-                        <i class="fas fa-cog"></i>
-                        Usar API Personalizada
-                    </button>
-                </div>
-                <div class="provider-note">
-                    <p><i class="fas fa-info-circle"></i> Los servicios externos no pueden integrarse directamente por restricciones de seguridad. Usa la API personalizada para chat integrado.</p>
-                </div>
-            </div>
-        `;
-    }
-
-    // Create custom API interface
-    function createCustomAPIInterface(container) {
+    // Create Gemini API interface
+    async function createGeminiAPIInterface(container) {
+        // Load chat history
+        await loadChatHistory();
+        
         container.innerHTML = `
             <div class="custom-api-interface">
                 <div class="chat-messages" id="chat-messages">
-                    <div class="system-message">
-                        <i class="fas fa-robot"></i>
-                        <div class="message-content">
-                            <strong>Sistema:</strong> ${systemInstructions}
+                    <div class="system-message" id="system-message">
+                        <div class="system-message-header" onclick="toggleSystemMessage()">
+                            <i class="fas fa-robot"></i>
+                            <strong>Sistema</strong>
+                            <i class="fas fa-chevron-down system-chevron" id="system-chevron"></i>
                         </div>
-                    </div>
-                    <div class="welcome-message">
-                        <div class="message-content">
-                            ¡Hola! Soy tu asistente de IA personalizado. ¿En qué puedo ayudarte hoy?
+                        <div class="system-message-content" id="system-message-content">
+                            ${systemInstructions}
                         </div>
-                        <div class="message-time">${new Date().toLocaleTimeString()}</div>
                     </div>
                 </div>
                 <div class="chat-input-container">
                     <textarea 
                         id="chat-input" 
-                        placeholder="Escribe tu mensaje aquí..." 
-                        rows="3"></textarea>
+                        placeholder="¿En qué puedo ayudarte hoy? Escribe tu pregunta aquí..." 
+                        rows="2"></textarea>
                     <button id="send-message" class="send-btn">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
-                <div class="api-status">
-                    <span class="status-indicator connected"></span>
-                    <span class="status-text">Conectado a ${modelName}</span>
-                </div>
+            </div>
+            <div class="api-status">
+                <span class="status-indicator connected"></span>
+                <span class="status-text">Conectado a Gemini Pro</span>
             </div>
         `;
 
-        // Add event listeners for custom API
+        // Load and display chat history
+        const messagesContainer = container.querySelector('#chat-messages');
+        if (chatHistory.length === 0) {
+            // Show welcome message only if no history
+            const welcomeMessage = document.createElement('div');
+            welcomeMessage.className = 'welcome-message';
+            welcomeMessage.innerHTML = `
+                <div class="message-content">
+                    ¡Hola! Soy tu asistente de IA powered by Gemini. ¿En qué puedo ayudarte hoy?
+                </div>
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            `;
+            messagesContainer.appendChild(welcomeMessage);
+        } else {
+            // Display chat history
+            chatHistory.forEach(message => {
+                displayMessageInChat(message.role, message.content, message.timestamp, messagesContainer);
+            });
+        }
+
+        // Add event listeners for Gemini API
         const chatInput = container.querySelector('#chat-input');
         const sendButton = container.querySelector('#send-message');
 
@@ -284,9 +306,67 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 sendMessage();
             }
         });
+
+        // Initialize system message collapsed state
+        const systemMessage = container.querySelector('#system-message');
+        const systemContent = container.querySelector('#system-message-content');
+        const systemChevron = container.querySelector('#system-chevron');
+        
+        if (systemMessageCollapsed && systemMessage && systemContent && systemChevron) {
+            systemMessage.classList.add('collapsed');
+            systemContent.style.display = 'none';
+            systemChevron.style.transform = 'rotate(-90deg)';
+        }
+
+        // Add global toggle function for system message
+        window.toggleSystemMessage = function() {
+            const content = document.getElementById('system-message-content');
+            const chevron = document.getElementById('system-chevron');
+            const systemMessage = document.getElementById('system-message');
+            
+            if (content && chevron && systemMessage) {
+                const isCollapsed = systemMessage.classList.contains('collapsed');
+                
+                if (isCollapsed) {
+                    // Expand
+                    systemMessage.classList.remove('collapsed');
+                    content.style.display = 'block';
+                    chevron.style.transform = 'rotate(0deg)';
+                    systemMessageCollapsed = false;
+                } else {
+                    // Collapse
+                    systemMessage.classList.add('collapsed');
+                    content.style.display = 'none';
+                    chevron.style.transform = 'rotate(-90deg)';
+                    systemMessageCollapsed = true;
+                }
+                
+                // Save the state
+                saveAIChatSettings();
+            }
+        };
+
+        // Initialize system message state based on saved preference
+        setTimeout(() => {
+            const content = document.getElementById('system-message-content');
+            const chevron = document.getElementById('system-chevron');
+            const systemMessage = document.getElementById('system-message');
+            
+            if (content && chevron && systemMessage) {
+                if (systemMessageCollapsed) {
+                    content.style.display = 'none';
+                    chevron.style.transform = 'rotate(-90deg)';
+                    systemMessage.classList.add('collapsed');
+                } else {
+                    content.style.display = 'block';
+                    chevron.style.transform = 'rotate(0deg)';
+                    systemMessage.classList.remove('collapsed');
+                }
+            }
+        }, 100);
     }
 
-    // Send message to custom API via background script
+    // Send message to Gemini API via background script
     async function sendMessage() {
         const input = document.querySelector('#chat-input');
         const messagesContainer = document.querySelector('#chat-messages');
@@ -310,31 +390,30 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         statusText.textContent = 'Enviando...';
 
         // Add user message
+        const timestamp = new Date().toISOString();
         addMessageToChat('user', message, messagesContainer);
+        
+        // Save user message to history
+        chatHistory.push({
+            role: 'user',
+            content: message,
+            timestamp: timestamp
+        });
+        await saveChatHistory();
+
         input.value = '';
 
         // Add loading indicator
         const loadingId = addMessageToChat('assistant', 'Escribiendo...', messagesContainer);
 
         try {
-            // Prepare messages for API
-            const messages = [
-                { role: 'system', content: systemInstructions },
-                { role: 'user', content: message }
-            ];
-
             // Send request to background script
             const response = await new Promise((resolve, reject) => {
                 chrome.runtime.sendMessage({
-                    action: 'makeAIAPICall',
-                    data: {
-                        baseUrl: baseUrl,
-                        apiKey: apiKey,
-                        messages: messages,
-                        modelName: modelName,
-                        maxTokens: 1000,
-                        temperature: 0.7
-                    }
+                    action: 'generateContent',
+                    apiKey: apiKey,
+                    prompt: message,
+                    systemInstruction: systemInstructions
                 }, (response) => {
                     if (chrome.runtime.lastError) {
                         reject(new Error(chrome.runtime.lastError.message));
@@ -347,10 +426,19 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
             // Remove loading indicator
             document.getElementById(loadingId)?.remove();
 
-            if (response.success && response.data.choices && response.data.choices[0] && response.data.choices[0].message) {
-                addMessageToChat('assistant', response.data.choices[0].message.content, messagesContainer);
+            if (response.success && response.content) {
+                addMessageToChat('assistant', response.content, messagesContainer);
+                
+                // Save assistant response to history
+                chatHistory.push({
+                    role: 'assistant',
+                    content: response.content,
+                    timestamp: new Date().toISOString()
+                });
+                await saveChatHistory();
+                
                 statusIndicator.className = 'status-indicator connected';
-                statusText.textContent = `Conectado a ${modelName}`;
+                statusText.textContent = 'Conectado a Gemini Pro';
             } else {
                 const errorMsg = response.error || 'Respuesta inesperada del servidor';
                 addMessageToChat('assistant', `Error: ${errorMsg}`, messagesContainer);
@@ -372,14 +460,23 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 
     // Add message to chat
     function addMessageToChat(role, content, container) {
+        const timestamp = new Date().toISOString();
+        return displayMessageInChat(role, content, timestamp, container);
+    }
+
+    // Display message in chat with timestamp
+    function displayMessageInChat(role, content, timestamp, container) {
         const messageId = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${role}-message`;
         messageDiv.id = messageId;
+        
+        const messageTime = new Date(timestamp).toLocaleTimeString();
         messageDiv.innerHTML = `
             <div class="message-content">${content}</div>
-            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            <div class="message-time">${messageTime}</div>
         `;
+        
         container.appendChild(messageDiv);
         container.scrollTop = container.scrollHeight;
         return messageId;
@@ -408,78 +505,145 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 
     // Close chat popup
     function closeChatPopup() {
-        const chatContainer = document.querySelector('#ai-chat-popup');
-        if (chatContainer) {
-            chatContainer.remove();
-            isPopupVisible = false;
+        const confirmed = confirm(
+            '¿Estás seguro de que quieres cerrar el chat?\n\n' +
+            'El chat se cerrará pero tu historial se mantendrá guardado.'
+        );
+        
+        if (confirmed) {
+            const chatPopup = document.querySelector('#ai-chat-popup');
+            if (chatPopup) {
+                chatPopup.remove();
+                isPopupVisible = false;
+            }
+        }
+    }
+
+    // Open chat in new tab
+    function openChatInNewTab() {
+        const chatUrl = chrome.runtime.getURL('aipopup.html');
+        window.open(chatUrl, '_blank');
+    }
+
+    // Handle clear history with confirmation
+    async function handleClearHistory() {
+        const confirmed = confirm(
+            '¿Estás seguro de que quieres borrar todo el historial del chat?\n\n' +
+            'Esta acción no se puede deshacer y se perderán todas las conversaciones anteriores.'
+        );
+        
+        if (confirmed) {
+            try {
+                await clearChatHistory();
+                
+                // Clear the chat messages container
+                const messagesContainer = document.querySelector('#chat-messages');
+                if (messagesContainer) {
+                    // Keep system message, remove everything else
+                    const systemMessage = messagesContainer.querySelector('.system-message');
+                    messagesContainer.innerHTML = '';
+                    
+                    if (systemMessage) {
+                        messagesContainer.appendChild(systemMessage);
+                    }
+                    
+                    // Add welcome message
+                    const welcomeMessage = document.createElement('div');
+                    welcomeMessage.className = 'welcome-message';
+                    welcomeMessage.innerHTML = `
+                        <div class="message-content">
+                            ¡Historial borrado! Soy tu asistente de IA powered by Gemini. ¿En qué puedo ayudarte hoy?
+                        </div>
+                        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                    `;
+                    messagesContainer.appendChild(welcomeMessage);
+                }
+                
+                // Show temporary success notification
+                const clearBtn = document.querySelector('.clear-history-btn');
+                if (clearBtn) {
+                    const originalHTML = clearBtn.innerHTML;
+                    clearBtn.innerHTML = '<i class="fas fa-check"></i>';
+                    clearBtn.style.color = '#4caf50';
+                    
+                    setTimeout(() => {
+                        clearBtn.innerHTML = originalHTML;
+                        clearBtn.style.color = '';
+                    }, 2000);
+                }
+                
+            } catch (error) {
+                console.error('Error clearing chat history:', error);
+                alert('Error al borrar el historial. Por favor, inténtalo de nuevo.');
+            }
         }
     }
 
     // Make element draggable
     function makeDraggable(element, handle) {
-        let isDragging = false;
-        let startX, startY, initialX, initialY;
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        
+        handle.onmousedown = dragMouseDown;
 
-        handle.style.cursor = 'move';
-
-        handle.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            initialX = parseInt(window.getComputedStyle(element).left, 10) || 0;
-            initialY = parseInt(window.getComputedStyle(element).top, 10) || 0;
-            
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', stopDrag);
-        });
-
-        function drag(e) {
-            if (!isDragging) return;
+        function dragMouseDown(e) {
+            e = e || window.event;
             e.preventDefault();
-            
-            const currentX = initialX + e.clientX - startX;
-            const currentY = initialY + e.clientY - startY;
-            
-            element.style.left = currentX + 'px';
-            element.style.top = currentY + 'px';
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
         }
 
-        function stopDrag() {
-            isDragging = false;
-            document.removeEventListener('mousemove', drag);
-            document.removeEventListener('mouseup', stopDrag);
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            element.style.top = (element.offsetTop - pos2) + "px";
+            element.style.left = (element.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
         }
     }
 
-    // Add CSS styles
+    // Add CSS styles for the chat popup
     function addAIChatStyles() {
+        if (document.querySelector('#ai-chat-styles')) return;
+
         const style = document.createElement('style');
+        style.id = 'ai-chat-styles';
         style.textContent = `
+            /* AI Chat Popup Styles */
             .ai-chat-container {
                 position: fixed;
                 bottom: 20px;
                 right: 20px;
                 z-index: 10000;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
 
             .ucursitos-mascot {
                 width: 60px;
                 height: 60px;
                 border-radius: 50%;
-                background: #007bff;
+                background: linear-gradient(45deg, #4285f4, #34a853);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
-                box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
                 transition: all 0.3s ease;
-                border: 3px solid #ffffff;
+                position: relative;
             }
 
             .ucursitos-mascot:hover {
                 transform: scale(1.1);
-                box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+                box-shadow: 0 6px 20px rgba(0,0,0,0.2);
             }
 
             .ucursitos-mascot img {
@@ -492,342 +656,319 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 position: absolute;
                 bottom: 70px;
                 right: 0;
-                width: 400px;
-                height: 500px;
+                width: 450px;
+                height: 600px;
                 background: white;
-                border-radius: 12px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+                border-radius: 15px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.15);
                 overflow: hidden;
-                border: 1px solid #e1e5e9;
+                border: 1px solid #e0e0e0;
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
             }
 
             .ai-chat-header {
-                background: linear-gradient(135deg, #007bff, #0056b3);
+                background: linear-gradient(45deg, #4285f4, #34a853);
                 color: white;
-                padding: 12px 16px;
+                padding: 15px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                user-select: none;
+                cursor: move;
+                flex-shrink: 0;
+                min-height: 40px;
+                box-sizing: border-box;
             }
 
             .chat-header-content {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                width: 100%;
+                flex: 1;
             }
 
             .provider-icon {
-                font-size: 18px;
-                margin-right: 8px;
+                font-size: 20px;
+                margin-right: 10px;
             }
 
             .provider-name {
                 font-weight: 600;
-                font-size: 14px;
+                font-size: 16px;
             }
 
             .chat-controls {
                 display: flex;
                 gap: 4px;
+                align-items: flex-end;
+                margin-left: auto;
             }
 
             .chat-control-btn {
-                background: rgba(255, 255, 255, 0.2);
+                background: rgba(255,255,255,0.2);
                 border: none;
                 color: white;
-                width: 24px;
-                height: 24px;
+                padding: 4px 6px;
                 border-radius: 4px;
                 cursor: pointer;
+                transition: all 0.2s ease;
+                font-size: 10px;
+                min-width: 24px;
+                height: 24px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 12px;
-                transition: background-color 0.2s ease;
             }
 
             .chat-control-btn:hover {
-                background: rgba(255, 255, 255, 0.3);
+                background: rgba(255,255,255,0.3);
+                transform: scale(1.05);
+            }
+
+            .clear-history-btn:hover {
+                background: rgba(255,100,100,0.3);
+            }
+
+            .open-tab-btn:hover {
+                background: rgba(255,255,255,0.4);
+                transform: scale(1.05);
             }
 
             .ai-chat-content {
-                height: calc(100% - 48px);
+                flex: 1;
+                display: flex;
+                align-items: stretch;
+                height: calc(100% - 65px);
+                flex-direction: column;
                 overflow: hidden;
-            }
-
-            .ai-chat-iframe {
-                width: 100%;
-                height: 100%;
-                border: none;
-            }
-
-            .api-config-notice {
-                padding: 20px;
-                text-align: center;
-                color: #6c757d;
-            }
-
-            .config-button {
-                background: #007bff;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 6px;
-                cursor: pointer;
-                margin-top: 15px;
-                font-size: 14px;
-                transition: background-color 0.2s ease;
-            }
-
-            .config-button:hover {
-                background: #0056b3;
-            }
-
-            .external-provider-interface {
-                padding: 20px;
-                text-align: center;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-
-            .provider-info {
-                margin-bottom: 30px;
-            }
-
-            .provider-icon-large {
-                font-size: 48px;
-                margin-bottom: 15px;
-            }
-
-            .provider-info h3 {
-                margin: 0 0 10px 0;
-                color: #333;
-                font-size: 20px;
-            }
-
-            .provider-info p {
-                color: #6c757d;
-                margin: 0;
-                font-size: 14px;
-            }
-
-            .provider-actions {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-                margin-bottom: 20px;
-            }
-
-            .provider-btn {
-                padding: 12px 20px;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 14px;
-                font-weight: 500;
-                transition: all 0.2s ease;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .provider-btn.primary {
-                background: #007bff;
-                color: white;
-            }
-
-            .provider-btn.primary:hover {
-                background: #0056b3;
-                transform: translateY(-1px);
-            }
-
-            .provider-btn.secondary {
-                background: #f8f9fa;
-                color: #6c757d;
-                border: 1px solid #dee2e6;
-            }
-
-            .provider-btn.secondary:hover {
-                background: #e9ecef;
-                color: #495057;
-            }
-
-            .provider-note {
-                background: #e3f2fd;
-                border-left: 4px solid #2196f3;
-                padding: 12px;
-                border-radius: 0 4px 4px 0;
-                font-size: 12px;
-                color: #1565c0;
-            }
-
-            .provider-note i {
-                margin-right: 8px;
+                min-height: 0;
+                position: relative;
+                box-sizing: border-box;
             }
 
             .custom-api-interface {
-                height: 100%;
+                flex: 1;
                 display: flex;
                 flex-direction: column;
+                overflow: hidden;
+                min-height: 0;
+                box-sizing: border-box;
+                position: relative;
             }
 
             .chat-messages {
                 flex: 1;
                 overflow-y: auto;
-                padding: 16px;
+                padding: 12px;
                 background: #f8f9fa;
+                min-height: 0;
+                box-sizing: border-box;
             }
 
             .chat-message {
                 margin-bottom: 12px;
-                max-width: 85%;
+                padding: 10px 12px;
+                border-radius: 12px;
+                max-width: 80%;
+                word-wrap: break-word;
+                line-height: 1.4;
             }
 
             .user-message {
-                margin-left: auto;
-            }
-
-            .user-message .message-content {
-                background: #007bff;
+                background: #4285f4;
                 color: white;
-                padding: 8px 12px;
-                border-radius: 12px 12px 4px 12px;
+                margin-left: auto;
+                text-align: right;
+                border-bottom-right-radius: 4px;
             }
 
-            .assistant-message .message-content {
+            .assistant-message {
                 background: white;
+                border: 1px solid #e0e0e0;
+                margin-right: auto;
                 color: #333;
-                padding: 8px 12px;
-                border-radius: 12px 12px 12px 4px;
-                border: 1px solid #e1e5e9;
+                border-bottom-left-radius: 4px;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            }
+
+            .system-message {
+                background: #f8f9fa;
+                border: 1px solid #dee2e6;
+                margin: 0 0 10px 0;
+                max-width: 100%;
+                font-size: 11px;
+                border-radius: 8px;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .system-message-header {
+                padding: 6px 10px;
+                background: #e9ecef;
+                border-bottom: 1px solid #dee2e6;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                user-select: none;
+                transition: background-color 0.2s ease;
+            }
+
+            .system-message-header:hover {
+                background: #dee2e6;
+            }
+
+            .system-message-header i.fas.fa-robot {
+                margin-right: 6px;
+                color: #6c757d;
+            }
+
+            .system-message-header strong {
+                flex: 1;
+                color: #6c757d;
+                font-weight: 600;
+                font-size: 10px;
+            }
+
+            .system-chevron {
+                transition: transform 0.3s ease;
+                color: #6c757d;
+                font-size: 8px;
+            }
+
+            .system-message-content {
+                padding: 8px 10px;
+                line-height: 1.3;
+                color: #6c757d;
+                background: #f8f9fa;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                transition: all 0.3s ease;
+                font-size: 10px;
+                max-height: 100px;
+                overflow-y: auto;
+            }
+
+            .system-message.collapsed {
+                margin-bottom: 5px;
+            }
+
+            .system-message.collapsed .system-message-content {
+                display: none;
+            }
+
+            .system-message.collapsed .system-chevron {
+                transform: rotate(-90deg);
+            }
+
+            .welcome-message {
+                background: #e8f4fd;
+                border: 1px solid #b3d9ff;
+                margin: 0 0 15px 0;
+                max-width: 100%;
+                padding: 12px;
+                border-radius: 8px;
+                text-align: center;
+                color: #0c5aa6;
+            }
+
+            .message-content {
+                margin-bottom: 5px;
             }
 
             .message-time {
                 font-size: 10px;
-                color: #6c757d;
+                opacity: 0.6;
                 margin-top: 4px;
-                text-align: right;
-            }
-
-            .assistant-message .message-time {
-                text-align: left;
+                font-style: italic;
             }
 
             .chat-input-container {
                 padding: 12px;
                 background: white;
-                border-top: 1px solid #e1e5e9;
+                border-top: 1px solid #e0e0e0;
                 display: flex;
                 gap: 8px;
                 align-items: flex-end;
+                flex-shrink: 0;
+                box-sizing: border-box;
             }
 
-            #chat-input {
+            .chat-input-container textarea {
                 flex: 1;
-                border: 1px solid #e1e5e9;
-                border-radius: 8px;
-                padding: 8px 12px;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                padding: 10px 12px;
                 resize: none;
                 font-family: inherit;
                 font-size: 14px;
+                transition: border-color 0.2s ease;
                 max-height: 80px;
+                min-height: 40px;
             }
 
-            #chat-input:focus {
+            .chat-input-container textarea:focus {
                 outline: none;
-                border-color: #007bff;
+                border-color: #4285f4;
             }
 
             .send-btn {
-                background: #007bff;
-                color: white;
+                background: #4285f4;
                 border: none;
-                border-radius: 8px;
-                width: 36px;
-                height: 36px;
+                color: white;
+                padding: 10px 12px;
+                border-radius: 10px;
                 cursor: pointer;
+                transition: all 0.2s ease;
+                font-size: 14px;
+                min-width: 44px;
+                height: 40px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: background-color 0.2s ease;
             }
 
             .send-btn:hover {
-                background: #0056b3;
+                background: #3367d6;
+                transform: scale(1.05);
             }
 
             .send-btn:disabled {
-                background: #6c757d;
+                background: #ccc;
                 cursor: not-allowed;
-            }
-
-            .system-message {
-                background: #fff3cd;
-                border-left: 4px solid #ffc107;
-                padding: 10px 12px;
-                margin-bottom: 12px;
-                border-radius: 0 8px 8px 0;
-                font-size: 12px;
-                display: flex;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .system-message i {
-                color: #856404;
-                margin-top: 2px;
-            }
-
-            .welcome-message {
-                background: #d1ecf1;
-                border-left: 4px solid #17a2b8;
-                padding: 10px 12px;
-                margin-bottom: 12px;
-                border-radius: 0 8px 8px 0;
-                max-width: 85%;
-            }
-
-            .welcome-message .message-content {
-                background: none;
-                border: none;
-                padding: 0;
-                color: #0c5460;
-                font-weight: 500;
+                transform: none;
             }
 
             .api-status {
-                padding: 8px 12px;
-                background: white;
-                border-top: 1px solid #e1e5e9;
+                padding: 6px 12px;
+                background: #f8f9fa;
+                border-top: 1px solid #e0e0e0;
                 display: flex;
                 align-items: center;
-                gap: 8px;
-                font-size: 12px;
+                gap: 6px;
+                font-size: 11px;
+                flex-shrink: 0;
+                box-sizing: border-box;
+                color: #6c757d;
             }
 
             .status-indicator {
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
-                flex-shrink: 0;
             }
 
             .status-indicator.connected {
-                background: #28a745;
+                background: #34a853;
             }
 
             .status-indicator.sending {
-                background: #ffc107;
+                background: #fbbc04;
                 animation: pulse 1s infinite;
             }
 
             .status-indicator.error {
-                background: #dc3545;
+                background: #ea4335;
             }
 
             @keyframes pulse {
@@ -836,21 +977,75 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 100% { opacity: 1; }
             }
 
-            .status-text {
-                color: #6c757d;
-                font-weight: 500;
+            .api-config-notice {
+                padding: 20px;
+                text-align: center;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                overflow-y: auto;
+                box-sizing: border-box;
             }
 
-            @media (max-width: 768px) {
-                .ai-chat-frame {
-                    width: 320px;
-                    height: 400px;
-                }
-                
-                .ai-chat-container {
-                    bottom: 10px;
-                    right: 10px;
-                }
+            .api-config-notice h3 {
+                color: #4285f4;
+                margin-bottom: 15px;
+            }
+
+            .api-setup-info {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 15px 0;
+                text-align: left;
+            }
+
+            .api-setup-info h4 {
+                margin-bottom: 10px;
+                color: #333;
+            }
+
+            .api-setup-info ul {
+                margin: 0;
+                padding-left: 20px;
+            }
+
+            .api-setup-info li {
+                margin-bottom: 8px;
+                line-height: 1.4;
+            }
+
+            .api-warning {
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                border-radius: 6px;
+                padding: 12px;
+                margin-top: 15px;
+                font-size: 13px;
+                line-height: 1.4;
+                color: #856404;
+            }
+
+            .api-warning strong {
+                color: #d32f2f;
+            }
+
+            .config-button {
+                background: #4285f4;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: all 0.2s ease;
+                margin-top: 15px;
+            }
+
+            .config-button:hover {
+                background: #3367d6;
+                transform: translateY(-2px);
             }
         `;
         document.head.appendChild(style);
@@ -858,27 +1053,30 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 
     // Initialize the AI chat popup
     async function initAIChatPopup() {
-        if (!isExtensionContextValid()) return;
+        if (isPopupVisible) return;
 
         await loadAIChatSettings();
         addAIChatStyles();
 
-        // Only create popup if not already exists
-        if (!document.querySelector('#ai-chat-popup')) {
-            const chatPopup = createAIChatPopup();
-            document.body.appendChild(chatPopup);
-            isPopupVisible = true;
+        const chatPopup = await createAIChatPopup();
+        document.body.appendChild(chatPopup);
+        isPopupVisible = true;
+
+        // Show/hide based on minimized state
+        if (!isMinimized) {
+            const chatFrame = chatPopup.querySelector('.ai-chat-frame');
+            chatFrame.style.display = 'block';
         }
     }
 
     // Update popup when settings change
-    function updateChatPopup() {
+    async function updateChatPopup() {
         const existingPopup = document.querySelector('#ai-chat-popup');
         if (existingPopup) {
             existingPopup.remove();
         }
         if (isPopupVisible) {
-            initAIChatPopup();
+            await initAIChatPopup();
         }
     }
 
@@ -886,23 +1084,8 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
     window.aiChatPopup = {
         init: initAIChatPopup,
         update: updateChatPopup,
-        setProvider: (provider) => {
-            currentProvider = provider;
-            saveAIChatSettings();
-            updateChatPopup();
-        },
         setApiKey: (key) => {
             apiKey = key;
-            saveAIChatSettings();
-            updateChatPopup();
-        },
-        setBaseUrl: (url) => {
-            baseUrl = url;
-            saveAIChatSettings();
-            updateChatPopup();
-        },
-        setModel: (model) => {
-            modelName = model;
             saveAIChatSettings();
             updateChatPopup();
         },
@@ -917,18 +1100,23 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
             updateChatPopup();
             return DEFAULT_SYSTEM_INSTRUCTIONS;
         },
-        switchToCustom: () => {
-            currentProvider = 'custom';
-            saveAIChatSettings();
-            updateChatPopup();
-        },
-        getCurrentProvider: () => currentProvider,
         getCurrentApiKey: () => apiKey,
-        getCurrentBaseUrl: () => baseUrl,
-        getCurrentModel: () => modelName,
         getCurrentSystemInstructions: () => systemInstructions,
         getDefaultSystemInstructions: () => DEFAULT_SYSTEM_INSTRUCTIONS,
-        getProviders: () => AI_PROVIDERS
+        getChatHistory: () => chatHistory,
+        clearChatHistory: async () => {
+            await clearChatHistory();
+            updateChatPopup();
+        },
+        exportChatHistory: () => {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(chatHistory, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `ucursednt-chat-history-${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
     };
 
     // Auto-initialize on U-Cursos pages

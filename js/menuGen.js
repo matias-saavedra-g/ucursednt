@@ -439,6 +439,31 @@
                 line-height: 1.4;
             }
 
+            .api-warning {
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                border-radius: 6px;
+                padding: 12px;
+                margin-top: 15px;
+                font-size: 13px;
+                line-height: 1.4;
+                color: #856404;
+            }
+
+            .api-warning strong {
+                color: #d32f2f;
+            }
+
+            .gemini-info ul {
+                margin: 8px 0;
+                padding-left: 20px;
+            }
+
+            .gemini-info li {
+                margin-bottom: 6px;
+                line-height: 1.4;
+            }
+
             .api-key-container {
                 display: flex;
                 gap: 8px;
@@ -613,45 +638,30 @@
         const sectionHeader = document.createElement('div');
         sectionHeader.className = 'ai-config-header';
         sectionHeader.innerHTML = `
-            <h3><i class="fas fa-robot"></i> Configuración de Chat IA</h3>
-            <p>Configura tu proveedor de IA preferido y API key para el chat flotante</p>
+            <h3><i class="fas fa-robot"></i> Configuración de Chat IA - Gemini</h3>
+            <p>Configura tu API key de Google AI Studio para usar el chat flotante con Gemini</p>
+            <div class="gemini-info">
+                <p><strong>📝 Cómo obtener tu API key:</strong></p>
+                <ul>
+                    <li>Ve a <a href="https://aistudio.google.com" target="_blank" style="color: #4285f4; text-decoration: underline;">AI Studio</a></li>
+                    <li>Inicia sesión con tu cuenta de Google</li>
+                    <li>Ve a "Get API key" en el menú lateral</li>
+                    <li>Crea una nueva API key</li>
+                    <li>Copia la key y pégala abajo</li>
+                </ul>
+                <div class="api-warning">
+                    <strong>⚠️ Advertencia:</strong> Exponer una clave de API en una aplicación del lado del cliente no es una práctica recomendada para su uso en producción, ya que puede ser sustraída por actores maliciosos. Este método solo es adecuado para pruebas iniciales y la creación de prototipos.
+                </div>
+            </div>
         `;
-
-        // Provider selection
-        const providerGroup = document.createElement('div');
-        providerGroup.className = 'config-group';
-        
-        const providerLabel = document.createElement('label');
-        providerLabel.className = 'config-label';
-        providerLabel.innerHTML = '<i class="fas fa-brain"></i> Proveedor de IA:';
-
-        const providerSelect = document.createElement('select');
-        providerSelect.className = 'config-select';
-        providerSelect.id = 'ai-provider-select';
-
-        // Add provider options
-        const providers = [
-            { value: 'chatgpt', label: '🤖 ChatGPT (gratuito)', free: true },
-            { value: 'claude', label: '🧠 Claude (gratuito)', free: true },
-            { value: 'gemini', label: '✨ Gemini (gratuito)', free: true },
-            { value: 'custom', label: '🔧 API Personalizada (requiere key)', free: false }
-        ];
-
-        providers.forEach(provider => {
-            const option = document.createElement('option');
-            option.value = provider.value;
-            option.textContent = provider.label;
-            providerSelect.appendChild(option);
-        });
 
         // API Key input
         const apiKeyGroup = document.createElement('div');
         apiKeyGroup.className = 'config-group';
-        apiKeyGroup.id = 'api-key-group';
         
         const apiKeyLabel = document.createElement('label');
         apiKeyLabel.className = 'config-label';
-        apiKeyLabel.innerHTML = '<i class="fas fa-key"></i> API Key:';
+        apiKeyLabel.innerHTML = '<i class="fas fa-key"></i> API Key de Gemini:';
 
         const apiKeyContainer = document.createElement('div');
         apiKeyContainer.className = 'api-key-container';
@@ -660,53 +670,13 @@
         apiKeyInput.type = 'password';
         apiKeyInput.className = 'config-input api-key-input';
         apiKeyInput.id = 'ai-api-key';
-        apiKeyInput.placeholder = 'Ingresa tu API key aquí...';
+        apiKeyInput.placeholder = 'Ingresa tu API key de Google AI Studio...';
 
         const toggleKeyBtn = document.createElement('button');
         toggleKeyBtn.className = 'toggle-key-btn';
         toggleKeyBtn.type = 'button';
         toggleKeyBtn.innerHTML = '<i class="fas fa-eye"></i>';
         toggleKeyBtn.title = 'Mostrar/Ocultar API Key';
-
-        // Base URL input
-        const baseUrlGroup = document.createElement('div');
-        baseUrlGroup.className = 'config-group';
-        baseUrlGroup.id = 'base-url-group';
-        
-        const baseUrlLabel = document.createElement('label');
-        baseUrlLabel.className = 'config-label';
-        baseUrlLabel.innerHTML = '<i class="fas fa-link"></i> Base URL:';
-
-        const baseUrlInput = document.createElement('input');
-        baseUrlInput.type = 'text';
-        baseUrlInput.className = 'config-input';
-        baseUrlInput.id = 'ai-base-url';
-        baseUrlInput.placeholder = 'https://api.openai.com/v1/chat/completions';
-
-        // Add helper text for common APIs
-        const baseUrlHelper = document.createElement('div');
-        baseUrlHelper.className = 'config-helper';
-        baseUrlHelper.innerHTML = `
-            <small>APIs compatibles:</small><br>
-            <small>• OpenAI: https://api.openai.com/v1/chat/completions</small><br>
-            <small>• Gemini: https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent</small><br>
-            <small>• Anthropic: https://api.anthropic.com/v1/messages</small>
-        `;
-
-        // Model input
-        const modelGroup = document.createElement('div');
-        modelGroup.className = 'config-group';
-        modelGroup.id = 'model-group';
-        
-        const modelLabel = document.createElement('label');
-        modelLabel.className = 'config-label';
-        modelLabel.innerHTML = '<i class="fas fa-brain"></i> Modelo:';
-
-        const modelInput = document.createElement('input');
-        modelInput.type = 'text';
-        modelInput.className = 'config-input';
-        modelInput.id = 'ai-model';
-        modelInput.placeholder = 'gpt-3.5-turbo';
 
         // System Instructions
         const systemGroup = document.createElement('div');
@@ -780,26 +750,10 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 - Seguro y Confiable: Proporciona información con seguridad, pero sé humilde cuando no conoces una respuesta.
 - Proactivo y Orientador: No te limites a responder; si es pertinente, ofrece consejos adicionales o sugiere funcionalidades relacionadas que podrían ser útiles para el usuario.`;
         
-        providerSelect.value = aiSettings.provider || 'chatgpt';
         apiKeyInput.value = aiSettings.apiKey || '';
-        baseUrlInput.value = aiSettings.baseUrl || 'https://api.openai.com/v1/chat/completions';
-        modelInput.value = aiSettings.modelName || 'gpt-3.5-turbo';
         systemTextarea.value = aiSettings.systemInstructions || defaultSystemInstructions;
 
-        // Update API key visibility based on provider
-        function updateAPIKeyVisibility() {
-            const isCustom = providerSelect.value === 'custom';
-            apiKeyGroup.style.display = isCustom ? 'block' : 'none';
-            baseUrlGroup.style.display = isCustom ? 'block' : 'none';
-            modelGroup.style.display = isCustom ? 'block' : 'none';
-            systemGroup.style.display = isCustom ? 'block' : 'none';
-        }
-
-        updateAPIKeyVisibility();
-
         // Event listeners
-        providerSelect.addEventListener('change', updateAPIKeyVisibility);
-
         toggleKeyBtn.addEventListener('click', () => {
             const isPassword = apiKeyInput.type === 'password';
             apiKeyInput.type = isPassword ? 'text' : 'password';
@@ -831,10 +785,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 
         saveBtn.addEventListener('click', async () => {
             const settings = {
-                provider: providerSelect.value,
                 apiKey: apiKeyInput.value,
-                baseUrl: baseUrlInput.value || 'https://api.openai.com/v1/chat/completions',
-                modelName: modelInput.value || 'gpt-3.5-turbo',
                 systemInstructions: systemTextarea.value.trim() || defaultSystemInstructions,
                 isMinimized: true
             };
@@ -843,10 +794,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
             
             // Update the chat popup if it exists
             if (window.aiChatPopup) {
-                window.aiChatPopup.setProvider(settings.provider);
                 window.aiChatPopup.setApiKey(settings.apiKey);
-                window.aiChatPopup.setBaseUrl(settings.baseUrl);
-                window.aiChatPopup.setModel(settings.modelName);
                 window.aiChatPopup.setSystemInstructions(settings.systemInstructions);
             }
 
@@ -866,18 +814,8 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         apiKeyContainer.appendChild(apiKeyInput);
         apiKeyContainer.appendChild(toggleKeyBtn);
 
-        providerGroup.appendChild(providerLabel);
-        providerGroup.appendChild(providerSelect);
-
         apiKeyGroup.appendChild(apiKeyLabel);
         apiKeyGroup.appendChild(apiKeyContainer);
-
-        baseUrlGroup.appendChild(baseUrlLabel);
-        baseUrlGroup.appendChild(baseUrlInput);
-        baseUrlGroup.appendChild(baseUrlHelper);
-
-        modelGroup.appendChild(modelLabel);
-        modelGroup.appendChild(modelInput);
 
         systemGroup.appendChild(systemLabel);
         systemGroup.appendChild(systemTextarea);
@@ -886,10 +824,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         systemButtonsContainer.appendChild(resetToDefaultBtn);
 
         aiConfigContainer.appendChild(sectionHeader);
-        aiConfigContainer.appendChild(providerGroup);
         aiConfigContainer.appendChild(apiKeyGroup);
-        aiConfigContainer.appendChild(baseUrlGroup);
-        aiConfigContainer.appendChild(modelGroup);
         aiConfigContainer.appendChild(systemGroup);
         aiConfigContainer.appendChild(saveBtn);
 

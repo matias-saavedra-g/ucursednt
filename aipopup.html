@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCursedn't AI - Chat con IA Gemini</title>
+    <link rel="icon" type="image/png" href="icons/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/aipopup.css">
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <img src="images/ucursitos.png" alt="UCursitos" class="header-logo">
+            <div>
+                <div class="header-title">UCursedn't AI</div>
+                <div class="header-subtitle">Asistente Virtual de U-Cursos</div>
+            </div>
+        </div>
+        <div class="header-controls">
+            <button class="header-btn" id="new-chat-btn">
+                <i class="fas fa-plus"></i>
+                Nuevo Chat
+            </button>
+            <button class="header-btn" id="export-btn">
+                <i class="fas fa-download"></i>
+                Exportar Chat
+            </button>
+            <button class="header-btn danger" id="clear-all-btn">
+                <i class="fas fa-trash"></i>
+                Borrar Todo
+            </button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Panel izquierdo: Lista de chats -->
+        <div class="chat-sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-comments"></i> Historial de Chats</h3>
+                <div class="sidebar-stats">
+                    <span id="chat-count">0 chats</span>
+                </div>
+            </div>
+            <div class="chat-list" id="chat-list">
+                <!-- Chat items will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Área principal del chat -->
+        <div class="chat-main">
+            <div class="chat-container">
+                <div class="system-message" id="system-message">
+                    <div class="system-message-header">
+                        <div>
+                            <i class="fas fa-robot"></i>
+                            <strong>Instrucciones del Sistema</strong>
+                        </div>
+                        <i class="fas fa-chevron-down system-chevron" id="system-chevron"></i>
+                    </div>
+                    <div class="system-message-content" id="system-message-content">
+                        Cargando instrucciones del sistema...
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Messages will be loaded here -->
+                </div>
+
+                <div class="chat-input-section">
+                    <div class="chat-input-container">
+                        <textarea 
+                            id="chat-input" 
+                            placeholder="¿En qué puedo ayudarte hoy? Escribe tu pregunta aquí..." 
+                            rows="2"></textarea>
+                        <button id="send-message" class="send-btn" title="Enviar mensaje">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="api-status">
+                        <span class="status-indicator connected" id="status-indicator"></span>
+                        <span class="status-text" id="status-text">Conectado a Gemini Pro</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel derecho: Explorador/minimap del chat -->
+        <div class="chat-explorer">
+            <div class="explorer-header">
+                <h4><i class="fas fa-map"></i> Explorador</h4>
+                <button class="explorer-toggle" id="explorer-toggle" title="Ocultar explorador">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="explorer-content" id="explorer-content">
+                <div class="explorer-minimap" id="explorer-minimap">
+                    <!-- Minimap will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/aipopup.js"></script>
+</body>
+</html>
