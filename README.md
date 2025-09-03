@@ -1,30 +1,34 @@
-
-
 <img align="left" height=64 src="icons/icon.png"/><h1><a href="https://github.com/matias-saavedra-g/ucursednt">U-Cursedn't</a></h1>
 
-Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cursos](https://www.u-cursos.cl/) y respectivos logros por hacer cada una de ellas. Desarrollado por [matias-saavedra-g](https://github.com/matias-saavedra-g/), basado en la idea de [Eric K](https://github.com/Nyveon), [PuntitOWO](https://github.com/PuntitOwO), [sebcp](https://github.com/sebcp), [vmkovacs](https://github.com/vmkovacs), y [TaconeoMental](https://github.com/TaconeoMental): [tU-Cursos](https://github.com/Nyveon/tU-Cursos).
+Extensión de Chromium que agrega funciones adicionales a la plataforma de [U-Cursos](https://www.u-cursos.cl/) y respectivos logros por hacer cada una de ellas. Desarrollado por [matias-saavedra-g](https://github.com/matias-saavedra-g/), basado en la idea de [Eric K](https://github.com/Nyveon), [PuntitOWO](https://github.com/PuntitOwO), [sebcp](https://github.com/sebcp), [vmkovacs](https://github.com/vmkovacs), y [TaconeoMental](https://github.com/TaconeoMental): [tU-Cursos](https://github.com/Nyveon/tU-Cursos).
 
 <a href="https://chromewebstore.google.com/detail/u-cursednt/jappfnpemaaconilafnlhdkndccfkgen"><img src="https://developer.chrome.com/static/docs/webstore/branding/image/YT2Grfi9vEBa2wAPzhWa.png"/></a>
 
 ---
 
-# Índice <!-- omit in toc -->
-- [Funcionalidades de las Extensiones para U-Cursos](#funcionalidades-de-las-extensiones-para-u-cursos)
-  - [📋 Copia Fácil de Notas](#-copia-fácil-de-notas)
-  - [📋 Copia Fácil de Miembros](#-copia-fácil-de-miembros)
-  - [📋 Copia Fácil de Datos del Curso](#-copia-fácil-de-datos-del-curso)
-  - [📖 Recortar Texto Largo](#-recortar-texto-largo)
-  - [💬 Interacción con Foros](#-interacción-con-foros)
-  - [🔘 Otras Realizaciones del Curso](#-otras-realizaciones-del-curso)
-  - [✔ Ventana Emergente de Calificaciones](#-ventana-emergente-de-calificaciones)
-  - [📐 Redimensionar Vista Previa de PDF](#-redimensionar-vista-previa-de-pdf)
-  - [📆 Contador de Semanas](#-contador-de-semanas)
-  - [🔔 Notificación de Tareas Pendientes](#-notificación-de-tareas-pendientes)
-  - [🔔 Notificación de Pendientes](#-notificación-de-pendientes)
-  - [💥 Secciones colapsables](#-secciones-colapsables)
-  - [⚙ Menú de Configuración](#-menú-de-configuración)
-  - [🖌 Renombrar Cursos](#-renombrar-cursos)
-  - [🏆 Logros](#-logros)
+# Índice - [Funcionalidades](#funcionalidades)
+- [Índice - Funcionalidades](#índice---funcionalidades)
+- [Funcionalidades](#funcionalidades)
+  - [🤖 Chat IA Flotante con Gemini](#-chat-ia-flotante-con-gemini)
+  - [📋 Utilidades de Copia Fácil](#-utilidades-de-copia-fácil)
+      - [Copia Fácil de Notas](#copia-fácil-de-notas)
+      - [Copia Fácil de Miembros](#copia-fácil-de-miembros)
+      - [Copia Fácil de Datos del Curso](#copia-fácil-de-datos-del-curso)
+  - [✨ Mejoras de Interfaz y Experiencia de Usuario](#-mejoras-de-interfaz-y-experiencia-de-usuario)
+      - [🖌 Renombrar Cursos](#-renombrar-cursos)
+      - [💥 Secciones Colapsables](#-secciones-colapsables)
+      - [💬 Interacción con Foros](#-interacción-con-foros)
+      - [📖 Recortar Texto Largo ("Mucho Texto")](#-recortar-texto-largo-mucho-texto)
+      - [📐 Redimensionar Vista Previa de PDF](#-redimensionar-vista-previa-de-pdf)
+      - [🔊 Sonido de Entrega de Tareas](#-sonido-de-entrega-de-tareas)
+      - [✨ Animaciones de Navegación](#-animaciones-de-navegación)
+  - [🔔 Notificaciones y Atajos](#-notificaciones-y-atajos)
+      - [Notificación de Tareas y Pendientes](#notificación-de-tareas-y-pendientes)
+      - [📆 Contador de Semanas](#-contador-de-semanas)
+      - [🔘 Otras Realizaciones del Curso](#-otras-realizaciones-del-curso)
+      - [✔ Ventana Emergente de Calificaciones](#-ventana-emergente-de-calificaciones)
+  - [🏆 Sistema de Logros](#-sistema-de-logros)
+  - [⚙️ Menú de Configuración](#️-menú-de-configuración)
 - [Instalación Local](#instalación-local)
   - [Chrome](#chrome)
   - [Opera](#opera)
@@ -32,191 +36,143 @@ Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cur
 
 ---
 
-# Funcionalidades de las Extensiones para [U-Cursos](https://www.u-cursos.cl/)
+# Funcionalidades
 
-## 📋 Copia Fácil de Notas
+## 🤖 Chat IA Flotante con Gemini
+<img src="images/ucursitos.png" width="200"/>
 
+> Archivo: `aiChatPopup.js`
+
+- **Asistente Virtual:** Un popup flotante con la mascota "UCursitos" te da acceso directo a la IA de Gemini.
+- **Historial de Chat:** Guarda tus conversaciones y permite exportarlas.
+- **Personalización:** Configura tu propia API Key de Google AI Studio y personaliza las instrucciones del sistema para adaptar el comportamiento del asistente a tus necesidades.
+- **Integración con Foros:** Envía hilos o posts completos del foro directamente al chat para obtener resúmenes, explicaciones o ayuda.
+
+---
+
+## 📋 Utilidades de Copia Fácil
+
+#### Copia Fácil de Notas
 <img src="images/easyCopyGrades.png"/>
 
-> Por matias-saavedra-g
+> Archivo: `easyCopyGrades.js`
 
-### Descripción: <!-- omit in toc -->
-Con los botones en la esquina superior derecha, esta función permite copiar fácilmente las notas de los estudiantes desde [U-Cursos](https://www.u-cursos.cl/) de manera horizontal o vertical, para pegarlas dentro de una hoja de cálculo, o separadas por el símbolo de suma, para ingresarlas (junto a sus ponderaciones) en un software de cálculo simbólico como [Wolfram Alpha](https://www.wolframalpha.com/).
+- Copia rápidamente tus notas en formato horizontal (para hojas de cálculo), vertical o como una suma (para calculadoras como Wolfram Alpha).
 
----
-
-## 📋 Copia Fácil de Miembros
-
+#### Copia Fácil de Miembros
 <img src="images/easyCopyMembers.png"/>
 
-> Por matias-saavedra-g
+> Archivo: `easyCopyMembers.js`
 
-### Descripción: <!-- omit in toc -->
-Con los botones sobre cada categoría de miembros, proporciona una forma sencilla de copiar la lista de miembros de un curso en [U-Cursos](https://www.u-cursos.cl/) de manera horizontal o vertical, para pegarlos dentro de una hoja de cálculo, o en software de composición de textos como [Overleaf](https://www.overleaf.com/)
+- Agrega botones para copiar la lista de integrantes de un curso en formato horizontal o vertical, ideal para crear listas o informes.
 
----
-
-## 📋 Copia Fácil de Datos del Curso
-
+#### Copia Fácil de Datos del Curso
 <img src="images/easyCopyCourseDetails.png"/>
 
-> Por matias-saavedra-g
+> Archivo: `easyCopyCourseDetails.js`
 
-### Descripción: <!-- omit in toc -->
-Con los botones a la derecha de los detalles del curso (aunque estén renombrados), proporciona una forma sencilla de copiar el nombre y código de un curso en [U-Cursos](https://www.u-cursos.cl/) para pegarlos dentro como texto.
-
----
-
-## 📖 Recortar Texto Largo
-
-<img src="images/muchoTexto.png"/>
-
-> Por sebcp
-
-> (Se cambian los nombres de los botones)
-
-### Descripción: <!-- omit in toc -->
-Con un botón bajo el texto en algún subforo, permite recortar y mostrar una versión corta de textos largos en [U-Cursos](https://www.u-cursos.cl/), con la opción de expandirlos mostrándose como "Mucho Texto".
+- Añade un botón de copiado rápido junto al nombre y código del curso para pegarlos fácilmente donde necesites.
 
 ---
 
-## 💬 Interacción con Foros
+## ✨ Mejoras de Interfaz y Experiencia de Usuario
 
-> Por matias-saavedra-g
-
-### Descripción: <!-- omit in toc -->
-Añade funcionalidad avanzada de interacción con los foros de [U-Cursos](https://www.u-cursos.cl/). Permite copiar contenido de hilos completos o posts individuales al portapapeles, así como enviar este contenido directamente al chat IA integrado para análisis o consultas.
-
-### Características: <!-- omit in toc -->
-- **Botones a Nivel de Hilo**: "Copiar Hilo" y "Enviar Hilo al Chat" en la cabecera de cada hilo
-- **Integración Nativa**: Los botones de post se integran directamente en la lista de opciones nativa de U-Cursos (`ul.opciones`)
-- **Acciones de Post**: "Copiar Post" y "Enviar Post al Chat" junto a las opciones existentes (Compartir, Responder)
-- **Formato Inteligente**: El contenido se formatea automáticamente con autor, fecha y jerarquía del hilo
-- **Integración con Chat IA**: Envío directo al popup flotante de UCursitos para interacción con Gemini AI
-- **Feedback Visual**: Confirmación inmediata de acciones completadas con colores distintivos
-
-### Casos de Uso: <!-- omit in toc -->
-- Copiar preguntas de estudiantes para responder posteriormente
-- Enviar discusiones completas al chat IA para obtener resúmenes o análisis
-- Guardar contenido importante de foros para referencia externa
-- Facilitar la moderación y gestión de contenido del foro
-
----
-
-## 🔘 Otras Realizaciones del Curso
-
-<img src="images/otrasRealizaciones.png"/>
-
-> Por matias-saavedra-g
-
-### Descripción: <!-- omit in toc -->
-Al final del menú de cada curso, crea un botón de "Otras Realizaciones del Curso" dentro de algún curso en [U-Cursos](https://www.u-cursos.cl/).
-
----
-
-## ✔ Ventana Emergente de Calificaciones
-
-> Por sebcp
-
-> (No testeado)
-
-### Descripción: <!-- omit in toc -->
-Abre el editor de calificaciones de los estudiantes en una ventana emergente en [U-Cursos](https://www.u-cursos.cl/) en lugar de redirigir a otra página.
-
----
-
-## 📐 Redimensionar Vista Previa de PDF
-
-<img src="images/resizePreviewPDF.png"/>
-
-> Por PuntitOWO
-
-> (Se añade alerta para mostrar esta funcionalidad)
-
-### Descripción: <!-- omit in toc -->
-Al clickear en la esquina inferior derecha, permite el ajuste de la vista previa de los PDF en [U-Cursos](https://www.u-cursos.cl/) para ocupar todo el espacio disponible en la pantalla que se esté ocupando (mejor para pantallas verticales).
-
----
-
-## 📆 Contador de Semanas
-
-<img src="images/weekCounter.png"/>
-
-> Por TaconeoMental
-
-> (Se añade soporte de inglés por matias-saavedra-g)
-
-### Descripción: <!-- omit in toc -->
-Cuenta y muestra el número de semanas entre la primera semana de clases del calendario y la fecha actual en [U-Cursos](https://www.u-cursos.cl/).
-
----
-
-## 🔔 Notificación de Tareas Pendientes
-
-<img src="images/pendingTasks.png"/>
-
-> Por matias-saavedra-g
-
-### Descripción: <!-- omit in toc -->
-Muestra el número de tareas pendientes en una insignia de notificaciones. Este conteo ocurre cada vez que se entra a tareas en la página de inicio de [U-Cursos](https://www.u-cursos.cl/). (Por esta razón se aconseja utilizar esta página como la principal).
-
----
-
-## 🔔 Notificación de Pendientes
-
-<img src="images/pendingNotifications.png"/>
-
-> Por matias-saavedra-g
-
-### Descripción: <!-- omit in toc -->
-Muestra el número de notificaciones pendientes en una insignia en la parte superior del listado de cursos. Este conteo ocurre cada vez que se entra a la página [U-Cursos](https://www.u-cursos.cl/). (Aparentemente no funciona cuando tienes +300 notificaciones pendientes).
-
----
-
-## 💥 Secciones colapsables
-
-<img src="images/collapsableMenus.png"/>
-
-> Por matias-saavedra-g
-
-### Descripción: <!-- omit in toc -->
-Con botones a la derecha de cada curso en el listado de cursos, permite colapsar las secciones en la página de inicio de [U-Cursos](https://www.u-cursos.cl/), y tiene memoria local para saber en qué estado quedaron en la última sesión.
-
----
-
-## ⚙ Menú de Configuración
-
-<img src="images/menuGen.png"/>
-
-> Por matias-saavedra-g
-
-### Descripción: <!-- omit in toc -->
-
-Añade un botón en el menú de la pantalla de inicio de [U-Cursos](https://www.u-cursos.cl/), el cual permite acceder a la configuración de [U-Cursden't](http://github.com/matias-saavedra-g/ucursednt) y borrar los datos locales generados por la misma.
-
----
-
-## 🖌 Renombrar Cursos
-
+#### 🖌 Renombrar Cursos
 <img src="images/renameCourses.png"/>
 
-> Por matias-saavedra-g
+> Archivo: `renameCourses.js`
 
-### Descripción: <!-- omit in toc -->
+- ¿Nombres de cursos muy largos o poco descriptivos? Ahora puedes renombrarlos para una mejor organización. La extensión recordará tus nombres personalizados.
 
-Permite renombrar los cursos (y nombre del estudiante) en todo [U-Cursos](https://www.u-cursos.cl/), y tiene memoria local para saber en qué estado quedaron en la última sesión.
+#### 💥 Secciones Colapsables
+<img src="images/collapsableMenus.png"/>
+
+> Archivo: `collapsableMenus.js`
+
+- Organiza tu página de inicio colapsando las secciones que no necesitas ver. La extensión guarda el estado (abierto/cerrado) de cada sección.
+
+#### 💬 Interacción con Foros
+<img src="images/forumInteraction.png"/>
+
+> Archivo: `forumInteraction.js`
+
+- **Copia y envía al Chat IA:** Copia el contenido de un post o de un hilo completo, o envíalo directamente al Chat IA para un análisis rápido. Los botones se integran de forma nativa en las opciones del foro.
+
+#### 📖 Recortar Texto Largo ("Mucho Texto")
+<img src="images/muchoTexto.png"/>
+
+> Archivo: `muchoTexto.js`
+
+- Oculta automáticamente los posts de foros que son muy largos detrás de un botón "Mucho Texto", manteniendo la interfaz más limpia y legible.
+
+#### 📐 Redimensionar Vista Previa de PDF
+<img src="images/resizePreviewPDF.png"/>
+
+> Archivo: `resizePreviewPDF.js`
+
+- Permite ajustar verticalmente el tamaño del visor de PDF, ideal para aprovechar mejor el espacio en pantallas verticales.
+
+#### 🔊 Sonido de Entrega de Tareas
+> Archivo: `taskSubmissionSound.js`
+
+- Recibe una gratificante confirmación sonora (un "sonido de dopamina") cada vez que entregas una tarea.
+
+#### ✨ Animaciones de Navegación
+<img src="images/navigationAnimations.gif"/>
+
+> Archivo: `navigationAnimations.js`
+
+- Añade animaciones suaves y efectos visuales al menú de navegación principal para una experiencia más fluida y moderna.
 
 ---
 
-## 🏆 Logros
+## 🔔 Notificaciones y Atajos
 
+#### Notificación de Tareas y Pendientes
+<img src="images/pendingTasks.png"/> <img src="images/pendingNotifications.png"/>
+
+> Archivos: `pendingTasks.js`, `pendingNotifications.js`
+
+- Muestra insignias con el número de tareas pendientes y notificaciones no leídas directamente en el menú de navegación y en las secciones de la página principal.
+
+#### 📆 Contador de Semanas
+<img src="images/weekCounter.png"/>
+
+> Archivo: `weekCounter.js`
+
+- Muestra el número de la semana actual del semestre junto a la fecha en tu horario. Funciona tanto en español como en inglés.
+
+#### 🔘 Otras Realizaciones del Curso
+<img src="images/otrasRealizaciones.png"/>
+
+> Archivo: `otrasRealizaciones.js`
+
+- Agrega un atajo en el menú de cada curso para acceder rápidamente a la página de "Otras Realizaciones".
+
+#### ✔ Ventana Emergente de Calificaciones
+> Archivo: `popupGrading.js`
+
+- Abre el historial de calificaciones en una ventana emergente en lugar de redirigirte a otra página.
+
+---
+
+## 🏆 Sistema de Logros
 <img src="images/achievementsGen.png"/>
 
-> Por matias-saavedra-g
+> Archivos: `achievementsGen.js`, `achievementsBoton.js`
 
-### Descripción: <!-- omit in toc -->
+- **Gamificación:** Desbloquea logros al utilizar las diferentes funcionalidades de la extensión.
+- **Página de Logros:** Accede a una página dedicada desde el menú principal para ver tu progreso, el total de logros y los que te faltan por descubrir.
 
-Se agrega un sistema de logros por hacer cada una de las funciones de la extensión, con un menú de logros en la pantalla de inicio de [U-Cursos](https://www.u-cursos.cl/), y un contador de logros desbloqueados.
+---
+
+## ⚙️ Menú de Configuración
+<img src="images/menuGen.png"/>
+
+> Archivos: `menuGen.js`, `menuBoton.js`
+
+- **Control Total:** Activa o desactiva cualquier funcionalidad de la extensión a través de un menú de configuración dedicado y fácil de usar.
+- **Gestión de Datos:** Visualiza y gestiona los datos que la extensión guarda en tu navegador.
 
 ---
 
@@ -227,15 +183,17 @@ Se agrega un sistema de logros por hacer cada una de las funciones de la extensi
 > Tutorial en [video](https://www.youtube.com/watch?v=oswjtLwCUqg) (24s).
 
 1. Clonar el repositorio desde GitHub:
-   ```
-   git clone https://github.com/matias-saavedra-g/ucursednt.git
-   ```
+```
+
+git clone [https://github.com/matias-saavedra-g/ucursednt.git](https://github.com/matias-saavedra-g/ucursednt.git)
+
+```
 
 2. Abrir Chrome y navegar a `chrome://extensions/`.
 
 3. Habilitar el modo desarrollador (Developer Mode) en la esquina superior derecha de la página.
 
-4. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (U-Cursedn't).
+4. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (ucursednt).
 
 5. La extensión debería cargarse y aparecer en la lista de extensiones instaladas.
 
@@ -244,29 +202,35 @@ Se agrega un sistema de logros por hacer cada una de las funciones de la extensi
 > Tutorial en [video](https://www.youtube.com/watch?v=5X9wGp3kWwA) (86s).
 
 1. Clonar el repositorio desde GitHub:
-   ```
-   git clone https://github.com/matias-saavedra-g/ucursednt.git
-   ```
+```
+
+git clone [https://github.com/matias-saavedra-g/ucursednt.git](https://github.com/matias-saavedra-g/ucursednt.git)
+
+```
 
 2. Abrir Opera y visitar `opera://extensions/`.
 
-3. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (U-Cursedn't).
+3. Habilitar el modo desarrollador (Developer Mode) en la esquina superior derecha de la página.
 
-4. La extensión debería cargarse y aparecer en la lista de extensiones instaladas.
+4. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (ucursednt).
+
+5. La extensión debería cargarse y aparecer en la lista de extensiones instaladas.
 
 ## Microsoft Edge
 
 > Tutorial en [video](https://www.youtube.com/watch?v=ruMPPADElqU) (39s).
 
 1. Clonar el repositorio desde GitHub:
-   ```
-   git clone https://github.com/matias-saavedra-g/ucursednt.git
-   ```
+```
+
+git clone [https://github.com/matias-saavedra-g/ucursednt.git](https://github.com/matias-saavedra-g/ucursednt.git)
+
+```
 
 2. Abrir Microsoft Edge y navegar a `edge://extensions/`.
 
 3. Habilitar el modo desarrollador (Developer Mode) en la esquina inferior izquierda de la página.
 
-4. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (U-Cursedn't).
+4. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (ucursednt).
 
 5. La extensión debería cargarse y aparecer en la lista de extensiones instaladas.
