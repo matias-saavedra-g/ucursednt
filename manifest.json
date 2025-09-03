@@ -1,6 +1,6 @@
 {
   "name": "U-Cursedn't",
-  "version": "4.0",
+  "version": "4.1",
   "description": "Esta extensión agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
   "manifest_version": 3,
   "author": "matias-saavedra-g",
@@ -70,6 +70,11 @@
         "*://www.u-cursos.cl/uchile/*/0/*/1/foro/"
       ],
       "js": ["js/muchoTexto.js"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["https://www.u-cursos.cl/*/*/*/*/*/foro/*"],
+      "js": ["js/extensionUtils.js", "js/forumInteraction.js"],
       "run_at": "document_end"
     },
     {

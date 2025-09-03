@@ -91,7 +91,11 @@
             /* Ensure text spans are visible */
             #navigation-wrapper > ul.modulos > li.servicio > a > span {
                 overflow: hidden !important;
+                overflow-x: hidden !important;
+                overflow-y: hidden !important;
                 text-overflow: ellipsis !important;
+                text-wrap-mode: nowrap !important;
+                list-style-type: none !important;
                 white-space: nowrap !important;
             }
             

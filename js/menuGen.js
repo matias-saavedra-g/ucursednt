@@ -92,6 +92,7 @@
                 easyCopyGrades: true,
                 easyCopyMembers: true,
                 muchoTexto: true,
+                forumInteraction: true,
                 otrasRealizaciones: true,
                 popupGrading: true,
                 resizePreviewPDF: true,
@@ -115,13 +116,6 @@
 
     // Add modern CSS styles to the page
     function addModernStyles() {
-        // Add FontAwesome if not already present
-        if (!document.querySelector('link[href*="font-awesome"]')) {
-            const fontAwesome = document.createElement('link');
-            fontAwesome.rel = 'stylesheet';
-            fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
-            document.head.appendChild(fontAwesome);
-        }
 
         const style = document.createElement('style');
         style.textContent = `
@@ -560,6 +554,7 @@
             { id: "easyCopyGrades", name: "Copia Fácil de Notas", icon: "📋", description: "Botones para copiar notas en diferentes formatos" },
             { id: "easyCopyMembers", name: "Copia Fácil de Miembros", icon: "👥", description: "Copiar listado de miembros del curso" },
             { id: "muchoTexto", name: "Recortar Texto Largo", icon: "➕", description: "Colapsar textos largos en foros" },
+            { id: "forumInteraction", name: "Interacción con Foros", icon: "💬", description: "Copiar y enviar posts/hilos del foro al chat IA" },
             { id: "otrasRealizaciones", name: "Otras Realizaciones del Curso", icon: "🌐", description: "Acceso rápido a otras realizaciones" },
             { id: "popupGrading", name: "Ventana Emergente de Calificaciones", icon: "🎓", description: "Editor de calificaciones en popup" },
             { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF", icon: "📑", description: "Ajustar tamaño de vista previa PDF" },

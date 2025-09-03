@@ -53,13 +53,6 @@
 
     // Add modern CSS styles for achievements
     function addModernAchievementStyles() {
-        // Add FontAwesome if not already present
-        if (!document.querySelector('link[href*="font-awesome"]')) {
-            const fontAwesome = document.createElement('link');
-            fontAwesome.rel = 'stylesheet';
-            fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
-            document.head.appendChild(fontAwesome);
-        }
 
         const style = document.createElement('style');
         style.textContent = `
@@ -434,6 +427,7 @@
             { id: "easyCopyGrades", name: "Copia Fácil de Notas", description: "Logro por activar la copia fácil de notas", icon: "fa-clipboard", unlocked: settings.features.easyCopyGrades, category: "features", rarity: "common" },
             { id: "easyCopyMembers", name: "Copia Fácil de Miembros", description: "Logro por activar la copia fácil de miembros", icon: "fa-users", unlocked: settings.features.easyCopyMembers, category: "features", rarity: "common" },
             { id: "muchoTexto", name: "Recortar Texto Largo", description: "Logro por activar la funcionalidad de recortar texto largo", icon: "fa-cut", unlocked: settings.features.muchoTexto, category: "features", rarity: "common" },
+            { id: "forumInteraction", name: "Interacción con Foros", description: "Logro por activar la interacción avanzada con foros", icon: "fa-comments", unlocked: settings.features.forumInteraction, category: "features", rarity: "rare" },
             { id: "otrasRealizaciones", name: "Otras Realizaciones del Curso", description: "Logro por activar otras realizaciones del curso", icon: "fa-tasks", unlocked: settings.features.otrasRealizaciones, category: "features", rarity: "common" },
             { id: "popupGrading", name: "Ventana Emergente de Calificaciones", description: "Logro por activar la ventana emergente de calificaciones", icon: "fa-window-restore", unlocked: settings.features.popupGrading, category: "features", rarity: "rare" },
             { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF", description: "Logro por activar la redimensión de vista previa de PDF", icon: "fa-expand", unlocked: settings.features.resizePreviewPDF, category: "features", rarity: "rare" },

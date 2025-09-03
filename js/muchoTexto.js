@@ -64,6 +64,65 @@
         if (!muchoTextoConfig) {return}
     }
 
+    // Add modern CSS styles for Mucho Texto buttons
+    function addMuchoTextoStyles() {
+        if (document.querySelector('#mucho-texto-styles')) return;
+
+        const style = document.createElement('style');
+        style.id = 'mucho-texto-styles';
+        style.textContent = `
+            /* Mucho Texto Button Styling - Modern Design */
+            .show-more-button {
+                border: none;
+                padding: 6px 12px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                white-space: nowrap;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                margin: 4px 0;
+            }
+            
+            .show-more-button:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            }
+            
+            .show-more-button:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .show-more-button:disabled {
+                cursor: not-allowed;
+                transform: none;
+                opacity: 0.8;
+            }
+            
+            .show-more-button i {
+                font-size: 11px;
+            }
+            
+            /* Responsive design */
+            @media (max-width: 768px) {
+                .show-more-button {
+                    font-size: 11px;
+                    padding: 5px 10px;
+                }
+            }
+        `;
+        
+        document.head.appendChild(style);
+    }
+
+    // Initialize styles
+    addMuchoTextoStyles();
+
     /**
      * Iterate over the divs with class "texto", first we remove the last children for formatting purposes
      * then we count the amount of paragraphs, check if it's greater than the admitted threshold. If it's
@@ -77,7 +136,7 @@
         const text_length = countLines(text[i]);
         if (text_length > paragraph_limit) {
             const long_text = text[i].innerHTML;
-            text[i].innerHTML = '<div class="text-content" style="display: none">' + long_text + '</div><br><button class="show-more-button" data-more="0">Es Mucho Texto</button>';
+            text[i].innerHTML = '<div class="text-content" style="display: none">' + long_text + '</div><br><button class="show-more-button" data-more="0"><i class="fas fa-expand-alt"></i> Es Mucho Texto</button>';
 
             // Añadir alerta la primera vez que se hace clic en el botón de "Es Mucho Texto"
             const showMoreButton = text[i].querySelector('.show-more-button');
@@ -90,7 +149,7 @@
                 // Toggle de texto corto y largo
                 const moreText = this.getAttribute('data-more') === "0";
                 this.setAttribute('data-more', moreText ? "1" : "0");
-                this.innerHTML = moreText ? 'Menos texto' : 'Es Mucho Texto';
+                this.innerHTML = moreText ? '<i class="fas fa-compress-alt"></i> Menos texto' : '<i class="fas fa-expand-alt"></i> Es Mucho Texto';
 
                 const textContent = this.previousElementSibling.previousElementSibling;
                 textContent.style.display = moreText ? 'block' : 'none';

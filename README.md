@@ -14,6 +14,7 @@ Extension de Chromium que agrega funciones adicionales a la plataforma de [U-Cur
   - [📋 Copia Fácil de Miembros](#-copia-fácil-de-miembros)
   - [📋 Copia Fácil de Datos del Curso](#-copia-fácil-de-datos-del-curso)
   - [📖 Recortar Texto Largo](#-recortar-texto-largo)
+  - [💬 Interacción con Foros](#-interacción-con-foros)
   - [🔘 Otras Realizaciones del Curso](#-otras-realizaciones-del-curso)
   - [✔ Ventana Emergente de Calificaciones](#-ventana-emergente-de-calificaciones)
   - [📐 Redimensionar Vista Previa de PDF](#-redimensionar-vista-previa-de-pdf)
@@ -76,6 +77,29 @@ Con los botones a la derecha de los detalles del curso (aunque estén renombrado
 
 ### Descripción: <!-- omit in toc -->
 Con un botón bajo el texto en algún subforo, permite recortar y mostrar una versión corta de textos largos en [U-Cursos](https://www.u-cursos.cl/), con la opción de expandirlos mostrándose como "Mucho Texto".
+
+---
+
+## 💬 Interacción con Foros
+
+> Por matias-saavedra-g
+
+### Descripción: <!-- omit in toc -->
+Añade funcionalidad avanzada de interacción con los foros de [U-Cursos](https://www.u-cursos.cl/). Permite copiar contenido de hilos completos o posts individuales al portapapeles, así como enviar este contenido directamente al chat IA integrado para análisis o consultas.
+
+### Características: <!-- omit in toc -->
+- **Botones a Nivel de Hilo**: "Copiar Hilo" y "Enviar Hilo al Chat" en la cabecera de cada hilo
+- **Integración Nativa**: Los botones de post se integran directamente en la lista de opciones nativa de U-Cursos (`ul.opciones`)
+- **Acciones de Post**: "Copiar Post" y "Enviar Post al Chat" junto a las opciones existentes (Compartir, Responder)
+- **Formato Inteligente**: El contenido se formatea automáticamente con autor, fecha y jerarquía del hilo
+- **Integración con Chat IA**: Envío directo al popup flotante de UCursitos para interacción con Gemini AI
+- **Feedback Visual**: Confirmación inmediata de acciones completadas con colores distintivos
+
+### Casos de Uso: <!-- omit in toc -->
+- Copiar preguntas de estudiantes para responder posteriormente
+- Enviar discusiones completas al chat IA para obtener resúmenes o análisis
+- Guardar contenido importante de foros para referencia externa
+- Facilitar la moderación y gestión de contenido del foro
 
 ---
 
