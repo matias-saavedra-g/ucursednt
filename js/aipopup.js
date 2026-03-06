@@ -282,7 +282,7 @@ function showAPIConfigNotice(container) {
                 </div>
             </div>
             <button class="config-button" id="config-btn-inline">
-                <i class="fas fa-cog"></i> Ir a Configuración
+                <i class="fa-regular fa-cog"></i> Ir a Configuración
             </button>
         </div>
     `;
@@ -389,7 +389,7 @@ async function sendMessage() {
         // Save history
         await safeChromeLocalSet('aiChatHistory', chatHistory);
 
-        updateStatus('connected', 'Conectado a Gemini Pro');
+        updateStatus('connected', 'Conectado a Gemini Flash Lite Latest');
 
     } catch (error) {
         console.error('Error sending message:', error);
@@ -405,7 +405,7 @@ async function sendMessage() {
 // Update API status
 function updateAPIStatus() {
     if (apiKey) {
-        updateStatus('connected', 'Conectado a Gemini Pro');
+        updateStatus('connected', 'Conectado a Gemini Flash Lite Latest');
     } else {
         updateStatus('error', 'API key no configurada');
     }
@@ -683,10 +683,10 @@ function renderChatList() {
             <div class="chat-item-preview">${chat.preview}</div>
             <div class="chat-item-actions">
                 <button class="chat-action-btn rename-btn" title="Renombrar">
-                    <i class="fas fa-edit"></i>
+                    <i class="fa-regular fa-edit"></i>
                 </button>
                 <button class="chat-action-btn delete-btn" title="Eliminar">
-                    <i class="fas fa-trash"></i>
+                    <i class="fa-regular fa-trash"></i>
                 </button>
             </div>
         `;
@@ -742,8 +742,8 @@ function toggleExplorer() {
         explorerVisible = !explorerVisible;
         explorer.style.display = explorerVisible ? 'flex' : 'none';
         toggleBtn.innerHTML = explorerVisible ? 
-            '<i class="fas fa-times"></i>' : 
-            '<i class="fas fa-map"></i>';
+            '<i class="fa-regular fa-times"></i>' : 
+            '<i class="fa-regular fa-map"></i>';
         toggleBtn.title = explorerVisible ? 'Ocultar explorador' : 'Mostrar explorador';
     }
 }

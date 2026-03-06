@@ -172,16 +172,16 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 <span class="provider-name">U-Cursedn't AI</span>
                 <div class="chat-controls">
                     <button class="chat-control-btn open-tab-btn" title="Abrir en Nueva Pestaña">
-                        <i class="fas fa-external-link-alt"></i>
+                        <i class="fa-regular fa-external-link-alt"></i>
                     </button>
                     <button class="chat-control-btn clear-history-btn" title="Borrar Historial">
-                        <i class="fas fa-trash"></i>
+                        <i class="fa-regular fa-trash"></i>
                     </button>
                     <button class="chat-control-btn minimize-btn" title="Minimizar">
-                        <i class="fas fa-minus"></i>
+                        <i class="fa-regular fa-minus"></i>
                     </button>
                     <button class="chat-control-btn close-btn" title="Cerrar">
-                        <i class="fas fa-times"></i>
+                        <i class="fa-regular fa-times"></i>
                     </button>
                 </div>
             </div>
@@ -213,7 +213,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                         </div>
                     </div>
                     <button class="config-button" onclick="window.open('/ucursednt/', '_blank')">
-                        <i class="fas fa-cog"></i> Ir a Configuración
+                        <i class="fa-regular fa-cog"></i> Ir a Configuración
                     </button>
                 </div>
             `;
@@ -250,9 +250,9 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 <div class="chat-messages" id="chat-messages">
                     <div class="system-message" id="system-message">
                         <div class="system-message-header" onclick="toggleSystemMessage()">
-                            <i class="fas fa-robot"></i>
+                            <i class="fa-regular fa-robot"></i>
                             <strong>Sistema</strong>
-                            <i class="fas fa-chevron-down system-chevron" id="system-chevron"></i>
+                            <i class="fa-regular fa-chevron-down system-chevron" id="system-chevron"></i>
                         </div>
                         <div class="system-message-content" id="system-message-content">
                             ${systemInstructions}
@@ -265,13 +265,13 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                         placeholder="¿En qué puedo ayudarte hoy? Escribe tu pregunta aquí..." 
                         rows="2"></textarea>
                     <button id="send-message" class="send-btn">
-                        <i class="fas fa-paper-plane"></i>
+                        <i class="fa-regular fa-paper-plane"></i>
                     </button>
                 </div>
             </div>
             <div class="api-status">
                 <span class="status-indicator connected"></span>
-                <span class="status-text">Conectado a Gemini Pro</span>
+                <span class="status-text">Conectado a Gemini Flash Lite Latest</span>
             </div>
         `;
 
@@ -438,7 +438,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 await saveChatHistory();
                 
                 statusIndicator.className = 'status-indicator connected';
-                statusText.textContent = 'Conectado a Gemini Pro';
+                statusText.textContent = 'Conectado a Gemini Flash Lite Latest';
             } else {
                 const errorMsg = response.error || 'Respuesta inesperada del servidor';
                 addMessageToChat('assistant', `Error: ${errorMsg}`, messagesContainer);
@@ -563,7 +563,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 const clearBtn = document.querySelector('.clear-history-btn');
                 if (clearBtn) {
                     const originalHTML = clearBtn.innerHTML;
-                    clearBtn.innerHTML = '<i class="fas fa-check"></i>';
+                    clearBtn.innerHTML = '<i class="fa-regular fa-check"></i>';
                     clearBtn.style.color = '#4caf50';
                     
                     setTimeout(() => {
