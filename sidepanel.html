@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCursedn't AI</title>
+    <link rel="icon" type="image/png" href="icons/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="css/sidepanel.css">
+</head>
+<body>
+
+    <!-- ── HEADER ─────────────────────────────────────────────── -->
+    <header class="sp-header">
+        <div class="sp-header-brand">
+            <img src="images/ucursitos.png" alt="UCursitos" class="sp-logo">
+            <div class="sp-brand-text">
+                <span class="sp-title">UCursedn't AI</span>
+                <span class="sp-subtitle">Gemini-Powered · MT</span>
+            </div>
+        </div>
+        <div class="sp-header-actions">
+            <button class="sp-icon-btn" id="new-chat-btn" title="Nuevo Chat">
+                <i class="fa-regular fa-plus"></i>
+            </button>
+            <button class="sp-icon-btn sp-icon-btn--badge" id="chats-btn" title="Historial de Chats">
+                <i class="fa-regular fa-comments"></i>
+                <span class="sp-badge" id="chat-badge">0</span>
+            </button>
+            <button class="sp-icon-btn" id="export-btn" title="Exportar Chat">
+                <i class="fa-regular fa-download"></i>
+            </button>
+            <button class="sp-icon-btn sp-icon-btn--danger" id="clear-btn" title="Borrar Mensajes">
+                <i class="fa-regular fa-trash"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ── CHAT HISTORY DRAWER ────────────────────────────────── -->
+    <div class="sp-overlay" id="drawer-overlay" aria-hidden="true"></div>
+    <aside class="sp-drawer" id="chat-drawer" aria-label="Historial de chats">
+        <div class="sp-drawer-header">
+            <span><i class="fa-regular fa-history"></i> Mis Chats</span>
+            <button class="sp-icon-btn sp-icon-btn--sm" id="close-drawer-btn" title="Cerrar">
+                <i class="fa-regular fa-times"></i>
+            </button>
+        </div>
+        <div class="sp-drawer-list" id="chat-list" role="list"></div>
+    </aside>
+
+    <!-- ── MAIN PANEL ─────────────────────────────────────────── -->
+    <main class="sp-main">
+
+        <!-- System instructions (collapsible) -->
+        <div class="sp-system collapsed" id="sp-system">
+            <button class="sp-system-toggle" id="system-toggle" aria-expanded="false">
+                <i class="fa-regular fa-robot"></i>
+                <span>Instrucciones del Sistema</span>
+                <i class="fa-regular fa-chevron-down sp-chevron" id="system-chevron"></i>
+            </button>
+            <div class="sp-system-body" id="system-body" aria-hidden="true"></div>
+        </div>
+
+        <!-- Inference mode indicator -->
+        <div class="sp-inference-bar">
+            <span class="sp-inference-pill" id="inference-pill">
+                <i class="fa-regular fa-cloud"></i> Gemini Cloud
+            </span>
+            <span class="sp-inference-hint" id="inference-hint">gemini-flash-lite-latest</span>
+        </div>
+
+        <!-- Messages viewport -->
+        <div class="sp-messages" id="chat-messages" role="log" aria-live="polite" aria-label="Mensajes del chat"></div>
+
+        <!-- Input area -->
+        <div class="sp-input-area">
+            <div class="sp-input-row">
+                <textarea
+                    id="chat-input"
+                    class="sp-textarea"
+                    placeholder="Escribe tu pregunta… (Ctrl+Enter para enviar)"
+                    rows="2"
+                    maxlength="4000"
+                    aria-label="Mensaje"
+                ></textarea>
+                <button id="send-btn" class="sp-send-btn" title="Enviar (Ctrl+Enter)" aria-label="Enviar mensaje">
+                    <i class="fa-regular fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="sp-status-bar">
+                <span class="sp-status-dot" id="status-dot" aria-hidden="true"></span>
+                <span class="sp-status-text" id="status-text">Cargando…</span>
+                <span class="sp-char-count" id="char-count" aria-live="polite">0 / 4000</span>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/sidepanel.js"></script>
+</body>
+</html>
