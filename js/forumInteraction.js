@@ -35,7 +35,8 @@
 
     // Check if we're on a forum page
     function isForumPage() {
-        return window.location.pathname.includes('/foro/');
+        const path = window.location.pathname;
+        return path.includes('/foro/') || path.includes('/foro_');
     }
 
     // Check extension settings
@@ -223,44 +224,6 @@ ${postData.content}`;
         }, duration);
     }
 
-    // Show temporary feedback on button (for thread-level actions)
-    function showButtonFeedback(button, text, duration = 2000) {
-        const originalHTML = button.innerHTML;
-        const originalStyle = button.style.cssText;
-        
-        button.innerHTML = text;
-        button.style.cssText = originalStyle + '; background-color: #4caf50 !important; color: white !important;';
-        button.disabled = true;
-        
-        setTimeout(() => {
-            button.innerHTML = originalHTML;
-            button.style.cssText = originalStyle;
-            button.disabled = false;
-        }, duration);
-    }
-
-    // Create action link for native integration (U-Cursos style)
-    function createActionLink(text, iconClass, clickHandler) {
-        const link = document.createElement('a');
-        link.href = '#';
-        link.className = 'forum-action-link';
-        link.innerHTML = `<span class="${iconClass}"></span> ${text}`;
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            clickHandler();
-        });
-        return link;
-    }
-
-    // Create list item for native options list
-    function createActionListItem(link) {
-        const listItem = document.createElement('li');
-        listItem.id = 'acciones'; // Native ID used by U-Cursos
-        listItem.appendChild(link);
-        return listItem;
-    }
-
     // Handle copy post action
     async function handleCopyPost(postElement, linkElement) {
         const postData = extractPostData(postElement);
@@ -290,7 +253,7 @@ ${postData.content}`;
     }
 
     // Handle copy thread action
-    async function handleCopyThread(threadElement, button) {
+    async function handleCopyThread(threadElement, trigger) {
         const posts = threadElement.querySelectorAll(SELECTORS.post);
         const threadData = Array.from(posts).map(post => extractPostData(post));
         const formattedText = formatThreadAsText(threadData);
@@ -298,14 +261,14 @@ ${postData.content}`;
         const success = await copyToClipboard(formattedText);
         
         if (success) {
-            showButtonFeedback(button, '<i class="fas fa-check"></i> ¡Copiado!');
+            showLinkFeedback(trigger, '<i class="fa-regular fa-check"></i> ¡Copiado!');
         } else {
-            showButtonFeedback(button, '<i class="fas fa-times"></i> Error', 2000);
+            showLinkFeedback(trigger, '<i class="fa-regular fa-times"></i> Error', 2000);
         }
     }
 
     // Handle send thread to chat action
-    function handleSendThreadToChat(threadElement, button) {
+    function handleSendThreadToChat(threadElement, trigger) {
         const posts = threadElement.querySelectorAll(SELECTORS.post);
         const threadData = Array.from(posts).map(post => extractPostData(post));
         const formattedText = formatThreadAsText(threadData);
@@ -313,100 +276,107 @@ ${postData.content}`;
         const success = sendToAIChat(formattedText);
         
         if (success) {
-            showButtonFeedback(button, '<i class="fas fa-check"></i> ¡Enviado!');
+            showLinkFeedback(trigger, '<i class="fa-regular fa-check"></i> ¡Enviado!');
         } else {
-            showButtonFeedback(button, '<i class="fas fa-times"></i> Error', 2000);
+            showLinkFeedback(trigger, '<i class="fa-regular fa-times"></i> Error', 2000);
         }
     }
 
-    // Add thread-level buttons (these remain as separate buttons since threads don't have native options structure)
-    function addThreadButtons(threadElement) {
-        // Find the first post (root post) to add thread controls
-        const rootPost = threadElement.querySelector(SELECTORS.rootPost);
-        if (!rootPost) {
-            console.warn('No root post found in thread:', threadElement);
-            return;
-        }
+    // Create a minimalist "Funciones IA" dropdown
+    function createIADropdown(items) {
+        const container = document.createElement('div');
+        container.className = 'forum-ia-dropdown';
 
-        // Check if buttons already exist
-        if (rootPost.querySelector('.forum-thread-actions')) {
-            return; // Already added
-        }
+        const trigger = document.createElement('a');
+        trigger.href = '#';
+        trigger.className = 'forum-ia-trigger';
+        trigger.innerHTML = 'Funciones IA <i class="fa fa-caret-down"></i>';
 
-        // Find the best place to insert thread buttons (typically in the header area)
-        const headerArea = rootPost.querySelector('.autor') || rootPost.querySelector('.msg-header') || rootPost.firstElementChild;
-        if (!headerArea) {
-            console.warn('No header area found in root post:', rootPost);
-            return;
-        }
+        const menu = document.createElement('div');
+        menu.className = 'forum-ia-menu';
 
-        // Create container for thread buttons
-        const threadButtonContainer = document.createElement('div');
-        threadButtonContainer.className = 'forum-thread-actions';
-        
-        // Create buttons (keep these as buttons for thread-level actions)
-        const copyThreadBtn = document.createElement('button');
-        copyThreadBtn.className = 'forum-action-btn thread-btn';
-        copyThreadBtn.innerHTML = `<i class="fas fa-copy"></i> Copiar Hilo`;
-        copyThreadBtn.addEventListener('click', () => handleCopyThread(threadElement, copyThreadBtn));
-        
-        const sendThreadBtn = document.createElement('button');
-        sendThreadBtn.className = 'forum-action-btn thread-btn';
-        sendThreadBtn.innerHTML = `<i class="fas fa-robot"></i> Enviar Hilo al Chat`;
-        sendThreadBtn.addEventListener('click', () => handleSendThreadToChat(threadElement, sendThreadBtn));
-        
-        threadButtonContainer.appendChild(copyThreadBtn);
-        threadButtonContainer.appendChild(sendThreadBtn);
-        
-        // Insert after the header area
-        try {
-            headerArea.parentNode.insertBefore(threadButtonContainer, headerArea.nextSibling);
-        } catch (error) {
-            console.error('Error inserting thread buttons:', error);
-        }
+        items.forEach(({ label, icon, handler }) => {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.innerHTML = `<i class="${icon}"></i> ${label}`;
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeIADropdownMenu(menu);
+                handler(trigger);
+            });
+            menu.appendChild(link);
+        });
+
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            document.querySelectorAll('.forum-ia-menu.open').forEach(m => {
+                if (m !== menu) closeIADropdownMenu(m);
+            });
+            if (menu.classList.contains('open')) {
+                closeIADropdownMenu(menu);
+            } else {
+                openIADropdownMenu(menu);
+            }
+        });
+
+        container.appendChild(trigger);
+        container.appendChild(menu);
+
+        return container;
     }
 
-    // Add post-level buttons using native U-Cursos options structure
-    function addPostButtons(postElement) {
-        // Find the native options list (ul.opciones)
+    function openIADropdownMenu(menu) {
+        menu.classList.add('open');
+        menu.style.maxHeight = menu.scrollHeight + 'px';
+    }
+
+    function closeIADropdownMenu(menu) {
+        menu.style.maxHeight = '0px';
+        menu.classList.remove('open');
+    }
+
+    // Add a single unified dropdown using native U-Cursos options structure.
+    // Root posts include both post and thread actions in the same menu.
+    function addPostButtons(postElement, threadElement) {
         const optionsList = postElement.querySelector(SELECTORS.postOptions);
         if (!optionsList) {
             console.warn('No options list (ul.opciones) found in post:', postElement);
             return;
         }
 
-        // Check if our buttons already exist
-        if (optionsList.querySelector('.boton-copiar-post') || optionsList.querySelector('.boton-enviar-chat')) {
-            return; // Already added
+        if (optionsList.querySelector('.forum-ia-dropdown')) {
+            return;
         }
 
         try {
-            // Create "Copiar Post" action
-            const copyPostLink = createActionLink('Copiar Post', 'fa fa-copy', () => {
-                handleCopyPost(postElement, copyPostLink);
-            });
-            copyPostLink.classList.add('boton-copiar-post');
-            const copyPostItem = createActionListItem(copyPostLink);
+            const actions = [
+                { label: 'Copiar Post', icon: 'fa fa-copy', handler: (t) => handleCopyPost(postElement, t) },
+                { label: 'Enviar Post al Chat', icon: 'fa fa-robot', handler: (t) => handleSendPostToChat(postElement, t) }
+            ];
 
-            // Create "Enviar Post al Chat" action
-            const sendPostLink = createActionLink('Enviar Post al Chat', 'fa fa-robot', () => {
-                handleSendPostToChat(postElement, sendPostLink);
-            });
-            sendPostLink.classList.add('boton-enviar-chat');
-            const sendPostItem = createActionListItem(sendPostLink);
-
-            // Insert the new actions at the beginning of the options list
-            // This ensures they appear before existing actions like "Compartir" and "Responder"
-            if (optionsList.firstChild) {
-                optionsList.insertBefore(copyPostItem, optionsList.firstChild);
-                optionsList.insertBefore(sendPostItem, optionsList.firstChild);
-            } else {
-                optionsList.appendChild(sendPostItem);
-                optionsList.appendChild(copyPostItem);
+            if (postElement.classList.contains('raiz') && threadElement) {
+                actions.push(
+                    { label: 'Copiar Hilo', icon: 'fa-regular fa-copy', handler: (t) => handleCopyThread(threadElement, t) },
+                    { label: 'Enviar Hilo al Chat', icon: 'fa-regular fa-robot', handler: (t) => handleSendThreadToChat(threadElement, t) }
+                );
             }
 
+            const container = createIADropdown(actions);
+
+            const listItem = document.createElement('li');
+            listItem.id = 'acciones';
+            listItem.className = 'forum-ia-item';
+            listItem.appendChild(container);
+
+            if (optionsList.firstChild) {
+                optionsList.insertBefore(listItem, optionsList.firstChild);
+            } else {
+                optionsList.appendChild(listItem);
+            }
         } catch (error) {
-            console.error('Error inserting post buttons into options list:', error);
+            console.error('Error inserting post dropdown into options list:', error);
         }
     }
 
@@ -417,49 +387,87 @@ ${postData.content}`;
         const style = document.createElement('style');
         style.id = 'forum-interaction-styles';
         style.textContent = `
-            /* Thread-level buttons (separate styling) */
-            .forum-thread-actions {
-                margin: 8px 0;
-                display: flex;
-                gap: 8px;
-                flex-wrap: wrap;
+            li.forum-ia-item {
+                padding-left: 0 !important;
+                margin-left: 0 !important;
             }
-            
-            .forum-action-btn.thread-btn {
+
+            .forum-ia-dropdown {
+                position: relative;
+                display: inline-flex;
+                flex-direction: column;
+                align-items: flex-start;
+                max-width: 100%;
+            }
+
+            .forum-ia-trigger {
+                background: none;
                 border: none;
-                padding: 6px 12px;
-                border-radius: 6px;
+                padding: 0;
                 cursor: pointer;
                 font-size: 12px;
-                font-weight: 500;
-                transition: all 0.3s ease;
+                color: inherit;
+                opacity: 0.65;
+                text-decoration: underline;
+                text-underline-offset: 3px;
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                transition: opacity 0.2s ease;
+                font-family: inherit;
+            }
+
+            .forum-ia-trigger:hover {
+                opacity: 1;
+            }
+
+            .forum-ia-menu {
+                position: relative;
+                max-height: 0;
+                opacity: 0;
+                margin-top: 0;
+                background: #fff;
+                border: 1px solid rgba(0,0,0,0.12);
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                min-width: 170px;
+                overflow: hidden;
+                pointer-events: none;
+                transform-origin: top;
+                transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, margin-top 0.25s ease;
+            }
+
+            .forum-ia-menu.open {
+                opacity: 1;
+                margin-top: 6px;
+                pointer-events: auto;
+            }
+
+            .forum-ia-menu a {
                 display: flex;
                 align-items: center;
-                gap: 5px;
-                white-space: nowrap;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                gap: 6px;
+                padding: 8px 12px;
+                color: inherit;
+                text-decoration: none;
+                font-size: 12px;
+                white-space: normal;
+                word-break: break-word;
+                transition: background 0.15s ease;
             }
-            
-            .forum-action-btn.thread-btn:hover {
-                transform: translateY(-1px);
-                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            }
-            
-            .forum-action-btn.thread-btn:active {
-                transform: translateY(0);
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-            
-            .forum-action-btn.thread-btn:disabled {
-                cursor: not-allowed;
-                transform: none;
-                opacity: 0.8;
-            }
-            
-            .forum-action-btn.thread-btn i {
-                font-size: 11px;
+
+            .forum-ia-menu a:hover {
+                background: rgba(0,0,0,0.05);
+                text-decoration: none;
             }
         `;
+
+        if (!window.forumIADropdownListenerAdded) {
+            window.forumIADropdownListenerAdded = true;
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.forum-ia-menu.open').forEach(m => closeIADropdownMenu(m));
+            });
+        }
         
         document.head.appendChild(style);
     }
@@ -501,13 +509,10 @@ ${postData.content}`;
     // Helper function to process threads
     function processThreads(threads) {
         threads.forEach(thread => {
-            // Add thread-level buttons
-            addThreadButtons(thread);
-            
-            // Find all posts within this thread and add post-level buttons
+            // Find all posts within this thread and add one unified dropdown per post
             const posts = thread.querySelectorAll(SELECTORS.post);
             posts.forEach(post => {
-                addPostButtons(post);
+                addPostButtons(post, thread);
             });
         });
 
