@@ -252,3 +252,7 @@ git clone [https://github.com/matias-saavedra-g/ucursednt.git](https://github.co
 4. Click en "Load unpacked" (Cargar extensión sin empaquetar), luego seleccionar la carpeta clonada de la extensión (ucursednt).
 
 5. La extensión debería cargarse y aparecer en la lista de extensiones instaladas.
+
+---
+
+> **Nota sobre el versionado:** A partir de la versión `26.3.1`, U-Cursedn't usa un esquema de versión basado en fecha: **`AA.MM.S`**, donde `AA` es el año (dos dígitos), `MM` el mes, y `S` el número de semana dentro del mes (1–5). Por ejemplo, `26.3.1` corresponde a la primera semana de marzo de 2026.
