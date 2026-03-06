@@ -8,8 +8,15 @@
     "activeTab",
     "clipboardWrite",
     "storage",
-    "tabs"
+    "tabs",
+    "sidePanel"
   ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src https://generativelanguage.googleapis.com"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
   "host_permissions": [
     "*://*.u-cursos.cl/*",
     "https://generativelanguage.googleapis.com/*"
@@ -19,12 +26,17 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["*://*.u-cursos.cl/*"],
       "js": ["js/popup.js"]
     },
     {
       "matches": ["*://*.u-cursos.cl/*"],
       "js": ["js/userDataCapture.js", "js/otrasRealizaciones.js"]
+    },
+    {
+      "matches": ["*://www.u-cursos.cl/*"],
+      "js": ["js/navigationAnimations.js"],
+      "run_at": "document_idle"
     },
     {
       "matches": ["*://*.u-cursos.cl/*/*/*/*/*/notas/*"],
@@ -73,7 +85,12 @@
       "run_at": "document_end"
     },
     {
-      "matches": ["https://www.u-cursos.cl/*/*/*/*/*/foro/*"],
+      "matches": [
+        "*://*.u-cursos.cl/ingenieria/2/foro_institucion/*",
+        "*://www.u-cursos.cl/ingenieria/*/*/*/*/foro/*",
+        "*://www.u-cursos.cl/uchile/4/foro_institucion/",
+        "*://www.u-cursos.cl/uchile/*/0/*/1/foro/"
+      ],
       "js": ["js/extensionUtils.js", "js/forumInteraction.js"],
       "run_at": "document_end"
     },
@@ -144,12 +161,7 @@
       "run_at": "document_end"
     },
     {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/navigationAnimations.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*/*/*/*/*/tareas/detalle*"],
+      "matches": ["*://www.u-cursos.cl/*/*/*/*/*/tareas*"],
       "js": ["js/taskSubmissionSound.js"],
       "run_at": "document_end"
     },
@@ -179,6 +191,10 @@
     },
     {
       "resources": ["aipopup.html", "js/aipopup.js", "js/extensionUtils.js", "css/aipopup.css"],
+      "matches": ["<all_urls>"]
+    },
+    {
+      "resources": ["sidepanel.html", "js/sidepanel.js", "css/sidepanel.css"],
       "matches": ["<all_urls>"]
     },
     {
