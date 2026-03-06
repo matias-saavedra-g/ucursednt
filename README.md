@@ -10,6 +10,7 @@ Extensión de Chromium que agrega funciones adicionales a la plataforma de [U-Cu
 - [Índice - Funcionalidades](#índice---funcionalidades)
 - [Funcionalidades](#funcionalidades)
   - [🤖 Chat IA Flotante con Gemini](#-chat-ia-flotante-con-gemini)
+  - [🪟 Panel Lateral de IA (Side Panel)](#-panel-lateral-de-ia-side-panel)
   - [📋 Utilidades de Copia Fácil](#-utilidades-de-copia-fácil)
       - [Copia Fácil de Notas](#copia-fácil-de-notas)
       - [Copia Fácil de Miembros](#copia-fácil-de-miembros)
@@ -44,9 +45,23 @@ Extensión de Chromium que agrega funciones adicionales a la plataforma de [U-Cu
 > Archivo: `aiChatPopup.js`
 
 - **Asistente Virtual:** Un popup flotante con la mascota "UCursitos" te da acceso directo a la IA de Gemini.
+- **Conversaciones Multi-turn:** Soporte para historial de conversación completo enviado al modelo en cada consulta, para respuestas más contextuales.
 - **Historial de Chat:** Guarda tus conversaciones y permite exportarlas.
 - **Personalización:** Configura tu propia API Key de Google AI Studio y personaliza las instrucciones del sistema para adaptar el comportamiento del asistente a tus necesidades.
 - **Integración con Foros:** Envía hilos o posts completos del foro directamente al chat para obtener resúmenes, explicaciones o ayuda.
+- **Modelo actualizado:** Ahora conecta con Gemini Flash Lite Latest.
+
+---
+
+## 🪟 Panel Lateral de IA (Side Panel)
+
+> Archivos: `sidepanel.html`, `sidepanel.js`, `sidepanel.css`
+
+- **Chat IA en el Panel Lateral:** Abre un panel lateral nativo de Chrome con el asistente UCursedn't AI directamente integrado en el navegador, sin interrumpir tu navegación.
+- **Arquitectura Amnesia-Proof MV3:** El estado del chat se persiste en `chrome.storage` para sobrevivir reinicios del service worker.
+- **Historial persistente:** Guarda y accede a múltiples conversaciones anteriores desde el panel.
+- **Soporte Gemini Nano (Local):** Detección automática de Gemini Nano para procesamiento local si está disponible.
+- **Acceso rápido:** Abre el panel lateral directamente desde el popup de la extensión.
 
 ---
 
@@ -90,6 +105,7 @@ Extensión de Chromium que agrega funciones adicionales a la plataforma de [U-Cu
 > Archivo: `collapsableMenus.js`
 
 - Organiza tu página de inicio colapsando las secciones que no necesitas ver. La extensión guarda el estado (abierto/cerrado) de cada sección.
+- **Efecto Dock de macOS:** Los elementos dentro de cada sección exhiben un efecto de magnificación al estilo del Dock de macOS al pasar el cursor.
 
 #### 💬 Interacción con Foros
 <img src="images/forumInteraction.png"/>
@@ -115,14 +131,16 @@ Extensión de Chromium que agrega funciones adicionales a la plataforma de [U-Cu
 #### 🔊 Sonido de Entrega de Tareas
 > Archivo: `taskSubmissionSound.js`
 
-- Recibe una gratificante confirmación sonora (un "sonido de dopamina") cada vez que entregas una tarea.
+- Recibe una gratificante confirmación sonora cada vez que interactúas con la sección de tareas.
+- Ahora activo en todas las páginas de tareas (no solo en el detalle de entrega).
+- El audio se reproduce mediante un iframe de YouTube embebido.
 
 #### ✨ Animaciones de Navegación
 <img src="images/navigationAnimations.gif"/>
 
 > Archivo: `navigationAnimations.js`
 
-- Añade animaciones suaves y efectos visuales al menú de navegación principal para una experiencia más fluida y moderna.
+- Añade un efecto de magnificación al estilo del Dock de macOS al menú de navegación principal: los ítems se escalan suavemente al pasar el cursor, dando una experiencia más fluida y moderna.
 
 ---
 
