@@ -501,6 +501,42 @@
                 background: #218838;
             }
 
+            /* Sound Configuration Section Styles */
+            .sound-config-section {
+                margin-top: 30px;
+                padding: 20px;
+                background: #f0fff4;
+                border-radius: 8px;
+                border-left: 4px solid #28a745;
+            }
+
+            .sound-config-header {
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .sound-config-header h3 {
+                color: #28a745;
+                margin: 0 0 8px 0;
+                font-size: 18px;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .sound-config-header p {
+                color: #6c757d;
+                margin: 0;
+                font-size: 14px;
+            }
+
+            .save-sound-config-btn {
+                width: 100%;
+                margin-top: 16px;
+            }
+
             /* Responsive design */
             @media (max-width: 768px) {
                 #feature-menu {
@@ -540,7 +576,7 @@
         
         const title = document.createElement("div");
         title.className = "settings-title";
-        title.innerHTML = `<i class="fas fa-cogs"></i> Configuración de U-Cursedn't`;
+        title.innerHTML = `<i class="fa-regular fa-cogs"></i> Configuración de U-Cursedn't`;
         
         const subtitle = document.createElement("div");
         subtitle.className = "settings-subtitle";
@@ -621,6 +657,10 @@
         const aiConfigSection = await createAIConfigSection();
         menuElement.appendChild(aiConfigSection);
 
+        // Add Sound Configuration Section
+        const soundConfigSection = await createSoundConfigSection();
+        menuElement.appendChild(soundConfigSection);
+
         return menuElement;
     }
 
@@ -633,7 +673,7 @@
         const sectionHeader = document.createElement('div');
         sectionHeader.className = 'ai-config-header';
         sectionHeader.innerHTML = `
-            <h3><i class="fas fa-robot"></i> Configuración de Chat IA - Gemini</h3>
+            <h3><i class="fa-regular fa-robot"></i> Configuración de Chat IA - Gemini</h3>
             <p>Configura tu API key de Google AI Studio para usar el chat flotante con Gemini</p>
             <div class="gemini-info">
                 <p><strong>📝 Cómo obtener tu API key:</strong></p>
@@ -656,7 +696,7 @@
         
         const apiKeyLabel = document.createElement('label');
         apiKeyLabel.className = 'config-label';
-        apiKeyLabel.innerHTML = '<i class="fas fa-key"></i> API Key de Gemini:';
+        apiKeyLabel.innerHTML = '<i class="fa-regular fa-key"></i> API Key de Gemini:';
 
         const apiKeyContainer = document.createElement('div');
         apiKeyContainer.className = 'api-key-container';
@@ -670,7 +710,7 @@
         const toggleKeyBtn = document.createElement('button');
         toggleKeyBtn.className = 'toggle-key-btn';
         toggleKeyBtn.type = 'button';
-        toggleKeyBtn.innerHTML = '<i class="fas fa-eye"></i>';
+        toggleKeyBtn.innerHTML = '<i class="fa-regular fa-eye"></i>';
         toggleKeyBtn.title = 'Mostrar/Ocultar API Key';
 
         // System Instructions
@@ -680,7 +720,7 @@
         
         const systemLabel = document.createElement('label');
         systemLabel.className = 'config-label';
-        systemLabel.innerHTML = '<i class="fas fa-robot"></i> Instrucciones del Sistema:';
+        systemLabel.innerHTML = '<i class="fa-regular fa-robot"></i> Instrucciones del Sistema:';
 
         const systemTextarea = document.createElement('textarea');
         systemTextarea.className = 'config-textarea';
@@ -694,12 +734,12 @@
         const resetToDefaultBtn = document.createElement('button');
         resetToDefaultBtn.className = 'modern-button btn-secondary reset-default-btn';
         resetToDefaultBtn.type = 'button';
-        resetToDefaultBtn.innerHTML = '<i class="fas fa-undo"></i> Restaurar Recomendadas';
+        resetToDefaultBtn.innerHTML = '<i class="fa-regular fa-undo"></i> Restaurar Recomendadas';
         resetToDefaultBtn.title = 'Restaurar las instrucciones recomendadas para U-Cursos';
 
         const saveBtn = document.createElement('button');
         saveBtn.className = 'modern-button btn-primary save-ai-config-btn';
-        saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar Configuración';
+        saveBtn.innerHTML = '<i class="fa-regular fa-save"></i> Guardar Configuración';
 
         // Load existing settings
         const aiSettings = await getChromeStorageItem('aiChatSettings') || {};
@@ -752,7 +792,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         toggleKeyBtn.addEventListener('click', () => {
             const isPassword = apiKeyInput.type === 'password';
             apiKeyInput.type = isPassword ? 'text' : 'password';
-            toggleKeyBtn.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+            toggleKeyBtn.innerHTML = isPassword ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
         });
 
         resetToDefaultBtn.addEventListener('click', () => {
@@ -766,12 +806,12 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 }
                 
                 // Show success message temporarily
-                resetToDefaultBtn.innerHTML = '<i class="fas fa-check"></i> ¡Restaurado!';
+                resetToDefaultBtn.innerHTML = '<i class="fa-regular fa-check"></i> ¡Restaurado!';
                 resetToDefaultBtn.classList.remove('btn-secondary');
                 resetToDefaultBtn.classList.add('btn-success');
                 
                 setTimeout(() => {
-                    resetToDefaultBtn.innerHTML = '<i class="fas fa-undo"></i> Restaurar Recomendadas';
+                    resetToDefaultBtn.innerHTML = '<i class="fa-regular fa-undo"></i> Restaurar Recomendadas';
                     resetToDefaultBtn.classList.remove('btn-success');
                     resetToDefaultBtn.classList.add('btn-secondary');
                 }, 2000);
@@ -794,12 +834,12 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
             }
 
             // Show success message
-            saveBtn.innerHTML = '<i class="fas fa-check"></i> ¡Guardado!';
+            saveBtn.innerHTML = '<i class="fa-regular fa-check"></i> ¡Guardado!';
             saveBtn.classList.remove('btn-primary');
             saveBtn.classList.add('btn-success');
             
             setTimeout(() => {
-                saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar Configuración';
+                saveBtn.innerHTML = '<i class="fa-regular fa-save"></i> Guardar Configuración';
                 saveBtn.classList.remove('btn-success');
                 saveBtn.classList.add('btn-primary');
             }, 2000);
@@ -826,12 +866,96 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         return aiConfigContainer;
     }
 
+    // Extract YouTube video ID from a URL or plain ID
+    function extractYouTubeVideoId(input) {
+        const urlMatch = input.match(/(?:youtube\.com\/watch\?(?:.*&)?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+        if (urlMatch) return urlMatch[1];
+        if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+        return null;
+    }
+
+    // Create Sound Configuration Section
+    async function createSoundConfigSection() {
+        const container = document.createElement('div');
+        container.className = 'sound-config-section';
+
+        const defaultVideoId = '_Z3ra0CxCE0';
+        const soundSettings = await getChromeStorageItem('taskSubmissionSoundSettings') || {};
+        const currentVideoId = soundSettings.videoId || defaultVideoId;
+
+        const header = document.createElement('div');
+        header.className = 'sound-config-header';
+        header.innerHTML = `
+            <h3><i class="fa-regular fa-music"></i> Configuración de Sonido de Entrega</h3>
+            <p>Personaliza el sonido que se reproduce al entregar una tarea. Ingresa una URL o ID de YouTube.</p>
+        `;
+
+        const urlGroup = document.createElement('div');
+        urlGroup.className = 'config-group';
+
+        const urlLabel = document.createElement('label');
+        urlLabel.className = 'config-label';
+        urlLabel.innerHTML = '<i class="fa-brands fa-youtube"></i> URL o ID del video de YouTube:';
+
+        const urlInput = document.createElement('input');
+        urlInput.type = 'text';
+        urlInput.className = 'config-input';
+        urlInput.id = 'sound-youtube-url';
+        urlInput.placeholder = `https://www.youtube.com/watch?v=${defaultVideoId}`;
+        urlInput.value = currentVideoId !== defaultVideoId
+            ? `https://www.youtube.com/watch?v=${currentVideoId}`
+            : '';
+
+        const helper = document.createElement('div');
+        helper.className = 'config-helper';
+        helper.innerHTML = `<small>
+            <strong>Por defecto:</strong> <a href="https://www.youtube.com/watch?v=${defaultVideoId}" target="_blank" style="color: #17a2b8;">https://www.youtube.com/watch?v=${defaultVideoId}</a><br>
+            Acepta URLs completas de YouTube o solo el ID del video (11 caracteres). Dejar vacío para usar el sonido por defecto.
+        </small>`;
+
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'modern-button btn-success save-sound-config-btn';
+        saveBtn.innerHTML = '<i class="fa-regular fa-save"></i> Guardar Sonido';
+
+        saveBtn.addEventListener('click', async () => {
+            const input = urlInput.value.trim();
+            let videoId = defaultVideoId;
+            if (input) {
+                const extracted = extractYouTubeVideoId(input);
+                if (extracted) {
+                    videoId = extracted;
+                } else {
+                    alert('URL o ID de YouTube inválido. Por favor, verifica el enlace.');
+                    return;
+                }
+            }
+            await setChromeStorageItem('taskSubmissionSoundSettings', { videoId });
+            saveBtn.innerHTML = '<i class="fa-regular fa-check"></i> ¡Guardado!';
+            saveBtn.classList.remove('btn-success');
+            saveBtn.classList.add('btn-primary');
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fa-regular fa-save"></i> Guardar Sonido';
+                saveBtn.classList.remove('btn-primary');
+                saveBtn.classList.add('btn-success');
+            }, 2000);
+        });
+
+        urlGroup.appendChild(urlLabel);
+        urlGroup.appendChild(urlInput);
+        urlGroup.appendChild(helper);
+        container.appendChild(header);
+        container.appendChild(urlGroup);
+        container.appendChild(saveBtn);
+
+        return container;
+    }
+
     // Inicializar la página
     async function initPage() {
         addModernStyles(); // Add modern CSS styles
         
         const errorDisplay = document.querySelector("#error");
-        errorDisplay.innerHTML = "";
+        errorDisplay.style.display = "none";
 
         const menuTitle = document.querySelector("#navbar > li");
         menuTitle.textContent = "U-Cursedn't";
@@ -845,7 +969,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         actionContainer.className = 'action-buttons';
 
         const clearButton = document.createElement('button');
-        clearButton.innerHTML = '<i class="fas fa-trash-alt"></i> Borrar Almacenamiento Local';
+        clearButton.innerHTML = '<i class="fa-regular fa-trash-alt"></i> Borrar Almacenamiento Local';
         clearButton.className = 'modern-button btn-danger';
         clearButton.id = 'clearChromeStorageButton';
 
@@ -866,7 +990,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         // Crea un botón que hace alterna el mostrar el Chrome storage
         const showChromeStorageButton = document.createElement('button');
         const chromeStorageList = document.createElement('ul');
-        showChromeStorageButton.innerHTML = '<i class="fas fa-database"></i> Mostrar Almacenamiento Local';
+        showChromeStorageButton.innerHTML = '<i class="fa-regular fa-database"></i> Mostrar Almacenamiento Local';
         showChromeStorageButton.className = 'modern-button btn-secondary';
         showChromeStorageButton.id = 'showChromeStorageButton';
 
@@ -894,7 +1018,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'delete-storage-btn';
-                deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                deleteBtn.innerHTML = '<i class="fa-regular fa-trash"></i>';
                 deleteBtn.title = 'Eliminar este elemento';
                 deleteBtn.addEventListener('click', async function(e) {
                     e.stopPropagation();
@@ -915,11 +1039,11 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         // Agrega funcionalidad al botón
         showChromeStorageButton.addEventListener('click', async function() {
             if (!bodyBlankPage.contains(chromeStorageList)) {
-                showChromeStorageButton.innerHTML = '<i class="fas fa-eye-slash"></i> Ocultar Almacenamiento Local';
+                showChromeStorageButton.innerHTML = '<i class="fa-regular fa-eye-slash"></i> Ocultar Almacenamiento Local';
                 await updateChromeStorageList();
                 bodyBlankPage.appendChild(chromeStorageList);
             } else {
-                showChromeStorageButton.innerHTML = '<i class="fas fa-database"></i> Mostrar Almacenamiento Local';
+                showChromeStorageButton.innerHTML = '<i class="fa-regular fa-database"></i> Mostrar Almacenamiento Local';
                 chromeStorageList.remove();
             }
         });

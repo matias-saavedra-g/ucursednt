@@ -145,69 +145,48 @@
     }
 
     // Función principal para agregar contador
-    /**
-     * Adds a counter to the schedule date element on the page.
-     * The counter displays the number of weeks based on the current date and the dates from the calendar events.
-     *
-     * @param {string} file - The iCal file containing the calendar events.
-     */
-    async function addCounter(file) {
-        var schedule_date_dom = document.getElementById("body").getElementsByTagName("h1")[0];
+    async function addCounter() {
+        // Find the current week info from the paginas navigation
+        // Format: "2026 - Semana 11 - 09/03 al 15/03"
+        const weekSpan = document.querySelector('ul.paginas li.sel span');
+        if (!weekSpan) return;
 
-        // Verificar si ya se ha mostrado la alerta para schedule_date_dom
-        let firstHoverScheduleDate = await getChromeStorageItem("scheduleDateFirstHover") !== true;
+        const weekText = weekSpan.textContent;
+        const match = weekText.match(/(\d{4}).*?(\d{2})\/(\d{2})\s+al/);
+        if (!match) return;
 
-        // Función para mostrar la alerta
-        async function showAlert() {
-            if (firstHoverScheduleDate) {
-                alert("¡Ahora contamos semanas!");
-                await setChromeStorageItem("scheduleDateFirstHover", true); // Marcar que ya se mostró la alerta
-                firstHoverScheduleDate = false; // Asegurar que la alerta se muestre solo una vez
+        const year = parseInt(match[1]);
+        const day = parseInt(match[2]);
+        const month = parseInt(match[3]);
+        var current_date = new Date(year, month - 1, day);
+
+        // Get class weeks from the Monday row (tr.odd) of the mini calendar
+        const mondayRow = document.querySelector('#body table tbody tr.odd');
+        if (!mondayRow) return;
+
+        var dates = [];
+        mondayRow.querySelectorAll('td[class*="semana-"]').forEach(cell => {
+            const anchor = cell.querySelector('a.n');
+            if (anchor && parseFloat(anchor.getAttribute('data-n') || '0') > 0) {
+                const tooltip = cell.querySelector('span.tooltip');
+                if (tooltip) {
+                    const dateMatch = tooltip.textContent.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+                    if (dateMatch) {
+                        dates.push(new Date(parseInt(dateMatch[3]), parseInt(dateMatch[2]) - 1, parseInt(dateMatch[1])));
+                    }
+                }
             }
-        }
+        });
 
-        // Verificar si el elemento schedule_date_dom está presente antes de añadir el evento mouseover
-        if (schedule_date_dom) {
-            schedule_date_dom.addEventListener("mouseover", showAlert);
-        }
-
-        // Resto de tu función addCounter...
-        var date_parts;
-        if (schedule_date_dom.innerText.includes("Semana del")) {
-            // Spanish language case: "Semana del 08/07/2024"
-            date_parts = schedule_date_dom.innerText.split(" ")[2].split("/");
-        } else if (schedule_date_dom.innerText.includes("Week")) {
-            // English language case: "08/07/2024 Week"
-            date_parts = schedule_date_dom.innerText.split(" ")[0].split("/");
-        } else {
-            // Handle other cases if needed
-            console.log("Unsupported format or language");
+        if (dates.length === 0) {
+            weekSpan.append(" (Off)");
             return;
         }
 
-        // date_parts now contains ["08", "07", "2024"]
-        // You can use date_parts[0], date_parts[1], date_parts[2] to access day, month, year respectively
-        console.log(date_parts);
+        dates.sort((d1, d2) => d1 - d2);
 
-        var current_date = new Date(date_parts[2], date_parts[1] - 1, date_parts[0]);
-
-        // Parse data from iCal
-        var calendar_events = ICAL.parse(file)[2];
-
-        /**
-         * We build an array containing only the dates from calendar_events.
-         * The rest of the metadata is ignored.
-         */
-        var dates = [];
-        calendar_events.forEach(e => dates.push(new Date(e[1][4][3])));
-        dates.sort(function(d1, d2){
-            return d1 - d2;
-        });
-
-        // Last item is undefined for some reason?
-        //dates.splice(-1)
-
-        var filtered_dates = reduceWeek(dates);
+        // Dates from Monday row are already one per week, no need to reduce
+        var filtered_dates = dates;
 
         // +1 because we want to take into account the current week
         var total_weeks = weeksBetween(filtered_dates[0], current_date) + 1;
@@ -216,10 +195,19 @@
 
         var text = is_class_week ? total_weeks - past_recess_weeks : "Off";
 
-        const add = " (" + text + ")";
-
         // Insert the number into the page
-        schedule_date_dom.append(add);
+        weekSpan.append(" (" + text + ")");
+
+        // Show one-time alert on first hover
+        let firstHoverScheduleDate = await getChromeStorageItem("scheduleDateFirstHover") !== true;
+        async function showAlert() {
+            if (firstHoverScheduleDate) {
+                alert("¡Ahora contamos semanas!");
+                await setChromeStorageItem("scheduleDateFirstHover", true);
+                firstHoverScheduleDate = false;
+            }
+        }
+        weekSpan.addEventListener("mouseover", showAlert);
     }
 
     const settings = await getChromeStorageItem("settings");
@@ -228,7 +216,6 @@
         if (!weekCounterConfig) {return}
     }
 
-    var href = document.getElementsByClassName("file ical")[0].href;
-    fetch(href).then(r => r.text()).then(d => addCounter(d));
+    await addCounter();
 
 })();

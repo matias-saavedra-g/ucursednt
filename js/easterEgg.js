@@ -4,7 +4,7 @@ const ulElement = document.querySelector("#menu_curso"); // Replace with your se
 
 if (ulElement) {
   const newLi = document.createElement('li');
-  newLi.innerHTML = '<a href="#" class="opcion"><i class="fa-solid fa-trash"></i><span> Borrar U-Cursos</span></a>';
+  newLi.innerHTML = '<a href="#" class="opcion"><i class="fa-regular fa-trash"></i><span> Borrar U-Cursos</span></a>';
   ulElement.appendChild(newLi);
 
   newLi.addEventListener('click', () => {

@@ -101,7 +101,7 @@
     function añadirBotones() {
         const renameCourseButton = document.createElement("button");
         renameCourseButton.classList.add("btn", "btn-default", "btn-sm");
-        renameCourseButton.innerHTML = `<i class="fa-solid fa-pencil"></i><span> Renombrar</span>`;
+        renameCourseButton.innerHTML = `<i class="fa-regular fa-pencil"></i><span> Renombrar</span>`;
         renameCourseButton.style.alignItems = "center";
         renameCourseButton.onclick = renameCourse;
         renameCourseButton.style.backgroundColor = "rgba(34, 34, 34, 0)";

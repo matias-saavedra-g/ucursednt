@@ -52,18 +52,18 @@
         // Cambia el ícono del botón de acuerdo con su texto (course code or course name) a un checkmark por 2 segundos
         const courseNameButton = document.querySelector("#navigation-wrapper > div.curso > div > div > h1 > button");
         const courseCodeButton = document.querySelector("#navigation-wrapper > div.curso > div > div > h2 > button");
-        const checkmarkIcon = `<i class="fa-solid fa-check"></i>`;
+        const checkmarkIcon = `<i class="fa-regular fa-check"></i>`;
 
         if (text === getCourseName()) {
             courseNameButton.innerHTML = checkmarkIcon;
-            setTimeout(() => {courseNameButton.innerHTML = `<i class="fa-solid fa-paste"></i>`}, 2000);
+            setTimeout(() => {courseNameButton.innerHTML = `<i class="fa-regular fa-paste"></i>`}, 2000);
         } else if (text === getCourseCode()) {
             courseCodeButton.innerHTML = checkmarkIcon;
-            setTimeout(() => {courseCodeButton.innerHTML = `<i class="fa-solid fa-paste"></i>`}, 2000);
+            setTimeout(() => {courseCodeButton.innerHTML = `<i class="fa-regular fa-paste"></i>`}, 2000);
         } else {
             // Renamed courses, override
             courseNameButton.innerHTML = checkmarkIcon;
-            setTimeout(() => {courseNameButton.innerHTML = `<i class="fa-solid fa-paste"></i>`}, 2000);
+            setTimeout(() => {courseNameButton.innerHTML = `<i class="fa-regular fa-paste"></i>`}, 2000);
         }
     }
 
@@ -92,7 +92,7 @@
     }
 
     // Añadir botones para copiar justo a la derecha de ambos elementos.
-    // Estos botones usan el ícono <i class="fa-solid fa-paste"></i>
+    // Estos botones usan el ícono <i class="fa-regular fa-paste"></i>
     function añadirBotones() {
         const courseName = getCourseName();
         const courseCode = getCourseCode();
@@ -100,7 +100,7 @@
         // Crear botones
         const courseNameButton = document.createElement("button");
         courseNameButton.classList.add("btn", "btn-default", "btn-sm");
-        courseNameButton.innerHTML = `<i class="fa-solid fa-paste"></i>`;
+        courseNameButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
         // Centra el innerHTML del botón en el centro
         courseNameButton.style.alignItems = "center";
         courseNameButton.onclick = () => copyToClipboard(courseName);
@@ -115,7 +115,7 @@
 
         const courseCodeButton = document.createElement("button");
         courseCodeButton.classList.add("btn", "btn-default", "btn-sm");
-        courseCodeButton.innerHTML = `<i class="fa-solid fa-paste"></i>`;
+        courseCodeButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
         courseCodeButton.style.alignItems = "center";
         courseCodeButton.onclick = () => copyToClipboard(courseCode);
         courseCodeButton.style.backgroundColor = "rgba(34, 34, 34, 0)";

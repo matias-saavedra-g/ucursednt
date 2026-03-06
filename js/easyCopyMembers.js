@@ -74,11 +74,11 @@
         const botonHorizontal = document.querySelector(`tbody:nth-child(${categoria-1}) > tr > td > div > button:nth-child(1)`);
         const botonVertical = document.querySelector(`tbody:nth-child(${categoria-1}) > tr > td > div > button:nth-child(2)`);
         if (formato === 'horizontal') {
-            botonHorizontal.innerHTML = '<i class="fas fa-check"></i>';
-            setTimeout(() => botonHorizontal.innerHTML = '<i class="fas fa-arrows-alt-h"></i>', 2000);
+            botonHorizontal.innerHTML = '<i class="fa-regular fa-check"></i>';
+            setTimeout(() => botonHorizontal.innerHTML = '<i class="fa-regular fa-arrows-alt-h"></i>', 2000);
         } else if (formato === 'vertical') {
-            botonVertical.innerHTML = '<i class="fas fa-check"></i>';
-            setTimeout(() => botonVertical.innerHTML = '<i class="fas fa-arrows-alt-v"></i>', 2000);
+            botonVertical.innerHTML = '<i class="fa-regular fa-check"></i>';
+            setTimeout(() => botonVertical.innerHTML = '<i class="fa-regular fa-arrows-alt-v"></i>', 2000);
         }
     }
 
@@ -102,7 +102,7 @@
 
             // Botón para copiar horizontalmente
             const botonHorizontal = document.createElement('button');
-            botonHorizontal.innerHTML = '<i class="fas fa-arrows-alt-h"></i>'; // Icono FontAwesome para horizontal
+            botonHorizontal.innerHTML = '<i class="fa-regular fa-arrows-alt-h"></i>'; // Icono FontAwesome para horizontal
             botonHorizontal.title = `Copiar Horizontal - Categoría ${categoria}`;
             botonHorizontal.style.background = 'transparent';
             botonHorizontal.style.border = 'transparent';
@@ -114,7 +114,7 @@
 
             // Botón para copiar verticalmente
             const botonVertical = document.createElement('button');
-            botonVertical.innerHTML = '<i class="fas fa-arrows-alt-v"></i>'; // Icono FontAwesome para vertical
+            botonVertical.innerHTML = '<i class="fa-regular fa-arrows-alt-v"></i>'; // Icono FontAwesome para vertical
             botonVertical.title = `Copiar Vertical - Categoría ${categoria}`;
             botonVertical.style.background = 'transparent';
             botonVertical.style.border = 'transparent';

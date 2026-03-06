@@ -488,7 +488,7 @@
         header.className = 'achievements-header';
         header.innerHTML = `
             <div class="achievements-title">
-                <i class="fas fa-trophy"></i>
+                <i class="fa-regular fa-trophy"></i>
                 <span>Colección de Logros</span>
             </div>
             <div class="achievements-subtitle">
@@ -518,17 +518,17 @@
         statsGrid.className = 'stats-grid';
         statsGrid.innerHTML = `
             <div class="stat-card total">
-                <div class="stat-icon" style="color: #007bff;"><i class="fas fa-trophy"></i></div>
+                <div class="stat-icon" style="color: #007bff;"><i class="fa-regular fa-trophy"></i></div>
                 <div class="stat-number" style="color: #007bff;">${totalAchievements}</div>
                 <div class="stat-label">Total de Logros</div>
             </div>
             <div class="stat-card unlocked">
-                <div class="stat-icon" style="color: #28a745;"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-icon" style="color: #28a745;"><i class="fa-regular fa-check-circle"></i></div>
                 <div class="stat-number" style="color: #28a745;">${unlockedAchievements}</div>
                 <div class="stat-label">Logros Desbloqueados</div>
             </div>
             <div class="stat-card locked">
-                <div class="stat-icon" style="color: #dc3545;"><i class="fas fa-lock"></i></div>
+                <div class="stat-icon" style="color: #dc3545;"><i class="fa-regular fa-lock"></i></div>
                 <div class="stat-number" style="color: #dc3545;">${lockedAchievements}</div>
                 <div class="stat-label">Logros Bloqueados</div>
             </div>
@@ -545,8 +545,8 @@
 
         // Group achievements by category
         const categories = {
-            features: { title: 'Características de la Extensión', icon: 'fas fa-cogs' },
-            interactions: { title: 'Interacciones y Descubrimientos', icon: 'fas fa-hand-pointer' }
+            features: { title: 'Características de la Extensión', icon: 'fa-regular fa-cogs' },
+            interactions: { title: 'Interacciones y Descubrimientos', icon: 'fa-regular fa-hand-pointer' }
         };
 
         advancementsContainer.appendChild(header);
@@ -599,7 +599,7 @@
         addModernAchievementStyles(); // Add modern CSS styles
         
         const errorDisplay = document.querySelector("#error");
-        errorDisplay.innerHTML = "";
+        errorDisplay.style.display = "none";
 
         const menuTitle = document.querySelector("#navbar > li");
         menuTitle.textContent = "Logros";

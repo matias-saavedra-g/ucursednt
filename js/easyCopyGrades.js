@@ -88,16 +88,16 @@
         // Cambia el ícono del botón de acuerdo con su formato a un checkmark por 2 segundos
         if (formato === 'horizontal') {
             const botonHorizontal = document.querySelector('thead > div > button:nth-child(2)');
-            botonHorizontal.innerHTML = '<i class="fa-solid fa-check"></i>';
-            setTimeout(() => botonHorizontal.innerHTML = '<i class="fa-solid fa-arrows-alt-h"></i>', 2000);
+            botonHorizontal.innerHTML = '<i class="fa-regular fa-check"></i>';
+            setTimeout(() => botonHorizontal.innerHTML = '<i class="fa-regular fa-arrows-alt-h"></i>', 2000);
         } else if (formato === 'vertical') {
             const botonVertical = document.querySelector('thead > div > button:nth-child(3)');
-            botonVertical.innerHTML = '<i class="fa-solid fa-check"></i>';
-            setTimeout(() => botonVertical.innerHTML = '<i class="fa-solid fa-arrows-alt-v"></i>', 2000);
+            botonVertical.innerHTML = '<i class="fa-regular fa-check"></i>';
+            setTimeout(() => botonVertical.innerHTML = '<i class="fa-regular fa-arrows-alt-v"></i>', 2000);
         } else if (formato === 'suma') {
             const botonSuma = document.querySelector('thead > div > button:nth-child(1)');
-            botonSuma.innerHTML = '<i class="fa-solid fa-check"></i>';
-            setTimeout(() => botonSuma.innerHTML = '<i class="fa-solid fa-plus"></i>', 2000);
+            botonSuma.innerHTML = '<i class="fa-regular fa-check"></i>';
+            setTimeout(() => botonSuma.innerHTML = '<i class="fa-regular fa-plus"></i>', 2000);
         }
     }
 
@@ -118,7 +118,7 @@
 
         // Botón para copiar suma
         const botonSuma = document.createElement('button');
-        botonSuma.innerHTML = '<i class="fa-solid fa-plus"></i>'; // Icono FontAwesome para suma
+        botonSuma.innerHTML = '<i class="fa-regular fa-plus"></i>'; // Icono FontAwesome para suma
         botonSuma.title = 'Copiar Suma';
         botonSuma.style.background = 'transparent';
         botonSuma.style.border = 'transparent';
@@ -130,7 +130,7 @@
 
         // Botón para copiar horizontalmente
         const botonHorizontal = document.createElement('button');
-        botonHorizontal.innerHTML = '<i class="fa-solid fa-arrows-alt-h"></i>'; // Icono FontAwesome para horizontal
+        botonHorizontal.innerHTML = '<i class="fa-regular fa-arrows-alt-h"></i>'; // Icono FontAwesome para horizontal
         botonHorizontal.title = 'Copiar Horizontal';
         botonHorizontal.style.background = 'transparent';
         botonHorizontal.style.border = 'transparent';
@@ -141,7 +141,7 @@
 
         // Botón para copiar verticalmente
         const botonVertical = document.createElement('button');
-        botonVertical.innerHTML = '<i class="fa-solid fa-arrows-alt-v"></i>'; // Icono FontAwesome para vertical
+        botonVertical.innerHTML = '<i class="fa-regular fa-arrows-alt-v"></i>'; // Icono FontAwesome para vertical
         botonVertical.title = 'Copiar Vertical';
         botonVertical.style.background = 'transparent';
         botonVertical.style.border = 'transparent';
