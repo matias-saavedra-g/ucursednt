@@ -164,3 +164,13 @@ body {
 .container {
     animation: slideInDown 0.3s ease-out;
 }
+
+/* MT Brand — AI panel launch button */
+.btn-ai {
+    background: linear-gradient(135deg, #2A5298, #1E3C72);
+    box-shadow: 0 2px 8px rgba(42, 82, 152, 0.35);
+}
+.btn-ai:hover {
+    background: linear-gradient(135deg, #3A6BC0, #2A5298);
+    box-shadow: 0 4px 12px rgba(42, 82, 152, 0.5);
+}

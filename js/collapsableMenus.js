@@ -103,6 +103,11 @@
             .collapsable-button i {
                 transition: all 0.2s ease-in-out;
             }
+
+            .collapsable-content > * {
+                transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+                transform-origin: bottom center;
+            }
         `;
         document.head.appendChild(style);
 
@@ -117,9 +122,9 @@
             const originalHeight = content.scrollHeight;
             content.style.maxHeight = originalHeight + "px";
             
-            // The click to collapse only should work when clicking the fa-solid fa-minus button
+            // The click to collapse only should work when clicking the fa-regular fa-minus button
             const button = document.createElement("button");
-            button.innerHTML = '<i class="fa-solid fa-minus"></i>';
+            button.innerHTML = '<i class="fa-regular fa-minus"></i>';
             button.classList.add("collapsable-button");
             // Makes background of button #222 in rgba with opacity 0.2
             button.style.backgroundColor = "rgba(34, 34, 34, 0)";
@@ -132,6 +137,9 @@
             // Add cursor pointer
             button.style.cursor = "pointer";
             
+            // Apply dock magnification to content items
+            applyDockEffect(content);
+
             section.appendChild(button);
             button.addEventListener("click", async () => {
                 // Add mouseover event for alert
@@ -155,7 +163,7 @@
                     const icon = button.querySelector("i");
                     icon.style.transform = "rotate(180deg)";
                     setTimeout(() => {
-                        button.innerHTML = '<i class="fa-solid fa-minus"></i>';
+                        button.innerHTML = '<i class="fa-regular fa-minus"></i>';
                         icon.style.transform = "rotate(0deg)";
                     }, 100);
                     
@@ -168,7 +176,7 @@
                     const icon = button.querySelector("i");
                     icon.style.transform = "rotate(180deg)";
                     setTimeout(() => {
-                        button.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                        button.innerHTML = '<i class="fa-regular fa-plus"></i>';
                         icon.style.transform = "rotate(0deg)";
                     }, 100);
                 }
@@ -181,6 +189,31 @@
         });
     }
 
+
+    // Apply macOS dock-like magnification to direct children of a container
+    function applyDockEffect(container) {
+        const SCALES = [1.1, 1.05, 1.01];
+        const items = Array.from(container.children);
+        if (items.length === 0) return;
+
+        function applyDock(hoveredIndex) {
+            items.forEach((item, i) => {
+                const dist = Math.abs(i - hoveredIndex);
+                const scale = dist < SCALES.length ? SCALES[dist] : 1;
+                item.style.transform = scale !== 1 ? `scale(${scale})` : '';
+            });
+        }
+
+        function resetDock() {
+            items.forEach(item => { item.style.transform = ''; });
+        }
+
+        items.forEach((item, index) => {
+            item.addEventListener('mouseenter', () => applyDock(index));
+        });
+
+        container.addEventListener('mouseleave', resetDock);
+    }
 
     // Save every collapsable state in Chrome Storage
     async function saveCollapsableState() {
@@ -215,7 +248,7 @@
                 content.classList.remove("expanded");
                 content.classList.add("collapsed");
                 if (button) {
-                    button.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                    button.innerHTML = '<i class="fa-regular fa-plus"></i>';
                 }
             } else {
                 // Apply expanded state (default)
@@ -223,7 +256,7 @@
                 content.classList.add("expanded");
                 content.style.maxHeight = content.scrollHeight + "px";
                 if (button) {
-                    button.innerHTML = '<i class="fa-solid fa-minus"></i>';
+                    button.innerHTML = '<i class="fa-regular fa-minus"></i>';
                 }
             }
         });
