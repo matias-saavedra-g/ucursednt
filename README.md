@@ -4,7 +4,7 @@ Extensión de Chromium que agrega funciones adicionales a la plataforma de [U-Cu
 
 <a href="https://chromewebstore.google.com/detail/u-cursednt/jappfnpemaaconilafnlhdkndccfkgen"><img src="https://developer.chrome.com/static/docs/webstore/branding/image/YT2Grfi9vEBa2wAPzhWa.png"/></a>
 
-![Version](https://img.shields.io/badge/versión-26.3.1-blue) ![Manifest](https://img.shields.io/badge/manifest-v3-green) ![License](https://img.shields.io/github/license/matias-saavedra-g/ucursednt)
+![Version](https://img.shields.io/badge/versión-26.3.2-blue) ![Manifest](https://img.shields.io/badge/manifest-v3-green) ![License](https://img.shields.io/github/license/matias-saavedra-g/ucursednt)
 
 ---
 
@@ -257,6 +257,6 @@ git clone [https://github.com/matias-saavedra-g/ucursednt.git](https://github.co
 
 ---
 
-> **Nota sobre el versionado:** A partir de la versión `26.3.1`, U-Cursedn't usa un esquema de versión basado en fecha: **`AA.MM.S`**, donde `AA` es el año (dos dígitos), `MM` el mes, y `S` el número de semana dentro del mes (1–5). Por ejemplo, `26.3.1` corresponde a la primera semana de marzo de 2026.
+> **Nota sobre el versionado:** A partir de la versión `26.3.2`, U-Cursedn't usa un esquema de versión basado en fecha: **`AA.MM.S`**, donde `AA` es el año (dos dígitos), `MM` el mes, y `S` el número de semana dentro del mes (1–5). Por ejemplo, `26.3.2` corresponde a la primera semana de marzo de 2026.
 
 > **Publicación automática:** Cada push a `main` desencadena un GitHub Action que publica la extensión automáticamente en Chrome Web Store.
