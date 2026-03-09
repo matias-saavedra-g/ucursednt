@@ -28,8 +28,104 @@ Extensión para mejorar tu experiencia en U-Cursos
         <div class="changelog-section">
             <div class="version-header">
                 <div class="version-title">
+                    <span class="version-number">Versión 26.3.1</span>
+                    <span class="version-date">Marzo 2026</span>
+                    <span class="version-badge badge-major">Major</span>
+                </div>
+                <div class="version-description">
+                    Panel Lateral de IA, conversaciones multi-turn, efecto Dock de macOS y publicación automatizada en Chrome Web Store
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-added">+</div>
+                        Nuevas Características
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Panel Lateral de IA (Side Panel):</strong> Nuevo panel lateral nativo de Chrome con el asistente UCursedn't AI directamente integrado en el navegador. Incluye historial multi-chat persistente mediante <code>chrome.storage</code> (arquitectura amnesia-proof MV3), detección automática de Gemini Nano para procesamiento local, y botón de acceso rápido desde el popup de la extensión.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Nuevo esquema de versiones:</strong> U-Cursedn't adopta un sistema de versiones basado en fecha (<code>AA.MM.S</code>): año (dos dígitos), mes y número de semana dentro del mes. La versión <code>26.3.1</code> corresponde a la primera semana de marzo de 2026.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-improved">↑</div>
+                        Mejoras y Optimizaciones
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Conversaciones Multi-turn en Gemini:</strong> El historial completo de la conversación se envía ahora al modelo en cada consulta, con conversión correcta de roles (<code>assistant → model</code>). Modelo actualizado a <em>Gemini Flash Lite Latest</em>.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Animaciones — Efecto Dock de macOS:</strong> <code>navigationAnimations.js</code> completamente refactorizado para usar una transformación de escala spring-eased (cubic-bezier) más ligera y fluida. Las secciones colapsables también aplican el efecto de magnificación dock a sus elementos internos al pasar el cursor.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Sonido de Entrega de Tareas:</strong> Reemplazado el sintetizador Web Audio API por reproducción de audio mediante iframe de YouTube. Ahora se activa en todas las páginas de tareas (<code>tareas/*</code>), no solo en la vista de detalle. El iframe se elimina automáticamente tras 15 segundos para evitar fugas de memoria en el DOM.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Interacción con Foros:</strong> Patrones de URL expandidos para cubrir los foros institucionales de Ingeniería y U-Chile (<code>foro_institucion</code>, <code>uchile/*/0/*/1/foro/</code>). Refactor interno para reducir duplicación y mejorar la delegación de eventos.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-technical">🔧</div>
+                        Mejoras Técnicas
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Actualización del Manifiesto:</strong> Añadido permiso <code>sidePanel</code> y entrada <code>side_panel.default_path</code>. Política de seguridad de contenido (CSP) configurada para permitir conexiones a la API de Gemini. Correcciones en content scripts: <code>popup.js</code> restringido a U-Cursos, <code>navigationAnimations.js</code> movido a <code>document_idle</code>.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Íconos estandarizados:</strong> Migración de clases <code>fa-solid</code> a <code>fa-regular</code> en todos los módulos (achievementsGen, easyCopy*, menuGen, muchoTexto, renameCourses, weekCounter) para mayor coherencia visual.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Publicación Automatizada en Chrome Web Store:</strong> Nuevo GitHub Action que publica automáticamente la extensión al hacer push a <code>main</code>, usando <code>furkanipek/chrome-extension-action</code>.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
                     <span class="version-number">Versión 4.1</span>
-                    <span class="version-date">Enero 2025</span>
+                    <span class="version-date">Septiembre 2025</span>
                     <span class="version-badge badge-feature">Feature</span>
                 </div>
                 <div class="version-description">
@@ -80,7 +176,7 @@ Extensión para mejorar tu experiencia en U-Cursos
             <div class="version-header">
                 <div class="version-title">
                     <span class="version-number">Versión 4.0</span>
-                    <span class="version-date">Diciembre 2024</span>
+                    <span class="version-date">Septiembre 2025</span>
                     <span class="version-badge badge-major">Major</span>
                 </div>
                 <div class="version-description">
@@ -110,7 +206,7 @@ Extensión para mejorar tu experiencia en U-Cursos
             <div class="version-header">
                 <div class="version-title">
                     <span class="version-number">Versión 3.7</span>
-                    <span class="version-date">Diciembre 2024</span>
+                    <span class="version-date">Noviembre 2024</span>
                     <span class="version-badge badge-major">Major</span>
                 </div>
                 <div class="version-description">

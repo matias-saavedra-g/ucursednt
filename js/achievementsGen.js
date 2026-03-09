@@ -428,6 +428,7 @@
             { id: "easyCopyMembers", name: "Copia Fácil de Miembros", description: "Logro por activar la copia fácil de miembros", icon: "fa-users", unlocked: settings.features.easyCopyMembers, category: "features", rarity: "common" },
             { id: "muchoTexto", name: "Recortar Texto Largo", description: "Logro por activar la funcionalidad de recortar texto largo", icon: "fa-cut", unlocked: settings.features.muchoTexto, category: "features", rarity: "common" },
             { id: "forumInteraction", name: "Interacción con Foros", description: "Logro por activar la interacción avanzada con foros", icon: "fa-comments", unlocked: settings.features.forumInteraction, category: "features", rarity: "rare" },
+            { id: "forumDownload", name: "Descargador de Foro", description: "Logro por activar la descarga de hilos del foro", icon: "fa-download", unlocked: settings.features.forumDownload, category: "features", rarity: "rare" },
             { id: "otrasRealizaciones", name: "Otras Realizaciones del Curso", description: "Logro por activar otras realizaciones del curso", icon: "fa-tasks", unlocked: settings.features.otrasRealizaciones, category: "features", rarity: "common" },
             { id: "popupGrading", name: "Ventana Emergente de Calificaciones", description: "Logro por activar la ventana emergente de calificaciones", icon: "fa-window-restore", unlocked: settings.features.popupGrading, category: "features", rarity: "rare" },
             { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF", description: "Logro por activar la redimensión de vista previa de PDF", icon: "fa-expand", unlocked: settings.features.resizePreviewPDF, category: "features", rarity: "rare" },
@@ -447,7 +448,8 @@
             { id: "scheduleDateFirstHover", name: "Primer Hover en Fecha de Programación", description: "Logro por hacer el primer hover en la fecha de programación", icon: "fa-calendar", unlocked: storageItems['scheduleDateFirstHover'] === true, category: "interactions", rarity: "epic" },
             { id: "collapsableMenusFirstClick", name: "Primer Click en Menús Colapsables", description: "Logro por hacer el primer click en menús colapsables", icon: "fa-hand-pointer", unlocked: storageItems['collapsableMenusFirstClick'] === true, category: "interactions", rarity: "rare" },
             { id: "taskSubmissionSoundFirstClick", name: "Primer Sonido de Entrega", description: "Logro por escuchar el primer sonido de dopamina al entregar una tarea", icon: "fa-music", unlocked: storageItems['taskSubmissionSoundFirstClick'] === true, category: "interactions", rarity: "legendary" },
-            { id: "navigationAnimations", name: "Animaciones de Navegación", description: "Logro por activar las animaciones de navegación", icon: "fa-animation", unlocked: storageItems['navigationAnimations'] === true, category: "interactions", rarity: "legendary" }
+            { id: "navigationAnimations", name: "Animaciones de Navegación", description: "Logro por activar las animaciones de navegación", icon: "fa-animation", unlocked: storageItems['navigationAnimations'] === true, category: "interactions", rarity: "legendary" },
+            { id: "forumDownloadFirstUse", name: "Archivista del Foro", description: "Logro por descargar el foro por primera vez", icon: "fa-file-archive", unlocked: storageItems['forumDownloadFirstUse'] === true, category: "interactions", rarity: "epic" }
         ];
     
         const totalAchievements = achievements.length;

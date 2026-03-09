@@ -91,7 +91,7 @@
         "*://www.u-cursos.cl/uchile/4/foro_institucion/",
         "*://www.u-cursos.cl/uchile/*/0/*/1/foro/"
       ],
-      "js": ["js/extensionUtils.js", "js/forumInteraction.js"],
+      "js": ["js/extensionUtils.js", "js/forumInteraction.js", "js/forumDownload.js"],
       "run_at": "document_end"
     },
     {
