@@ -28,7 +28,7 @@ Extensión para mejorar tu experiencia en U-Cursos
         <div class="changelog-section">
             <div class="version-header">
                 <div class="version-title">
-                    <span class="version-number">Versión 26.3.3</span>
+                    <span class="version-number">Versión 26.3.4</span>
                     <span class="version-date">Marzo 2026</span>
                     <span class="version-badge badge-hotfix">Hotfix</span>
                 </div>
@@ -47,13 +47,13 @@ Extensión para mejorar tu experiencia en U-Cursos
                         <li class="change-item">
                             <div class="change-bullet bullet-fixed"></div>
                             <div class="change-text">
-                                <strong>Optimización de Notificaciones de Tareas:</strong> Refactorizado el selector de elementos para apuntar directamente al menú de tareas específico (<code>servicio_tareas_usuario</code>), mejorando rendimiento y eliminando iteraciones innecesarias.
+                                <strong>Contexto de Posicionamiento de Notificaciones:</strong> Asegurada la presencia de <code>position: relative</code> en el elemento padre del menú de tareas para proporcionar contexto correcto de posicionamiento absoluto. Previene problemas de desplazamiento de elementos UI cuando el padre carece de contexto de posicionamiento.
                             </div>
                         </li>
                         <li class="change-item">
                             <div class="change-bullet bullet-fixed"></div>
                             <div class="change-text">
-                                <strong>Etiqueta Descriptiva de Semana:</strong> Añadida etiqueta "Semana lectiva:" al contador de semanas para mayor claridad en la visualización del horario.
+                                <strong>Formato de Etiqueta de Semana Lectiva:</strong> Mejorado el formato visual del contador de semanas añadiendo salto de línea antes de la etiqueta "Semana lectiva:" para una mejor legibilidad en la visualización del horario.
                             </div>
                         </li>
                     </ul>
