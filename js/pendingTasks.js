@@ -58,6 +58,11 @@
         const navigationItem = document.querySelector("#navigation-wrapper > ul > li.servicio_tareas_usuario");
         if (!navigationItem) return;
 
+        // Ensure parent has position: relative for absolute positioning context
+        if (!navigationItem.style.position || navigationItem.style.position === 'static') {
+            navigationItem.style.position = 'relative';
+        }
+
         let notificationElement = navigationItem.querySelector("#pending-tasks-notification");
         if (count > 0) {
             if (!notificationElement) {

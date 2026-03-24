@@ -195,8 +195,9 @@
 
         var text = is_class_week ? total_weeks - past_recess_weeks : "Off";
 
-        // Insert the number into the page
-        weekSpan.append(" (Semana lectiva: " + text + ")");
+        // Insert the number into the page with a newline character
+        weekSpan.append(document.createElement("br"));
+        weekSpan.append("Semana lectiva: " + text);
 
         // Show one-time alert on first hover
         let firstHoverScheduleDate = await getChromeStorageItem("scheduleDateFirstHover") !== true;
