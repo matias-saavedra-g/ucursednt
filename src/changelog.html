@@ -1,0 +1,346 @@
+<script src="js/browser-polyfill.min.js"></script>
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-Cursedn't - Changelog</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="css/changelog.css">
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="header-content">
+<a href="https://github.com/matias-saavedra-g/ucursednt" target="_blank" rel="noopener" class="header-link" title="Go to U-Cursedn't GitHub Repository">
+<div class="header-title">
+<h1>U-Cursedn't</h1>
+<img src="icons/icon.png" alt="U-Cursedn't" class="header-icon">
+</div>
+</a>
+<div class="header-subtitle">
+Extensión para mejorar tu experiencia en U-Cursos
+</div>
+</div>
+</div>
+
+    <div class="content">
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
+                    <span class="version-number">Versión 26.3.4</span>
+                    <span class="version-date">Marzo 2026</span>
+                    <span class="version-badge badge-hotfix">Hotfix</span>
+                </div>
+                <div class="version-description">
+                    Correcciones y optimizaciones en notificaciones de tareas y etiquetas de semana
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-fixed">✓</div>
+                        Correcciones
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-fixed"></div>
+                            <div class="change-text">
+                                <strong>Contexto de Posicionamiento de Notificaciones:</strong> Asegurada la presencia de <code>position: relative</code> en el elemento padre del menú de tareas para proporcionar contexto correcto de posicionamiento absoluto. Previene problemas de desplazamiento de elementos UI cuando el padre carece de contexto de posicionamiento.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-fixed"></div>
+                            <div class="change-text">
+                                <strong>Formato de Etiqueta de Semana Lectiva:</strong> Mejorado el formato visual del contador de semanas añadiendo salto de línea antes de la etiqueta "Semana lectiva:" para una mejor legibilidad en la visualización del horario.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
+                    <span class="version-number">Versión 26.3.2</span>
+                    <span class="version-date">Marzo 2026</span>
+                    <span class="version-badge badge-major">Major</span>
+                </div>
+                <div class="version-description">
+                    Panel Lateral de IA, conversaciones multi-turn, efecto Dock de macOS y publicación automatizada en Chrome Web Store
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-added">+</div>
+                        Nuevas Características
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Panel Lateral de IA (Side Panel):</strong> Nuevo panel lateral nativo de Chrome con el asistente UCursedn't AI directamente integrado en el navegador. Incluye historial multi-chat persistente mediante <code>chrome.storage</code> (arquitectura amnesia-proof MV3), detección automática de Gemini Nano para procesamiento local, y botón de acceso rápido desde el popup de la extensión.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Nuevo esquema de versiones:</strong> U-Cursedn't adopta un sistema de versiones basado en fecha (<code>AA.MM.S</code>): año (dos dígitos), mes y número de semana dentro del mes. La versión <code>26.3.2</code> corresponde a la primera semana de marzo de 2026.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-improved">↑</div>
+                        Mejoras y Optimizaciones
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Conversaciones Multi-turn en Gemini:</strong> El historial completo de la conversación se envía ahora al modelo en cada consulta, con conversión correcta de roles (<code>assistant → model</code>). Modelo actualizado a <em>Gemini Flash Lite Latest</em>.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Animaciones — Efecto Dock de macOS:</strong> <code>navigationAnimations.js</code> completamente refactorizado para usar una transformación de escala spring-eased (cubic-bezier) más ligera y fluida. Las secciones colapsables también aplican el efecto de magnificación dock a sus elementos internos al pasar el cursor.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Sonido de Entrega de Tareas:</strong> Reemplazado el sintetizador Web Audio API por reproducción de audio mediante iframe de YouTube. Ahora se activa en todas las páginas de tareas (<code>tareas/*</code>), no solo en la vista de detalle. El iframe se elimina automáticamente tras 15 segundos para evitar fugas de memoria en el DOM.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Interacción con Foros:</strong> Patrones de URL expandidos para cubrir los foros institucionales de Ingeniería y U-Chile (<code>foro_institucion</code>, <code>uchile/*/0/*/1/foro/</code>). Refactor interno para reducir duplicación y mejorar la delegación de eventos.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-technical">🔧</div>
+                        Mejoras Técnicas
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Actualización del Manifiesto:</strong> Añadido permiso <code>sidePanel</code> y entrada <code>side_panel.default_path</code>. Política de seguridad de contenido (CSP) configurada para permitir conexiones a la API de Gemini. Correcciones en content scripts: <code>popup.js</code> restringido a U-Cursos, <code>navigationAnimations.js</code> movido a <code>document_idle</code>.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Íconos estandarizados:</strong> Migración de clases <code>fa-solid</code> a <code>fa-regular</code> en todos los módulos (achievementsGen, easyCopy*, menuGen, muchoTexto, renameCourses, weekCounter) para mayor coherencia visual.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Publicación Automatizada en Chrome Web Store:</strong> Nuevo GitHub Action que publica automáticamente la extensión al hacer push a <code>main</code>, usando <code>furkanipek/chrome-extension-action</code>.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
+                    <span class="version-number">Versión 4.1</span>
+                    <span class="version-date">Septiembre 2025</span>
+                    <span class="version-badge badge-feature">Feature</span>
+                </div>
+                <div class="version-description">
+                    Nueva funcionalidad de interacción avanzada con foros de U-Cursos
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-added">+</div>
+                        Nuevas Características
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Interacción con Foros:</strong> Nueva funcionalidad que permite copiar contenido de hilos y posts individuales de los foros, así como enviarlos directamente al chat IA para análisis. Incluye botones contextuales en cada hilo y publicación para facilitar el trabajo con contenido del foro.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-technical">🔧</div>
+                        Mejoras Técnicas
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Integración con Chat IA:</strong> Mejorada la integración entre las funcionalidades de foro y el chat IA flotante, permitiendo un flujo de trabajo más fluido.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Detección de Estructura HTML:</strong> Implementado sistema robusto de detección de elementos del foro basado en la estructura HTML real de U-Cursos.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
+                    <span class="version-number">Versión 4.0</span>
+                    <span class="version-date">Septiembre 2025</span>
+                    <span class="version-badge badge-major">Major</span>
+                </div>
+                <div class="version-description">
+                    Actualización principal con chat IA integrado y mejoras significativas
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-added">+</div>
+                        Nuevas Características
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Chat IA Flotante:</strong> Integración completa con Gemini AI a través de un popup flotante con UCursitos como mascota. Incluye historial de conversaciones, instrucciones del sistema personalizables y exportación de chats.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
+                    <span class="version-number">Versión 3.7</span>
+                    <span class="version-date">Noviembre 2024</span>
+                    <span class="version-badge badge-major">Major</span>
+                </div>
+                <div class="version-description">
+                    Actualización principal con sistema de logros, UI modernizada y nuevas funcionalidades
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-added">+</div>
+                        Nuevas Características
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Sistema de Logros:</strong> U-Cursos ahora cuenta con un sistema de logros gamificado que premia a los usuarios por realizar ciertas acciones dentro de la plataforma. ¡Desbloquea todos los logros explorando las características de la extensión!
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Renombrar Cursos:</strong> Los usuarios ahora pueden personalizar los nombres de los cursos en los que están inscritos, facilitando la organización y identificación rápida de materias.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-improved">↑</div>
+                        Mejoras y Optimizaciones
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Copia Fácil de Notas:</strong> Se ha optimizado la funcionalidad con mejor detección de tablas y formato mejorado para hojas de cálculo.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Copia Fácil de Miembros:</strong> Mejoras en la funcionalidad con soporte para diferentes formatos de listado de estudiantes.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Copia Fácil de Datos del Curso:</strong> Se ha mejorado la extracción y copiado de información relevante de los cursos con mayor precisión.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Recortar Texto Largo:</strong> Optimización en la detección y recorte de textos largos en foros con mejor manejo de formato y estructura.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Redimensionar Vista Previa de PDF:</strong> Mejoras en la funcionalidad de redimensionamiento de PDFs con mejor detección de elementos y estabilidad.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Menú de Configuración:</strong> Interfaz completamente renovada con diseño moderno, mejor organización y experiencia de usuario mejorada.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <p>Desarrollado con ❤️ por <a href="https://github.com/matias-saavedra-g" target="_blank" rel="noopener" class="credits-link">Matías Saavedra</a></p>
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/matias-saavedra-g/ucursednt" target="_blank" rel="noopener" class="footer-link">
+                <i class="fab fa-github"></i>
+                Código Fuente
+            </a>
+            <a href="https://github.com/matias-saavedra-g/ucursednt/issues" target="_blank" rel="noopener" class="footer-link">
+                <i class="fa-regular fa-bug"></i>
+                Reportar Problemas
+            </a>
+            <a href="https://github.com/matias-saavedra-g/ucursednt/releases" target="_blank" rel="noopener" class="footer-link">
+                <i class="fa-regular fa-download"></i>
+                Descargas
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

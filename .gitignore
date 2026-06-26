@@ -1,0 +1,7 @@
+# Environment variables
+.env
+
+# Build outputs
+dist/
+__pycache__/
+*.zip
