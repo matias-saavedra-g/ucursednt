@@ -21,15 +21,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
     'use strict';
 
     // Import utility functions
-    const { safeChromeStorageGet, safeChromeStorageSet, isExtensionContextValid } = window.extensionUtils || {
-        safeChromeStorageGet: (key) => new Promise(resolve => {
-            browser.storage.sync.get([key]).then(result => resolve(result[key] || null));
-        }),
-        safeChromeStorageSet: (key, value) => new Promise(resolve => {
-            browser.storage.sync.set({ [key]: value }, resolve);
-        }),
-        isExtensionContextValid: () => true
-    };
+
 
     // Helper functions for local storage (chat history)
     const safeChromeLocalGet = (key) => new Promise(resolve => {
@@ -104,7 +96,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
     // Load stored settings
     async function loadAIChatSettings() {
         try {
-            const settings = await safeChromeStorageGet('aiChatSettings') || {};
+            const settings = await UcursedntUtils.Storage.get('aiChatSettings') || {};
             apiKey = settings.apiKey || '';
             systemInstructions = settings.systemInstructions || DEFAULT_SYSTEM_INSTRUCTIONS;
             isMinimized = settings.isMinimized !== false; // Default to minimized
@@ -117,7 +109,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
     // Save settings
     async function saveAIChatSettings() {
         try {
-            await safeChromeStorageSet('aiChatSettings', {
+            await UcursedntUtils.Storage.set('aiChatSettings', {
                 apiKey: apiKey,
                 systemInstructions: systemInstructions,
                 isMinimized: isMinimized,
@@ -1140,7 +1132,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
     if (window.location.hostname.includes('u-cursos.cl')) {
         // Wait for page to be ready and check if feature is enabled
         const checkAndInit = async () => {
-            const settings = await safeChromeStorageGet('settings');
+            const settings = await UcursedntUtils.Storage.get('settings');
             if (settings && settings.features && settings.features.aiChatPopup) {
                 initAIChatPopup();
             }

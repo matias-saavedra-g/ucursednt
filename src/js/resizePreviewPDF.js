@@ -17,38 +17,10 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
 (async function() {
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Check if the page URL matches the PDF viewer pattern
     const pdfViewerURL = /https:\/\/www\.u-cursos\.cl\/\w+\/\d+\/\d+\/\w+\/\d+\/material_docente\/detalle\?id=\d+/;
@@ -71,12 +43,12 @@ if (typeof window.showExtensionAlert === 'undefined') {
             pdfContainer.children[0].style.overflow = "auto";
 
             // Show an alert message only once on hover
-            let firstHover = await getStorageItem("resizableFirstHover") !== true;
+            let firstHover = await UcursedntUtils.Storage.get("resizableFirstHover") !== true;
 
             pdfContainer.addEventListener("mouseover", async function() {
                 if (firstHover) {
                     window.showExtensionAlert("¡Puedes cambiar el tamaño del visor PDF desde la esquina inferior derecha!");
-                    await setStorageItem("resizableFirstHover", true);
+                    await UcursedntUtils.Storage.set("resizableFirstHover", true);
                     firstHover = false;
                 }
             });

@@ -18,89 +18,19 @@ if (typeof window.showExtensionAlert === 'undefined') {
 (async function() {
 
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get all Chrome Storage items
-    function getAllChromeStorageItems() {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get(null, (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to remove an item from Chrome Storage
-    function removeChromeStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.remove([key], () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to clear all Chrome Storage
-    function clearChromeStorage() {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.clear(() => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Inicializar configuraciones
     async function initSettings() {
@@ -130,8 +60,8 @@ if (typeof window.showExtensionAlert === 'undefined') {
             },
         };
 
-        if (!await getStorageItem("settings")) {
-            await setStorageItem("settings", defaultSettings);
+        if (!await UcursedntUtils.Storage.get("settings")) {
+            await UcursedntUtils.Storage.set("settings", defaultSettings);
         }
     }
 
@@ -581,7 +511,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
     // Crear el menú de características
     async function createFeatureMenu() {
-        const settings = await getStorageItem("settings");
+        const settings = await UcursedntUtils.Storage.get("settings");
         const features = settings.features;
 
         const menuElement = document.createElement("div");
@@ -638,7 +568,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
             checkbox.className = "feature-checkbox";
             checkbox.addEventListener("change", async (e) => {
                 features[feature.id] = e.target.checked;
-                await setStorageItem("settings", settings);
+                await UcursedntUtils.Storage.set("settings", settings);
                 featureElement.className = `feature-group ${e.target.checked ? 'enabled' : ''}`;
                 statusSpan.textContent = e.target.checked ? 'Activado' : 'Desactivado';
                 statusSpan.className = `feature-status ${e.target.checked ? 'enabled' : 'disabled'}`;
@@ -763,7 +693,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         saveBtn.innerHTML = '<i class="fa-regular fa-save"></i> Guardar Configuración';
 
         // Load existing settings
-        const aiSettings = await getStorageItem('aiChatSettings') || {};
+        const aiSettings = await UcursedntUtils.Storage.get('aiChatSettings') || {};
         const defaultSystemInstructions = window.aiChatPopup?.getDefaultSystemInstructions?.() || `System Prompt: Asistente Virtual de U-Cursos
 
 1. PERSONA
@@ -846,7 +776,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 isMinimized: true
             };
 
-            await setStorageItem('aiChatSettings', settings);
+            await UcursedntUtils.Storage.set('aiChatSettings', settings);
             
             // Update the chat popup if it exists
             if (window.aiChatPopup) {
@@ -901,7 +831,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         container.className = 'sound-config-section';
 
         const defaultVideoId = '_Z3ra0CxCE0';
-        const soundSettings = await getStorageItem('taskSubmissionSoundSettings') || {};
+        const soundSettings = await UcursedntUtils.Storage.get('taskSubmissionSoundSettings') || {};
         const currentVideoId = soundSettings.videoId || defaultVideoId;
 
         const header = document.createElement('div');
@@ -950,7 +880,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                     return;
                 }
             }
-            await setStorageItem('taskSubmissionSoundSettings', { videoId });
+            await UcursedntUtils.Storage.set('taskSubmissionSoundSettings', { videoId });
             saveBtn.innerHTML = '<i class="fa-regular fa-check"></i> ¡Guardado!';
             saveBtn.classList.remove('btn-success');
             saveBtn.classList.add('btn-primary');
@@ -998,7 +928,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
             const clearConfirmed = confirm('¿Estás seguro que quieres borrar el almacenamiento interno? Esta acción no puede revertirse.');
         
             if (clearConfirmed) {
-                await clearChromeStorage();
+                await UcursedntUtils.Storage.clear();
                 console.log('Chrome storage cleared!');
                 await initSettings();
                 console.log('Settings initialized!');
@@ -1020,7 +950,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         // Función para actualizar la lista del almacenamiento Chrome
         async function updateChromeStorageList() {
             chromeStorageList.innerHTML = '';
-            const storageItems = await getAllChromeStorageItems();
+            const storageItems = await UcursedntUtils.Storage.getAll();
             
             Object.keys(storageItems).forEach(key => {
                 const value = JSON.stringify(storageItems[key]);
@@ -1045,7 +975,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                     e.stopPropagation();
                     const deleteConfirmed = confirm(`¿Estás seguro que quieres borrar "${key}" del almacenamiento local?`);
                     if (deleteConfirmed) {
-                        await removeChromeStorageItem(key);
+                        await UcursedntUtils.Storage.remove(key);
                         await updateChromeStorageList();
                     }
                 });
@@ -1081,7 +1011,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
     await initPage();
 
     // Log all storage items for debugging
-    const storageItems = await getAllChromeStorageItems();
+    const storageItems = await UcursedntUtils.Storage.getAll();
     Object.keys(storageItems).forEach(key => {
         const value = JSON.stringify(storageItems[key]);
         console.log(`Key: ${key}, Value: ${value}`);

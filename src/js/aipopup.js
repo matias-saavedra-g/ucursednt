@@ -69,9 +69,8 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 - Seguro y Confiable: Proporciona información con seguridad, pero sé humilde cuando no conoces una respuesta.
 - Proactivo y Orientador: No te limites a responder; si es pertinente, ofrece consejos adicionales o sugiere funcionalidades relacionadas que podrían ser útiles para el usuario.`;
 
-// Fallback if extensionUtils.js is not loaded
-if (typeof isExtensionContextValid === 'undefined') {
-    window.isExtensionContextValid = function() {
+if (typeof UcursedntUtils.Browser.isExtensionContextValid === 'undefined') {
+    window.UcursedntUtils.Browser.isExtensionContextValid = function() {
         try {
             return browser.runtime && browser.runtime.id;
         } catch (error) {
@@ -80,11 +79,9 @@ if (typeof isExtensionContextValid === 'undefined') {
     };
 }
 
-// Use utility functions from extensionUtils.js if available, otherwise create fallbacks
-const { safeChromeStorageGet, safeChromeStorageSet, isExtensionContextValid: contextCheck } = window.extensionUtils || {};
 
-// Fallback functions if extensionUtils is not available
-const safeChromeStorageGetFn = safeChromeStorageGet || ((key) => new Promise(resolve => {
+
+const safeChromeStorageGetFn = UcursedntUtils.Storage.get || ((key) => new Promise(resolve => {
     try {
         browser.storage.sync.get([key]).then(result => resolve(result[key] || null));
     } catch (error) {
@@ -93,7 +90,7 @@ const safeChromeStorageGetFn = safeChromeStorageGet || ((key) => new Promise(res
     }
 }));
 
-const safeChromeStorageSetFn = safeChromeStorageSet || ((key, value) => new Promise(resolve => {
+const safeChromeStorageSetFn = UcursedntUtils.Storage.set || ((key, value) => new Promise(resolve => {
     try {
         browser.storage.sync.set({ [key]: value }, resolve);
     } catch (error) {
@@ -165,7 +162,7 @@ const safeChromeLocalRemove = (key) => new Promise(resolve => {
 async function loadChatData() {
     try {
         console.log('Loading chat data...');
-        console.log('extensionUtils available:', !!window.extensionUtils);
+        
         
         // Load settings
         console.log('Loading settings...');
@@ -508,8 +505,7 @@ function showError(message) {
 
 // Initialize the page
 function initializePage() {
-    // Wait a bit for extensionUtils to load
-    setTimeout(() => {
+        setTimeout(() => {
         loadChatData();
         loadChatsHistory();
     }, 100);

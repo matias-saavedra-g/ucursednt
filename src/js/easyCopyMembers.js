@@ -3,40 +3,13 @@
 (async function() {
 
     // Función para establecer un dato en Chrome Storage
-    async function setStorageItem(key, value) {
-        try {
-            await browser.storage.sync.set({ [key]: value });
-        } catch (error) {
-            console.error('Error setting Chrome storage item:', error);
-        }
-    }
+    
 
     // Función para obtener un dato de Chrome Storage
-    async function getStorageItem(key) {
-        try {
-            const result = await browser.storage.sync.get([key]);
-            return result[key] || null;
-        } catch (error) {
-            console.error('Error getting Chrome storage item:', error);
-            return null;
-        }
-    }
+    
 
     // Función para copiar texto al portapapeles
-    function copyToClipboard(text) {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.select();
-        navigator.clipboard.writeText(textArea.value)
-            .then(() => {
-                console.log('Text copied to clipboard');
-            })
-            .catch(err => {
-                console.error('Error in copying text: ', err);
-            });
-        document.body.removeChild(textArea);
-    }
+    
 
     // Función para obtener los nombres de los integrantes de una categoría
     function getIntegrantes(categoria) {
@@ -66,7 +39,7 @@
         }
 
         // Copiar al portapapeles y mostrar alerta con el nombre de la categoría
-        copyToClipboard(text);
+        UcursedntUtils.DOM.copyToClipboard(text);
         const nombreCategoria = document.querySelector(`tbody:nth-child(${categoria-1}) > tr > td`).textContent.trim();
         console.log(`Integrantes de la categoría ${nombreCategoria} copiados al portapapeles en formato ${formato}`);
 
@@ -131,7 +104,7 @@
         }
     }
 
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     const easyCopyMembersConfig = settings?.features?.easyCopyMembers;
     if (!settings || !easyCopyMembersConfig) {
         return;

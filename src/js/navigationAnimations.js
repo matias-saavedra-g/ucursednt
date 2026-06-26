@@ -1,36 +1,9 @@
 (async function() {
     // Check if extension context is still valid
-    function isExtensionContextValid() {
-        try {
-            return browser.runtime && browser.runtime.id;
-        } catch (error) {
-            return false;
-        }
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                if (!isExtensionContextValid()) {
-                    console.log('Extension context invalidated, returning null');
-                    resolve(null);
-                    return;
-                }
-                
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                console.log('Extension context error in getStorageItem:', error);
-                resolve(null);
-            }
-        });
-    }
+    
 
     // Function to add macOS dock-like animations to the navigation menu
     function addNavigationAnimations() {
@@ -113,7 +86,7 @@
     // Main execution with error handling
     try {
         // Check if navigationAnimations feature is enabled
-        const settings = await getStorageItem("settings");
+        const settings = await UcursedntUtils.Storage.get("settings");
         if (settings && settings.features && settings.features.navigationAnimations === false) {
             console.log('Navigation animations feature is disabled');
             return;

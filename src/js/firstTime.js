@@ -20,49 +20,26 @@ if (typeof window.showExtensionAlert === 'undefined') {
 (async function() {
 
 // Función para establecer un dato en Chrome Storage
-async function setStorageItem(key, value) {
-    try {
-        await browser.storage.sync.set({ [key]: value });
-    } catch (error) {
-        console.error('Error setting Chrome storage item:', error);
-    }
-}
+
 
 // Función para obtener un dato de Chrome Storage
-async function getStorageItem(key) {
-    try {
-        const result = await browser.storage.sync.get([key]);
-        return result[key] || null;
-    } catch (error) {
-        console.error('Error getting Chrome storage item:', error);
-        return null;
-    }
-}
+
 
 // Function to build the correct tasks URL
-async function getTasksUrl() {
-    const userId = await getStorageItem('userId');
-    
-    if (userId) {
-        return `https://www.u-cursos.cl/usuario/${userId}/tareas_usuario/`;
-    }
-    
-    // Fallback URLs if userId is not available
-    return null;
-}
+
 
 // Note: User data extraction is now handled by userDataCapture.js
 // This file only handles first-time visit logic
 
 // Verificar si es la primera visita
-const firstVisit = await getStorageItem('firstVisit');
+const firstVisit = await UcursedntUtils.Storage.get('firstVisit');
 
 if (!firstVisit) {
     // Redirigir a la página especificada
     window.location.href = "https://www.u-cursos.cl/ucursednt/";
     
     // Establecer el indicador de primera visita en Chrome Storage
-    await setStorageItem('firstVisit', true);
+    await UcursedntUtils.Storage.set('firstVisit', true);
     
     // Mostrar el changelog popup
     showChangeLogPopup();

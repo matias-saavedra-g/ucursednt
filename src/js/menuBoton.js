@@ -18,13 +18,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
 (async function() {
 
     // Función para establecer un dato en Chrome Storage
-    async function setStorageItem(key, value) {
-        try {
-            await browser.storage.sync.set({ [key]: value });
-        } catch (error) {
-            console.error('Error setting Chrome storage item:', error);
-        }
-    }
+    
 
     // Función para obtener un dato de Chrome Storage
     /**
@@ -32,15 +26,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
      * @param {string} key - The key to retrieve the value for.
      * @returns {any} - The value associated with the key, or null if the key does not exist.
      */
-    async function getStorageItem(key) {
-        try {
-            const result = await browser.storage.sync.get([key]);
-            return result[key] || null;
-        } catch (error) {
-            console.error('Error getting Chrome storage item:', error);
-            return null;
-        }
-    }
+    
 
     // Verificar si estamos en la URL del homepage de u-cursos
     const currentUrl2 = window.location.href;
@@ -75,10 +61,10 @@ if (typeof window.showExtensionAlert === 'undefined') {
             window.location.href = newUrl;
 
             // Mostrar una alerta la primera vez que se hace clic en el botón
-            let firstClick = await getStorageItem("menuBotonFirstClick") !== true;
+            let firstClick = await UcursedntUtils.Storage.get("menuBotonFirstClick") !== true;
             if (firstClick) {
                 window.showExtensionAlert("Este es el menú de configuración de U-Cursedn't.");
-                await setStorageItem("menuBotonFirstClick", true); // Marcar que ya se mostró la alerta
+                await UcursedntUtils.Storage.set("menuBotonFirstClick", true); // Marcar que ya se mostró la alerta
             }
 
         });

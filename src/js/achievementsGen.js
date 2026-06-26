@@ -1,55 +1,13 @@
 (async function() {
 
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get all Chrome Storage items
-    function getAllChromeStorageItems() {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get(null, (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Add modern CSS styles for achievements
     function addModernAchievementStyles() {
@@ -420,8 +378,8 @@
 
     // Función para crear el showroom de logros
     async function createAdvancementsShowroom() {
-        const settings = await getStorageItem('settings');
-        const storageItems = await getAllChromeStorageItems();
+        const settings = await UcursedntUtils.Storage.get('settings');
+        const storageItems = await UcursedntUtils.Storage.getAll();
         
         const achievements = [
             { id: "easyCopyGrades", name: "Copia Fácil de Notas", description: "Logro por activar la copia fácil de notas", icon: "fa-clipboard", unlocked: settings.features.easyCopyGrades, category: "features", rarity: "common" },
@@ -615,7 +573,7 @@
     await initPage();
 
     // Log all storage items for debugging
-    const storageItems = await getAllChromeStorageItems();
+    const storageItems = await UcursedntUtils.Storage.getAll();
     Object.keys(storageItems).forEach(key => {
         const value = JSON.stringify(storageItems[key]);
         console.log(`Key: ${key}, Value: ${value}`);

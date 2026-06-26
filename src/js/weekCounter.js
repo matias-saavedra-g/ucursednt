@@ -23,27 +23,9 @@ if (typeof window.showExtensionAlert === 'undefined') {
     'use strict';
 
     // ── Storage Utilities ────────────────────────────────────────────────────
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) reject(browser.runtime.lastError);
-                    else resolve();
-                });
-            } catch (error) { reject(error); }
-        });
-    }
+    
 
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) reject(browser.runtime.lastError);
-                    else resolve(result[key] !== undefined ? result[key] : null);
-                });
-            } catch (error) { reject(error); }
-        });
-    }
+    
 
     // ── Date Utilities ───────────────────────────────────────────────────────
     function getWeek(date) {
@@ -73,19 +55,12 @@ if (typeof window.showExtensionAlert === 'undefined') {
         return false;
     }
 
-    function startOfWeek(d1) {
-        let d = new Date(d1.getTime());
-        let day = d.getDay();
-        let diff = d.getDate() - day + (day === 0 ? -6 : 1);
-        d.setDate(diff);
-        d.setHours(0, 0, 0, 0);
-        return d;
-    }
+    
 
     function weeksBetween(d1, d2) {
         let semana = 7 * 24 * 60 * 60 * 1000;
-        let start1 = startOfWeek(d1).getTime();
-        let start2 = startOfWeek(d2).getTime();
+        let start1 = UcursedntUtils.Date.startOfWeek(d1).getTime();
+        let start2 = UcursedntUtils.Date.startOfWeek(d2).getTime();
         return Math.round((start2 - start1) / semana);
     }
 
@@ -143,8 +118,8 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
         if (path.includes('/usuario/')) {
             // It's the user's personal schedule
-            const userId = await getStorageItem('userId') || 'unknown';
-            const academicInfo = await getStorageItem('currentAcademicInfo') || { year: current_date.getFullYear(), semester: current_date.getMonth() > 6 ? 2 : 1 };
+            const userId = await UcursedntUtils.Storage.get('userId') || 'unknown';
+            const academicInfo = await UcursedntUtils.Storage.get('currentAcademicInfo') || { year: current_date.getFullYear(), semester: current_date.getMonth() > 6 ? 2 : 1 };
             cacheKey = `weekCache_user_${userId}_${academicInfo.year}_${academicInfo.semester}`;
         } else {
             // It's a course schedule
@@ -159,7 +134,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
         // 4. Check Cache
         let class_weeks = [];
-        const cachedData = await getStorageItem(cacheKey);
+        const cachedData = await UcursedntUtils.Storage.get(cacheKey);
 
         if (cachedData && cachedData.class_weeks && cachedData.class_weeks.length > 0) {
             // Cache Hit: Rebuild Date objects from stored timestamps
@@ -193,7 +168,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
             class_weeks = reduceWeek(classDates);
 
             // Save array of timestamps to storage
-            await setStorageItem(cacheKey, {
+            await UcursedntUtils.Storage.set(cacheKey, {
                 class_weeks: class_weeks.map(d => d.getTime()),
                 savedAt: Date.now()
             });
@@ -215,11 +190,11 @@ if (typeof window.showExtensionAlert === 'undefined') {
         weekSpan.innerHTML += `<br><i>apróximado, comprobar si había tareas en semana de receso</i>`;
 
         // 6. Alert configuration
-        let firstHoverScheduleDate = await getStorageItem("scheduleDateFirstHover") !== true;
+        let firstHoverScheduleDate = await UcursedntUtils.Storage.get("scheduleDateFirstHover") !== true;
         async function showAlert() {
             if (firstHoverScheduleDate) {
                 window.showExtensionAlert("¡Ahora contamos semanas con precisión y guardamos la info para que cargue instantáneamente!");
-                await setStorageItem("scheduleDateFirstHover", true);
+                await UcursedntUtils.Storage.set("scheduleDateFirstHover", true);
                 firstHoverScheduleDate = false;
             }
         }
@@ -227,7 +202,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
     }
 
     // ── Init ─────────────────────────────────────────────────────────────────
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     if (settings && settings.features && settings.features.weekCounter === false) {
         return; 
     }

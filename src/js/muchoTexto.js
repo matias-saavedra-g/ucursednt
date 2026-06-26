@@ -20,38 +20,10 @@ if (typeof window.showExtensionAlert === 'undefined') {
 (async function() {
 
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     const paragraph_limit = 5;
     const text = document.getElementsByClassName('texto');
@@ -75,7 +47,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         }
     }
 
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     if (settings) {
         const muchoTextoConfig = settings.features.muchoTexto;
         if (!muchoTextoConfig) {return}
@@ -149,9 +121,9 @@ if (typeof window.showExtensionAlert === 'undefined') {
             // Añadir alerta la primera vez que se hace clic en el botón de "Es Mucho Texto"
             const showMoreButton = text[i].querySelector('.show-more-button');
             showMoreButton.addEventListener('click', async function () {
-                if (await getStorageItem("showMoreFirstClick") !== true) {
+                if (await UcursedntUtils.Storage.get("showMoreFirstClick") !== true) {
                     window.showExtensionAlert("Mucho texto...");
-                    await setStorageItem("showMoreFirstClick", true); // Marcar que ya se mostró la alerta
+                    await UcursedntUtils.Storage.set("showMoreFirstClick", true); // Marcar que ya se mostró la alerta
                 }
                 
                 // Toggle de texto corto y largo

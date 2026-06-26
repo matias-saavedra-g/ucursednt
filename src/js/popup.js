@@ -16,15 +16,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
 }
 
 // Función para copiar texto al portapapeles utilizando el API del navegador
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(function () {
-        // Alerta cuando se ha copiado correctamente el texto
-        window.showExtensionAlert('Texto copiado al portapapeles');
-    }, function (err) {
-        // Manejo de errores en caso de fallo al copiar
-        console.error('Error al copiar el texto: ', err);
-    });
-}
+
 
 // Open the AI side panel when the user clicks the "Abrir Chat IA" button.
 // chrome.sidePanel.open() must be called in response to a user gesture.
@@ -36,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
             if (tab?.id) {
-                await openExtensionSidePanel(tab.id );
+                await UcursedntUtils.Browser.openSidePanel(tab.id );
                 window.close(); // Close the popup after launching the panel
             }
         } catch (err) {
@@ -57,10 +49,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // Auto-injected cross-browser side panel opener
-async function openExtensionSidePanel(tabId) {
-    if (typeof browser !== 'undefined' && browser.sidebarAction) {
-        await browser.sidebarAction.open();
-    } else if (typeof chrome !== 'undefined' && chrome.sidePanel) {
-        await chrome.sidePanel.open({ tabId: tabId });
-    }
-}
+

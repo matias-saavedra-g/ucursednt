@@ -17,61 +17,13 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
 (async function() {
     // Check if extension context is still valid
-    function isExtensionContextValid() {
-        try {
-            return browser.runtime && browser.runtime.id;
-        } catch (error) {
-            return false;
-        }
-    }
+    
 
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                if (!isExtensionContextValid()) {
-                    console.log('Extension context invalidated, skipping storage operation');
-                    resolve();
-                    return;
-                }
-                
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                console.log('Extension context error in setStorageItem:', error);
-                resolve(); // Don't reject to avoid breaking the script
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                if (!isExtensionContextValid()) {
-                    console.log('Extension context invalidated, returning null');
-                    resolve(null);
-                    return;
-                }
-                
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                console.log('Extension context error in getStorageItem:', error);
-                resolve(null); // Return null instead of rejecting
-            }
-        });
-    }
+    
     
     // Make every section collapsable and adds a button next to each section to collapse it using fa-compress
     // and fa-expand icons with sleek animations
@@ -160,10 +112,10 @@ if (typeof window.showExtensionAlert === 'undefined') {
             section.appendChild(button);
             button.addEventListener("click", async () => {
                 // Add mouseover event for alert
-                let firstClick = await getStorageItem("collapsableMenusFirstClick") !== true;
+                let firstClick = await UcursedntUtils.Storage.get("collapsableMenusFirstClick") !== true;
                 if (firstClick) {
                     window.showExtensionAlert("Puedes expandir o colapsar las secciones haciendo click en el botón que aparece al lado de cada título.");
-                    await setStorageItem("collapsableMenusFirstClick", true); // Mark that the alert has been shown
+                    await UcursedntUtils.Storage.set("collapsableMenusFirstClick", true); // Mark that the alert has been shown
                     firstClick = false; // Update the local variable to prevent further alerts
                 }
                 
@@ -243,7 +195,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
             // Save based on CSS classes instead of display style
             state[section.innerText] = content.classList.contains("collapsed") ? "collapsed" : "expanded";
         });
-        await setStorageItem("collapsableState", state);
+        await UcursedntUtils.Storage.set("collapsableState", state);
         console.log('Saved collapsable state:', state);
     }
 
@@ -252,7 +204,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         const modulos = document.querySelector("#modulos");
         if (!modulos) return;
         
-        const state = await getStorageItem("collapsableState");
+        const state = await UcursedntUtils.Storage.get("collapsableState");
         if (!state) return;
         
         console.log('Loading collapsable state:', state);
@@ -282,7 +234,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
     // Main execution with error handling
     try {
         // Verificar si la configuración de collapsableMenus está activada
-        const settings = await getStorageItem("settings");
+        const settings = await UcursedntUtils.Storage.get("settings");
         if (settings) {
             const collapsableMenusConfig = settings.features.collapsableMenus;
             if (!collapsableMenusConfig) {return}

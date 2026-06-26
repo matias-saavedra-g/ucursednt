@@ -1,75 +1,29 @@
 (async function() {
 
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Función para obtener el nombre del curso
-    async function getCourseName() {
-        // Obtener el elemento que coincide
-        const courseNameElement = document.querySelector("#navigation-wrapper > div.curso > div > div > h1");
-
-        // Verificar si el elemento existe
-        if (!courseNameElement) { return "No se pudo encontrar el nombre del curso"; }
-
-        // Obtener el contenido de texto del elemento
-        let courseName = courseNameElement.firstChild.textContent.trim();
-
-        // Verificar si el nombre del curso ya existe en Chrome Storage
-        let courseMappings = await getStorageItem('courseMappings') || {};
-        if (courseMappings[courseName] || Object.values(courseMappings).includes(courseName)) {
-            // Si existe, recuperar el nombre original
-            courseName = Object.keys(courseMappings).find(key => courseMappings[key] === courseName) || courseName;
-        }
-
-        return courseName;
-    }
+    
 
     async function renameCourse() {
-        const courseName = await getCourseName();
+        const courseName = await UcursedntUtils.Ucursos.getCourseName();
         const newCourseName = prompt("Introduce el nuevo nombre del curso:", courseName);
     
         // Verificar si el usuario canceló la operación
         if (!newCourseName) { return; }
     
         // Guardar el nuevo nombre del curso en Chrome Storage
-        let courseMappings = await getStorageItem('courseMappings') || {};
+        let courseMappings = await UcursedntUtils.Storage.get('courseMappings') || {};
     
         // Guardar el nuevo nombre del curso en el objeto de mapeo
         courseMappings[courseName] = newCourseName;
     
         // Guardar el objeto de mapeo en Chrome Storage
-        await setStorageItem('courseMappings', courseMappings);
+        await UcursedntUtils.Storage.set('courseMappings', courseMappings);
     
         // Reemplazar el nombre del curso en todo el documento
         replaceCourseName(courseName, newCourseName);
@@ -85,7 +39,7 @@
     }
     
     async function replaceCourseNames() {
-        const renamedCourses = await getStorageItem('courseMappings');
+        const renamedCourses = await UcursedntUtils.Storage.get('courseMappings');
     
         // Verificar si hay cursos renombrados guardados
         if (!renamedCourses) { return; }
@@ -114,7 +68,7 @@
     }
     
     // Verificar si la configuración de renameCourses está activada
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     if (settings) {
         const renameCoursesSetting = settings.features.renameCourses;
         if (!renameCoursesSetting) {return}

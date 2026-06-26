@@ -2,38 +2,10 @@
 // This file provides Chrome Storage API functions as replacements for localStorage
 
 // Function to set an item in Chrome Storage
-function setStorageItem(key, value) {
-    return new Promise((resolve, reject) => {
-        try {
-            browser.storage.sync.set({ [key]: value }, () => {
-                if (browser.runtime.lastError) {
-                    reject(browser.runtime.lastError);
-                } else {
-                    resolve();
-                }
-            });
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
+
 
 // Function to get an item from Chrome Storage
-function getStorageItem(key) {
-    return new Promise((resolve, reject) => {
-        try {
-            browser.storage.sync.get([key], (result) => {
-                if (browser.runtime.lastError) {
-                    reject(browser.runtime.lastError);
-                } else {
-                    resolve(result[key] !== undefined ? result[key] : null);
-                }
-            });
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
+
 
 // Function to get multiple items from Chrome Storage
 function getStorageItems(keys) {
@@ -53,38 +25,10 @@ function getStorageItems(keys) {
 }
 
 // Function to remove an item from Chrome Storage
-function removeChromeStorageItem(key) {
-    return new Promise((resolve, reject) => {
-        try {
-            browser.storage.sync.remove([key], () => {
-                if (browser.runtime.lastError) {
-                    reject(browser.runtime.lastError);
-                } else {
-                    resolve();
-                }
-            });
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
+
 
 // Function to clear all Chrome Storage
-function clearChromeStorage() {
-    return new Promise((resolve, reject) => {
-        try {
-            browser.storage.sync.clear(() => {
-                if (browser.runtime.lastError) {
-                    reject(browser.runtime.lastError);
-                } else {
-                    resolve();
-                }
-            });
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
+
 
 // Backward compatibility functions that maintain the same interface as localStorage
 // These functions work synchronously by using cached data or async/await patterns
@@ -92,7 +36,7 @@ function clearChromeStorage() {
 // Synchronous-style functions for easier migration (using async/await internally)
 async function setLocalStorageItem(key, value) {
     try {
-        await setStorageItem(key, value);
+        await UcursedntUtils.Storage.set(key, value);
     } catch (error) {
         console.error('Error setting storage item:', error);
     }
@@ -100,7 +44,7 @@ async function setLocalStorageItem(key, value) {
 
 async function getLocalStorageItem(key) {
     try {
-        return await getStorageItem(key);
+        return await UcursedntUtils.Storage.get(key);
     } catch (error) {
         console.error('Error getting storage item:', error);
         return null;

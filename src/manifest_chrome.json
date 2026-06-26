@@ -1,7 +1,7 @@
 {
   "name": "U-Cursedn't",
   "version": "26.6.1",
-  "description": "Esta extensión agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
+  "description": "Esta extensi\u00f3n agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
   "manifest_version": 3,
   "author": "matias-saavedra-g",
   "permissions": [
@@ -26,21 +26,46 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/utilities.js", "js/popup.js"]
+      "matches": [
+        "*://*.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/popup.js"
+      ]
     },
     {
-      "matches": ["*://*.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/userDataCapture.js", "js/otrasRealizaciones.js"]
+      "matches": [
+        "*://*.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/userDataCapture.js",
+        "js/otrasRealizaciones.js"
+      ]
     },
     {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/navigationAnimations.js"],
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/navigationAnimations.js"
+      ],
       "run_at": "document_idle"
     },
     {
-      "matches": ["*://*.u-cursos.cl/*/*/*/*/*/notas/*"],
-      "js": ["js/browser-polyfill.min.js", "js/easyCopyGrades.js"],
+      "matches": [
+        "*://*.u-cursos.cl/*/*/*/*/*/notas/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/easyCopyGrades.js"
+      ],
       "run_at": "document_end"
     },
     {
@@ -48,7 +73,11 @@
         "*://*.u-cursos.cl/*/*/*/*/*/integrantes/*",
         "*://*.u-cursos.cl/*/*/*/*/*/*/*/*/integrantes/*"
       ],
-      "js": ["js/browser-polyfill.min.js", "js/easyCopyMembers.js"],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/easyCopyMembers.js"
+      ],
       "run_at": "document_end"
     },
     {
@@ -56,27 +85,34 @@
         "*://*.u-cursos.cl/usuario/*/horario/*",
         "*://*.u-cursos.cl/*/*/*/*/*/horario_curso/*"
       ],
-      "js": ["js/browser-polyfill.min.js", "js/weekCounter.js", "js/ical.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://*.u-cursos.cl/ingenieria/*/*/*/*notas/*"],
-      "js": ["js/browser-polyfill.min.js", "js/popupGrading.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://*.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/resizePreviewPDF.js"],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/weekCounter.js",
+        "js/ical.js"
+      ],
       "run_at": "document_end"
     },
     {
       "matches": [
-        "*://*.u-cursos.cl/ingenieria/2/foro_institucion/*",
-        "*://www.u-cursos.cl/ingenieria/*/*/*/*/foro/*",
-        "*://www.u-cursos.cl/uchile/4/foro_institucion/",
-        "*://www.u-cursos.cl/uchile/*/0/*/1/foro/"
+        "*://*.u-cursos.cl/ingenieria/*/*/*/*notas/*"
       ],
-      "js": ["js/browser-polyfill.min.js", "js/muchoTexto.js"],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/popupGrading.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/resizePreviewPDF.js"
+      ],
       "run_at": "document_end"
     },
     {
@@ -88,7 +124,21 @@
       ],
       "js": [
         "js/browser-polyfill.min.js",
-        "js/extensionUtils.js",
+        "js/utilities.js",
+        "js/muchoTexto.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/ingenieria/2/foro_institucion/*",
+        "*://www.u-cursos.cl/ingenieria/*/*/*/*/foro/*",
+        "*://www.u-cursos.cl/uchile/4/foro_institucion/",
+        "*://www.u-cursos.cl/uchile/*/0/*/1/foro/"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
         "js/forumInteraction.js",
         "js/forumDownload.js"
       ],
@@ -100,12 +150,22 @@
         "*://*.u-cursos.cl/ucursednt/*",
         "*://*.u-cursos.cl/logros/*"
       ],
-      "js": ["js/browser-polyfill.min.js", "js/achievementsBoton.js"],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/achievementsBoton.js"
+      ],
       "run_at": "document_end"
     },
     {
-      "matches": ["*://*.u-cursos.cl/logros/*"],
-      "js": ["js/browser-polyfill.min.js", "js/achievementsGen.js"],
+      "matches": [
+        "*://*.u-cursos.cl/logros/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/achievementsGen.js"
+      ],
       "run_at": "document_end"
     },
     {
@@ -114,67 +174,140 @@
         "*://*.u-cursos.cl/ucursednt/*",
         "*://*.u-cursos.cl/logros/*"
       ],
-      "js": ["js/browser-polyfill.min.js", "js/menuBoton.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://*.u-cursos.cl/ucursednt/*"],
-      "js": ["js/browser-polyfill.min.js", "js/menuGen.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/firstTime.js"]
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/pendingTasks.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/easyCopyCourseDetails.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/renameCourses.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/easterEgg.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/pendingNotifications.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/collapsableMenus.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*/*/*/*/*/tareas*"],
-      "js": ["js/browser-polyfill.min.js", "js/taskSubmissionSound.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/extensionUtils.js", "js/aiChatPopup.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://www.u-cursos.cl/*"],
-      "js": ["js/browser-polyfill.min.js", "js/footerCredit.js"],
-      "run_at": "document_end"
-    },
-    {
-      "matches": ["*://*.u-cursos.cl/*"],
       "js": [
         "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/menuBoton.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/ucursednt/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/menuGen.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/firstTime.js"
+      ]
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/pendingTasks.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/easyCopyCourseDetails.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/renameCourses.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/easterEgg.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/pendingNotifications.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/collapsableMenus.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*/*/*/*/*/tareas*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/taskSubmissionSound.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/aiChatPopup.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/footerCredit.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
         "js/fuzzySearchHelper.js",
         "js/fuzzySearch.js",
         "js/autoPreload.js"
@@ -192,24 +325,48 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup.html"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "popup.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     },
     {
-      "resources": ["aipopup.html", "js/aipopup.js", "js/extensionUtils.js", "css/aipopup.css"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "aipopup.html",
+        "js/aipopup.js",
+        "css/aipopup.css"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     },
     {
-      "resources": ["sidepanel.html", "js/sidepanel.js", "css/sidepanel.css"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "sidepanel.html",
+        "js/sidepanel.js",
+        "css/sidepanel.css"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     },
     {
-      "resources": ["changelog.html"],
-      "matches": ["*://www.u-cursos.cl/*"]
+      "resources": [
+        "changelog.html"
+      ],
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ]
     },
     {
-      "resources": ["images/ucursitos.png"],
-      "matches": ["*://www.u-cursos.cl/*"]
+      "resources": [
+        "images/ucursitos.png"
+      ],
+      "matches": [
+        "*://www.u-cursos.cl/*"
+      ]
     }
   ],
   "icons": {

@@ -3,21 +3,7 @@
 (async function() {
 
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
     /**
@@ -25,23 +11,9 @@
      * @param {string} key - The key to retrieve the value for.
      * @returns {Promise<any>} The value associated with the key, or null if the key does not exist.
      */
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     if (settings) {
         const popupGradingConfig = settings.features.popupGrading;
         if (!popupGradingConfig) {return}

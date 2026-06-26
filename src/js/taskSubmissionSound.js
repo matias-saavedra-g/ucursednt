@@ -4,38 +4,10 @@
 (async function() {
 
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     const currentUrl = window.location.href;
     const taskDetailRegex = /^https:\/\/www\.u-cursos\.cl\/.*\/.*\/.*\/.*\/.*\/tareas\/detalle.*/;
@@ -46,7 +18,7 @@
     }
 
     // Check if the feature is enabled in settings
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     if (settings && settings.features && !settings.features.taskSubmissionSound) {
         return; // Feature is disabled
     }
@@ -67,10 +39,10 @@
 
     // ── Redirect page: play the sound if a submission just happened ───────────
     if (!taskDetailRegex.test(currentUrl)) {
-        const pending = await getStorageItem("pendingSubmissionSound");
+        const pending = await UcursedntUtils.Storage.get("pendingSubmissionSound");
         if (pending) {
-            await setStorageItem("pendingSubmissionSound", false);
-            const soundSettings = await getStorageItem("taskSubmissionSoundSettings");
+            await UcursedntUtils.Storage.set("pendingSubmissionSound", false);
+            const soundSettings = await UcursedntUtils.Storage.get("taskSubmissionSoundSettings");
             const videoId = (soundSettings && soundSettings.videoId) ? soundSettings.videoId : '_Z3ra0CxCE0';
             playYouTubeAudio(videoId);
             console.log('🎉 Task submission sound played!');
@@ -107,7 +79,7 @@
 
         button.addEventListener('click', async function() {
             // Store flag so the redirect page plays the sound
-            await setStorageItem("pendingSubmissionSound", true);
+            await UcursedntUtils.Storage.set("pendingSubmissionSound", true);
 
             // Visual feedback
             const originalTransform = button.style.transform;
@@ -119,9 +91,9 @@
             setTimeout(() => { button.style.boxShadow = ''; }, 600);
 
             // Track first click achievement
-            const firstClick = await getStorageItem("taskSubmissionSoundFirstClick");
+            const firstClick = await UcursedntUtils.Storage.get("taskSubmissionSoundFirstClick");
             if (!firstClick) {
-                await setStorageItem("taskSubmissionSoundFirstClick", true);
+                await UcursedntUtils.Storage.set("taskSubmissionSoundFirstClick", true);
                 console.log('🏆 Achievement unlocked: First Task Submission Sound!');
             }
         });

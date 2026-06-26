@@ -2,28 +2,14 @@
 
 (async function() {
     // Storage utility functions
-    async function setStorageItem(key, value) {
-        try {
-            await browser.storage.sync.set({ [key]: value });
-        } catch (error) {
-            console.error('Error setting Chrome storage item:', error);
-        }
-    }
+    
 
-    async function getStorageItem(key) {
-        try {
-            const result = await browser.storage.sync.get([key]);
-            return result[key] || null;
-        } catch (error) {
-            console.error('Error getting Chrome storage item:', error);
-            return null;
-        }
-    }
+    
 
     // Check if we already have all necessary user data
-    const existingUserId = await getStorageItem('userId');
-    const existingCampus = await getStorageItem('campus');
-    const userDataCaptured = await getStorageItem('userDataCaptured');
+    const existingUserId = await UcursedntUtils.Storage.get('userId');
+    const existingCampus = await UcursedntUtils.Storage.get('campus');
+    const userDataCaptured = await UcursedntUtils.Storage.get('userDataCaptured');
 
     // If we already have both user ID and campus, or if we've marked data as captured, skip
     if (userDataCaptured || (existingUserId && existingCampus)) {
@@ -44,7 +30,7 @@
         if (userIdMatch) {
             const userId = userIdMatch[1];
             console.log('User ID detected and stored:', userId);
-            await setStorageItem('userId', userId);
+            await UcursedntUtils.Storage.set('userId', userId);
             
             // Background worker removed - no notification needed
             
@@ -75,10 +61,10 @@
             }
             
             console.log('Campus detected and stored:', campus);
-            await setStorageItem('campus', campus);
+            await UcursedntUtils.Storage.set('campus', campus);
             
             // Store additional course information
-            await setStorageItem('lastCourseInfo', {
+            await UcursedntUtils.Storage.set('lastCourseInfo', {
                 campus: campus,
                 year: year,
                 semester: semester,
@@ -144,7 +130,7 @@
         }
         
         // Store current academic period information
-        await setStorageItem('currentAcademicInfo', {
+        await UcursedntUtils.Storage.set('currentAcademicInfo', {
             year: getCurrentAcademicYear(),
             semester: getCurrentSemester(),
             timestamp: Date.now()
@@ -152,7 +138,7 @@
         
         // Mark as captured if we have both pieces of data
         if (capturedUserId && capturedCampus) {
-            await setStorageItem('userDataCaptured', true);
+            await UcursedntUtils.Storage.set('userDataCaptured', true);
             console.log('User data capture completed! UserId:', capturedUserId, 'Campus:', capturedCampus);
         } else {
             console.log('Partial user data captured. Still need:', 

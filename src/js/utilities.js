@@ -10,6 +10,11 @@
         // ── 1. Storage Utilities ─────────────────────────────────────────────
         Storage: {
             get: async function(key) {
+                // Built-in safety check
+                if (!UcursedntUtils.Browser.isExtensionContextValid()) {
+                    console.log('Extension context invalidated, returning null');
+                    return null;
+                }
                 try {
                     const result = await browser.storage.sync.get([key]);
                     return result[key] !== undefined ? result[key] : null;
@@ -20,6 +25,11 @@
             },
             
             set: async function(key, value) {
+                // Built-in safety check
+                if (!UcursedntUtils.Browser.isExtensionContextValid()) {
+                    console.log('Extension context invalidated, skipping set');
+                    return;
+                }
                 try {
                     await browser.storage.sync.set({ [key]: value });
                 } catch (error) {
@@ -84,6 +94,11 @@
         Browser: {
             isExtensionContextValid: function() {
                 return typeof browser !== 'undefined' && browser.runtime && browser.runtime.id;
+            },
+
+            safeSendRuntimeMessage: async function(message) {
+                console.log('Runtime messages disabled - background worker removed');
+                return { success: false, error: 'background_worker_removed' };
             },
 
             openSidePanel: async function(tabId) {

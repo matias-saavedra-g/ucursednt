@@ -17,38 +17,10 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
 (async function() {
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to request background fetch of notifications (removed - no background worker)
     async function requestBackgroundFetch() {
@@ -125,11 +97,11 @@ if (typeof window.showExtensionAlert === 'undefined') {
         }
 
         // Add mouseover event for alert
-        let firstHover = await getStorageItem("pendingTasksFirstHover") !== true;
+        let firstHover = await UcursedntUtils.Storage.get("pendingTasksFirstHover") !== true;
         navigationItem.addEventListener('mouseover', async function() {
             if (firstHover) {
                 window.showExtensionAlert('¡Ahora te notificamos de tus tareas pendientes! Sugerimos definir "Tareas" como la página de inicio de U-Cursos.');
-                await setStorageItem("pendingTasksFirstHover", true); // Mark that the alert has been shown
+                await UcursedntUtils.Storage.set("pendingTasksFirstHover", true); // Mark that the alert has been shown
                 firstHover = false; // Update the local variable to prevent further alerts
             }
         });
@@ -137,7 +109,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
     // Function to refresh notifications display
     async function refreshNotifications() {
-        const pendingTasksCount = await getStorageItem("pendingTasksCount");
+        const pendingTasksCount = await UcursedntUtils.Storage.get("pendingTasksCount");
         if (pendingTasksCount !== null) {
             await notifyPendingTasks(pendingTasksCount);
         }
@@ -146,7 +118,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
     // Listen for updates from background worker (removed - no background worker)
     // browser.runtime.onMessage.addListener removed
 
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     if (settings && settings.features && settings.features.pendingTasks) {
         // URL pattern for tasks page (user ID format only)
         const tasksUrlPattern = /https:\/\/www\.u-cursos\.cl\/usuario\/[a-f0-9]+\/tareas_usuario/;
@@ -158,12 +130,12 @@ if (typeof window.showExtensionAlert === 'undefined') {
         if (isOnTasksPage) {
             console.log('On tasks page, counting local tasks');
             const pendingCount = countPendingTasks();
-            await setStorageItem("pendingTasksCount", pendingCount);
+            await UcursedntUtils.Storage.set("pendingTasksCount", pendingCount);
             // Background worker removed - no background fetch
         }
         
         // Always display current stored count
-        const pendingTasksCount = await getStorageItem("pendingTasksCount");
+        const pendingTasksCount = await UcursedntUtils.Storage.get("pendingTasksCount");
         await notifyPendingTasks(pendingTasksCount || 0);
         
         // Background worker removed - no fresh data requests

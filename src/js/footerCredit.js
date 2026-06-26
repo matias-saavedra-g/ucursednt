@@ -4,16 +4,10 @@
 (async function() {
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve) => {
-            browser.storage.sync.get([key], (result) => {
-                resolve(result[key] || null);
-            });
-        });
-    }
+    
 
     // Check if the feature is enabled in settings
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     if (settings && settings.features && !settings.features.footerCredit) {
         return; // Feature is disabled
     }

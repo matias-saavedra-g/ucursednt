@@ -3,54 +3,13 @@
 (async function() {
 
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Función para copiar texto al portapapeles
-    function copyToClipboard(text) {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.select();
-        navigator.clipboard.writeText(textArea.value)
-            .then(() => {
-                console.log('Text copied to clipboard');
-            })
-            .catch(err => {
-                console.error('Error in copying text: ', err);
-            });
-        document.body.removeChild(textArea);
-    }
+    
 
     // Función para obtener las notas del alumno
     function getNotas() {
@@ -82,7 +41,7 @@
         }
 
         // Copiar al portapapeles y mostrar alerta
-        copyToClipboard(text);
+        UcursedntUtils.DOM.copyToClipboard(text);
         console.log('Notas copiadas al portapapeles en formato ' + formato);
 
         // Cambia el ícono del botón de acuerdo con su formato a un checkmark por 2 segundos
@@ -157,7 +116,7 @@
         }
     }
 
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     const easyCopyGradesConfig = settings?.features?.easyCopyGrades;
     if (!settings || !easyCopyGradesConfig) {
         return;

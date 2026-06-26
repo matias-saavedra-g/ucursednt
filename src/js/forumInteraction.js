@@ -11,15 +11,7 @@
     window.forumInteractionLoaded = true;
 
     // Import utility functions
-    const { safeChromeStorageGet, safeChromeStorageSet, isExtensionContextValid } = window.extensionUtils || {
-        safeChromeStorageGet: (key) => new Promise(resolve => {
-            browser.storage.sync.get([key]).then(result => resolve(result[key] || null));
-        }),
-        safeChromeStorageSet: (key, value) => new Promise(resolve => {
-            browser.storage.sync.set({ [key]: value }, resolve);
-        }),
-        isExtensionContextValid: () => true
-    };
+
 
     // CSS Selectors for forum elements
     const SELECTORS = {
@@ -34,15 +26,12 @@
     };
 
     // Check if we're on a forum page
-    function isForumPage() {
-        const path = window.location.pathname;
-        return path.includes('/foro/') || path.includes('/foro_');
-    }
+    
 
     // Check extension settings
     async function checkSettings() {
         try {
-            const settings = await safeChromeStorageGet("settings");
+            const settings = await UcursedntUtils.Storage.get("settings");
             if (settings && settings.features && settings.features.forumInteraction === false) {
                 return false;
             }
@@ -101,31 +90,7 @@ ${postData.content}`;
     }
 
     // Copy text to clipboard
-    async function copyToClipboard(text) {
-        try {
-            await navigator.clipboard.writeText(text);
-            return true;
-        } catch (error) {
-            console.error('Error copying to clipboard:', error);
-            // Fallback method
-            try {
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                textArea.style.position = 'fixed';
-                textArea.style.left = '-999999px';
-                textArea.style.top = '-999999px';
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                const successful = document.execCommand('copy');
-                document.body.removeChild(textArea);
-                return successful;
-            } catch (fallbackError) {
-                console.error('Fallback copy method failed:', fallbackError);
-                return false;
-            }
-        }
-    }
+    
 
     // Send text to AI chat popup
     function sendToAIChat(text) {
@@ -229,7 +194,7 @@ ${postData.content}`;
         const postData = extractPostData(postElement);
         const formattedText = formatPostAsText(postData, false);
         
-        const success = await copyToClipboard(formattedText);
+        const success = await UcursedntUtils.DOM.copyToClipboard(formattedText);
         
         if (success) {
             showLinkFeedback(linkElement, '<span class="fa fa-check"></span> ¡Copiado!');
@@ -258,7 +223,7 @@ ${postData.content}`;
         const threadData = Array.from(posts).map(post => extractPostData(post));
         const formattedText = formatThreadAsText(threadData);
         
-        const success = await copyToClipboard(formattedText);
+        const success = await UcursedntUtils.DOM.copyToClipboard(formattedText);
         
         if (success) {
             showLinkFeedback(trigger, '<i class="fa-regular fa-check"></i> ¡Copiado!');
@@ -475,7 +440,7 @@ ${postData.content}`;
     // Initialize forum interaction features
     async function initializeForumInteraction() {
         // Check if we're on a forum page
-        if (!isForumPage()) {
+        if (!UcursedntUtils.Ucursos.isForumPage()) {
             return;
         }
 

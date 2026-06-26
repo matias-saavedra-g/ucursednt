@@ -26,37 +26,17 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
     // ── Guard: only run on forum pages ────────────────────────────────────────
 
-    function isForumPage() {
-        return /\/(foro[_\/])/.test(window.location.pathname);
-    }
+    
 
-    if (!isForumPage()) return;
+    if (!UcursedntUtils.Ucursos.isForumPage()) return;
 
     // ── Settings check ────────────────────────────────────────────────────────
 
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) reject(browser.runtime.lastError);
-                    else resolve(result[key] !== undefined ? result[key] : null);
-                });
-            } catch (e) { reject(e); }
-        });
-    }
+    
 
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) reject(browser.runtime.lastError);
-                    else resolve();
-                });
-            } catch (e) { reject(e); }
-        });
-    }
+    
 
-    const settings = await getStorageItem('settings');
+    const settings = await UcursedntUtils.Storage.get('settings');
     if (settings && settings.features && settings.features.forumDownload === false) return;
 
     // ── URL helpers ───────────────────────────────────────────────────────────
@@ -183,9 +163,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         }).join('\n\n\n');
     }
 
-    function toJSON(threads) {
-        return JSON.stringify(threads, null, 2);
-    }
+    
 
     function csvEscape(val) {
         const s = String(val == null ? '' : val).replace(/"/g, '""');
@@ -540,8 +518,8 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
             // Achievement: first forum download
             try {
-                const stored = await getStorageItem('forumDownloadFirstUse');
-                if (!stored) await setStorageItem('forumDownloadFirstUse', true);
+                const stored = await UcursedntUtils.Storage.get('forumDownloadFirstUse');
+                if (!stored) await UcursedntUtils.Storage.set('forumDownloadFirstUse', true);
             } catch (_) {}
         }
 

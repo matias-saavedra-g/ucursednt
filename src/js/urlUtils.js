@@ -1,32 +1,15 @@
 // urlUtils.js - Utility functions for building U-Cursos URLs
 
 // Storage utility functions
-async function getStorageItem(key) {
-    try {
-        const result = await browser.storage.sync.get([key]);
-        return result[key] || null;
-    } catch (error) {
-        console.error('Error getting Chrome storage item:', error);
-        return null;
-    }
-}
+
 
 // Function to build the correct tasks URL based on stored user data
-async function getTasksUrl() {
-    const userId = await getStorageItem('userId');
-    
-    if (userId) {
-        return `https://www.u-cursos.cl/usuario/${userId}/tareas_usuario/`;
-    }
-    
-    // No fallback URLs - tasks will ALWAYS be in user ID format
-    return null;
-}
+
 
 // Function to build course-specific URLs
 async function getCourseUrl(courseId, courseSubId, path = '') {
-    const campus = await getStorageItem('campus');
-    const academicInfo = await getStorageItem('currentAcademicInfo');
+    const campus = await UcursedntUtils.Storage.get('campus');
+    const academicInfo = await UcursedntUtils.Storage.get('currentAcademicInfo');
     
     if (campus && academicInfo && courseId && courseSubId) {
         const baseUrl = `https://www.u-cursos.cl/${campus}/${academicInfo.year}/${academicInfo.semester}/${courseId}/${courseSubId}`;

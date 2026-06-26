@@ -16,7 +16,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'openSidePanel') {
         browser.tabs.query({ active: true, currentWindow: true }, tabs => {
             if (tabs[0]?.id) {
-                openExtensionSidePanel(tabs[0].id );
+                UcursedntUtils.Browser.openSidePanel(tabs[0].id );
             }
         });
         sendResponse({ success: true });
@@ -95,10 +95,4 @@ browser.runtime.onStartup.addListener(() => {
 
 
 // Auto-injected cross-browser side panel opener
-async function openExtensionSidePanel(tabId) {
-    if (typeof browser !== 'undefined' && browser.sidebarAction) {
-        await browser.sidebarAction.open();
-    } else if (typeof chrome !== 'undefined' && chrome.sidePanel) {
-        await chrome.sidePanel.open({ tabId: tabId });
-    }
-}
+

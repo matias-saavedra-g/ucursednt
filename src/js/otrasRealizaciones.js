@@ -18,21 +18,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
 (async function() {
 
     // Function to set an item in Chrome Storage
-    function setStorageItem(key, value) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.set({ [key]: value }, () => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve();
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
     // Function to get an item from Chrome Storage
     /**
@@ -40,23 +26,9 @@ if (typeof window.showExtensionAlert === 'undefined') {
      * @param {string} key - The key of the item to retrieve from the Chrome storage.
      * @returns {Promise<any>} - The retrieved item, or null if the item does not exist.
      */
-    function getStorageItem(key) {
-        return new Promise((resolve, reject) => {
-            try {
-                browser.storage.sync.get([key], (result) => {
-                    if (browser.runtime.lastError) {
-                        reject(browser.runtime.lastError);
-                    } else {
-                        resolve(result[key] !== undefined ? result[key] : null);
-                    }
-                });
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
+    
 
-    const settings = await getStorageItem("settings");
+    const settings = await UcursedntUtils.Storage.get("settings");
     if (settings) {
         const otrasRealizacionesConfig = settings.features.otrasRealizaciones;
         if (!otrasRealizacionesConfig) {return}
@@ -90,10 +62,10 @@ if (typeof window.showExtensionAlert === 'undefined') {
             window.location.href = newUrl;
 
             // Mostrar una alerta la primera vez que se hace clic en el botón
-            let firstClick = await getStorageItem("otherRealizationsFirstClick") !== true;
+            let firstClick = await UcursedntUtils.Storage.get("otherRealizationsFirstClick") !== true;
             if (firstClick) {
                 window.showExtensionAlert("¡Nuevo atajo desbloqueado!");
-                await setStorageItem("otherRealizationsFirstClick", true); // Marcar que ya se mostró la alerta
+                await UcursedntUtils.Storage.set("otherRealizationsFirstClick", true); // Marcar que ya se mostró la alerta
             }
         });
 
