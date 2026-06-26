@@ -29,6 +29,95 @@ Extensión para mejorar tu experiencia en U-Cursos
         <div class="changelog-section">
             <div class="version-header">
                 <div class="version-title">
+                    <span class="version-number">Versión 26.6.1</span>
+                    <span class="version-date">Junio 2026</span>
+                    <span class="version-badge badge-major">Major</span>
+                </div>
+                <div class="version-description">
+                    Soporte oficial para Mozilla Firefox MV3, refactorización global de arquitectura (DRY), Fuzzy Search, Infinite Scroll y pipeline de empaquetado seguro.
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-added">+</div>
+                        Nuevas Características
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Compatibilidad con Mozilla Firefox:</strong> Adaptación completa del manifiesto a las especificaciones de Gecko. Reemplazo de Service Workers por Event Pages (`background.scripts`), re-estructuración de la barra lateral mediante `sidebar_action` y declaración explícita de `data_collection_permissions` para auditorías de privacidad.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Búsqueda Difusa en Navegación (Fuzzy Search):</strong> Incorporación de la utilidad global `fuzzySearch.js` y `fuzzySearchHelper.js` para filtrar dinámicamente cualquier menú o listado (historial, foros, ramos) mediante coincidencia secuencial de caracteres de manera no-estricta.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Autocarga Asíncrona (Infinite Scroll):</strong> Añadido `autoPreload.js` acoplado a un `IntersectionObserver` que carga las siguientes páginas de hilos en foros o registros en el historial de manera fluida a demanda de scroll. Cuenta con codificación inteligente automática para caracteres latinos (tildes, eñes) y un filtro anti-duplicación de DOM por ID y Anchor.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Módulo de Silencio "Tour Guide":</strong> Añadido switch maestro en la configuración global para deshabilitar las alertas informativas recurrentes de descubrimiento de funciones.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-improved">↑</div>
+                        Mejoras y Optimizaciones
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Persistencia de Calendario y Multi-vista:</strong> El `weekCounter.js` fue reescrito para leer la fecha directamente de los parámetros de URL, haciéndolo compatible con los modos Mes, Semana, Día y Agenda. Ahora escanea todas las celdas del mini-mapa d3 para no fallar si el usuario solo tiene clases en días específicos (o sábados), guardando el estado en un caché semestral indexado para un renderizado inmediato.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Estandarización de Promesas de Almacenamiento:</strong> Removidos los viejos e inestables callbacks asíncronos vinculados a `chrome.runtime.lastError`. Toda la extensión opera ahora bajo promesas nativas de la API `browser.*` a través de la inyección de `browser-polyfill.min.js`.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-technical">🔧</div>
+                        Mejoras Técnicas y de Arquitectura
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Consolidación DRY de Código:</strong> Eliminado por completo el script redundante `extensionUtils.js`. Se creó la librería centralizada `utilities.js` organizada en sub-namespaces (`Storage`, `DOM`, `Browser`, `Ucursos`, `Date`) inyectada globalmente al inicio de los manifiestos, incluyendo cláusulas de escape automáticas para evitar excepciones por invalidación de contexto.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Pipeline Avanzada de Build y Linters:</strong> El script `build.py` ahora integra un sistema de análisis estático que detiene la compilación si detecta JSONs mal formados o comas consecutivas en JS. Excluye automáticamente archivos basura de desarrollo (`*.old`, caches de python) y gestiona un archivo rotativo temporal (`/archive`) limitado de manera estricta a las últimas 3 versiones empaquetadas.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
                     <span class="version-number">Versión 26.3.4</span>
                     <span class="version-date">Marzo 2026</span>
                     <span class="version-badge badge-hotfix">Hotfix</span>
