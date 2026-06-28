@@ -10,7 +10,7 @@
     try {
         const result = await browser.storage.sync.get(['settings']);
         if (result.settings && result.settings.features && result.settings.features.autoPreloadPages === false) {
-            return; // Feature disabled
+            return;
         }
     } catch (error) {
         console.error('Error loading autoPreload settings:', error);
@@ -23,14 +23,12 @@
     
     if (!pager || existingItems.length === 0) return;
 
-    // Track URLs to prevent duplicate fetching
     const visitedUrls = new Set([window.location.href.split('#')[0]]);
     const urlsToLoad = [];
 
-    // Helper to queue new URLs from paginators
     function queuePaginationLinks(context) {
         const links = Array.from(context.querySelectorAll('.paginas.no-movil a'))
-            .map(a => a.href.split('#')[0]) // ignore hash fragments
+            .map(a => a.href.split('#')[0])
             .filter(href => href && !href.includes('javascript'));
         
         links.forEach(url => {
@@ -40,17 +38,15 @@
         });
     }
 
-    // Queue initial links
     queuePaginationLinks(document);
-    
-    if (urlsToLoad.length === 0) return; // No more pages to load
+    if (urlsToLoad.length === 0) return;
 
     let isFetching = false;
 
-    // ── 3. Sentinel Setup for Intersection Observer ──────────────────────────
+    // ── 3. Sentinel Setup ────────────────────────────────────────────────────
     const sentinel = document.createElement('div');
     sentinel.id = 'ucursednt-preload-sentinel';
-    sentinel.style.height = '40px'; // Slightly larger target for smooth detection
+    sentinel.style.height = '40px';
     
     const lastItem = existingItems[existingItems.length - 1];
     lastItem.parentNode.insertBefore(sentinel, lastItem.nextSibling);
@@ -58,11 +54,8 @@
     // ── 4. Fetch and Append Logic ────────────────────────────────────────────
     async function fetchNextPage() {
         if (isFetching || urlsToLoad.length === 0) return;
-        
-        // Lock to prevent race conditions during rapid scrolling
         isFetching = true;
         
-        // Grab exactly 1 page from the front of the queue
         const nextUrl = urlsToLoad.shift();
         visitedUrls.add(nextUrl);
 
@@ -72,8 +65,6 @@
             const response = await fetch(nextUrl);
             if (!response.ok) throw new Error('Network response was not ok');
             
-            // ── ENCODING FIX ──
-            // Dynamically decode based on U-Cursos headers to preserve ñ and tildes
             const buffer = await response.arrayBuffer();
             let charset = 'utf-8';
             const contentType = response.headers.get('content-type');
@@ -86,32 +77,23 @@
             const doc = new DOMParser().parseFromString(html, 'text/html');
             const newItems = doc.querySelectorAll(itemSelector);
             
-            // ── ANTI-DUPLICATION & APPENDING ──
             newItems.forEach(item => {
                 let isDuplicate = false;
-                
-                // Check 1: For forum posts with specific IDs (e.g., raiz_12345)
                 if (item.id && document.getElementById(item.id)) {
                     isDuplicate = true;
-                } 
-                // Check 2: For generic list items, check if we already have the main anchor link
-                else {
+                } else {
                     const anchor = item.querySelector('a');
                     if (anchor && document.querySelector(`a[href="${anchor.getAttribute('href')}"]`)) {
                         isDuplicate = true;
                     }
                 }
-
-                // Append only if it's completely new
                 if (!isDuplicate) {
                     sentinel.parentNode.insertBefore(item.cloneNode(true), sentinel);
                 }
             });
 
-            // Extract new pagination links from the fetched page to keep infinite scroll going
             queuePaginationLinks(doc);
 
-            // Re-trigger the fuzzy search if there's active text in the search bar
             const searchInput = document.querySelector('#__fuzzy_q');
             if (searchInput && searchInput.value.trim() !== '') {
                 searchInput.dispatchEvent(new Event('input', { bubbles: true }));
@@ -122,25 +104,31 @@
         } finally {
             pager.style.opacity = '1';
             
-            // Hide the paginator entirely if we ran out of pages
             if (urlsToLoad.length === 0) {
                 pager.style.display = 'none';
+                observer.disconnect(); // ✅ Clean up: no more pages, no need to observe
+                return;
             }
-            
-            // Release the lock after DOM has settled
+
+            // ✅ THE FIX: Force the observer to re-evaluate the sentinel's
+            // intersection state by disconnecting and re-observing.
+            // This is necessary because inserting nodes before the sentinel
+            // moves it in the DOM without triggering a new intersection event.
             setTimeout(() => {
                 isFetching = false;
-            }, 100); 
+                observer.unobserve(sentinel);
+                observer.observe(sentinel);
+            }, 150); // Small delay to let the DOM paint before re-evaluating
         }
     }
 
     // ── 5. Intersection Observer ─────────────────────────────────────────────
     const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting && !isFetching) {
             fetchNextPage();
         }
     }, {
-        rootMargin: '300px', // Trigger slightly earlier to make it feel instantaneous
+        rootMargin: '300px',
         threshold: 0
     });
 
