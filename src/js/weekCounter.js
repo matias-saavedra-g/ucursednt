@@ -187,7 +187,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         const text = is_class_week ? (total_weeks - past_recess_weeks) : "Off (Receso/Feriado)";
         weekSpan.innerHTML += `<br>Semana lectiva: ${text}`;
 
-        weekSpan.innerHTML += `<br><i>apróximado, comprobar si había tareas en semana de receso</i>`;
+        weekSpan.innerHTML += `<br><i>aproximado, comprobar si había tareas en semana de receso</i>`;
 
         // 6. Alert configuration
         let firstHoverScheduleDate = await UcursedntUtils.Storage.get("scheduleDateFirstHover") !== true;
