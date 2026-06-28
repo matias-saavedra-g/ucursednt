@@ -56,7 +56,8 @@ if (typeof window.showExtensionAlert === 'undefined') {
                 aiChatPopup: true,
                 fuzzySearch: true,
                 autoPreloadPages: true,
-                tourGuide: false
+                tourGuide: false,
+                tareaPrefill: true
             },
         };
 
@@ -554,7 +555,8 @@ if (typeof window.showExtensionAlert === 'undefined') {
             { id: "aiChatPopup", name: "Chat IA Flotante", icon: "🤖", description: "Popup flotante con UCursitos para chat con IA" },
             { id: "fuzzySearch", name: "Búsqueda en Navegación", icon: "🔍", description: "Filtro rápido para el menú lateral de los cursos" },
             { id: "autoPreloadPages", name: "Autocarga de Páginas", icon: "🔄", description: "Carga automáticamente las siguientes páginas al hacer scroll" },
-            { id: "tourGuide", name: "Guía de Usuario", icon: "🗺️", description: "Mostrar alertas informativas al descubrir o interactuar con nuevas funciones" }
+            { id: "tourGuide", name: "Guía de Usuario", icon: "🗺️", description: "Mostrar alertas informativas al descubrir o interactuar con nuevas funciones" },
+            { id: "tareaPrefill", name: "Autocompletar Tareas", icon: "✍️", description: "Rellena automáticamente el tiempo invertido y un comentario al entregar una tarea" }
         ];
 
         featuresList.forEach(feature => {

@@ -1,6 +1,6 @@
 {
   "name": "U-Cursedn't",
-  "version": "26.6.1",
+  "version": "26.6.2",
   "description": "Esta extensi\u00f3n agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
   "manifest_version": 3,
   "author": "matias-saavedra-g",
@@ -289,6 +289,17 @@
         "js/browser-polyfill.min.js",
         "js/utilities.js",
         "js/taskSubmissionSound.js"
+      ],
+      "run_at": "document_end"
+    },
+        {
+      "matches": [
+        "*://*.u-cursos.cl/*/*/*/*/*/tareas/detalle*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/tareaPrefill.js"
       ],
       "run_at": "document_end"
     },

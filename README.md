@@ -43,6 +43,7 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
       - [📖 Recortar Texto Largo ("Mucho Texto")](#-recortar-texto-largo-mucho-texto)
       - [📐 Redimensionar Vista Previa de PDF](#-redimensionar-vista-previa-de-pdf)
       - [🔊 Sonido de Entrega de Tareas](#-sonido-de-entrega-de-tareas)
+      - [✍️ Autocompletar Tareas](#️-autocompletar-tareas)
       - [✨ Animaciones de Navegación](#-animaciones-de-navegación)
   - [🔔 Notificaciones y Atajos](#-notificaciones-y-atajos)
       - [Notificación de Tareas y Pendientes](#notificación-de-tareas-y-pendientes)
@@ -138,7 +139,7 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 #### 🔄 Autocarga de Páginas (Infinite Scroll)
 > Archivo: `autoPreload.js`
 
-- **轻量級 Infinite Scroll:** Detecta mediante un `IntersectionObserver` cuándo te aproximas al final del historial de un curso o un foro. Carga de manera asíncrona (1 por 1) las siguientes páginas, previniendo duplicaciones o sobrecargas y respetando la codificación nativa (UTF-8/ISO-8859-1) para tildes y eñes. Los nuevos elementos se incorporan en tiempo real al Filtro Rápido.
+- **Infinite Scroll:** Detecta mediante un `IntersectionObserver` cuándo te aproximas al final del historial de un curso o un foro. Carga de manera asíncrona (1 por 1) las siguientes páginas, previniendo duplicaciones o sobrecargas y respetando la codificación nativa (UTF-8/ISO-8859-1) para tildes y eñes. Los nuevos elementos se incorporan en tiempo real al Filtro Rápido.
 
 #### 💬 Interacción con Foros
 <img src="src/images/forumInteraction.png"/>
@@ -167,6 +168,15 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 - Recibe una gratificante confirmación sonora cada vez que interactúas con la sección de tareas.
 - Ahora activo en todas las páginas de tareas (not solo en el detalle de entrega).
 - El audio se reproduce mediante un iframe de YouTube embebido.
+
+#### ✍️ Autocompletar Tareas
+> Archivo: `tareaPrefill.js`
+
+- Rellena automáticamente el tiempo invertido y un comentario base al abrir el formulario de entrega de una tarea.
+  - Se usa $ (\Delta \text{Días}) \cdot (60 \, \text{min/día}) \cdot [\text{random}(0.8, 1.2)] $ para el tiempo invertido.
+  - Se usa el formato "Se hace entrega de <título de la tarea>".
+- Solo actúa en la vista de detalle de tareas y respeta lo que el usuario ya haya escrito.
+- Se puede activar o desactivar desde el menú de configuración de la extensión.
 
 #### ✨ Animaciones de Navegación
 <img src="src/images/navigationAnimations.gif"/>
@@ -277,6 +287,6 @@ python scripts/build.py
 
 ---
 
-> **Nota sobre el versionado:** U-Cursedn't usa un esquema de versión basado en fecha: **`AA.MM.S`**, donde `AA` es el año (dos dígitos), `MM` el mes, y `S` el número de versión dentro del mes Por ejemplo, `26.6.1` corresponde a la primera versión de junio de 2026.
+> **Nota sobre el versionado:** U-Cursedn't usa un esquema de versión basado en fecha: **`AA.MM.V`**, donde `AA` es el año (dos dígitos), `MM` el mes, y `V` el número de versión dentro del mes Por ejemplo, `26.6.1` corresponde a la primera versión de junio de 2026.
 
 > **Integración Continua y Validación:** Cada versión pasa por un proceso de linting estático pre-build integrado en Python que valida la sanidad de los JSONs, previene el uso inseguro de `innerHTML` y busca tokens de sintaxis rotos (como comas consecutivas). Conserva un historial histórico rotativo de hasta 3 versiones empaquetadas en la carpeta `/archive`.
