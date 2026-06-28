@@ -4,6 +4,7 @@ import json
 import time
 import glob
 import re
+import stat
 
 # Define absolute paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -99,6 +100,14 @@ def archive_old_builds():
                 os.remove(old_archive)
                 print(f"  🗑️  Pruned old archive: {os.path.basename(old_archive)}")
 
+def remove_tree(path):
+    """Removes a directory tree, clearing Windows read-only attributes if needed."""
+    def handle_remove_error(function, target_path, exc_info):
+        os.chmod(target_path, stat.S_IWRITE)
+        function(target_path)
+
+    shutil.rmtree(path, onerror=handle_remove_error)
+
 def build_browser_dist(browser_name, manifest_file):
     """Copies source files and applies the correct manifest for the browser."""
     print(f"🔨 Building {browser_name} extension...")
@@ -139,7 +148,7 @@ def main():
     # Clean the dist directory
     if os.path.exists(DIST_DIR):
         print("🧹 Cleaning old dist/ directory...")
-        shutil.rmtree(DIST_DIR)
+        remove_tree(DIST_DIR)
     
     os.makedirs(DIST_DIR)
     print()
