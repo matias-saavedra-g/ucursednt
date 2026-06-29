@@ -11,7 +11,7 @@
         Storage: {
             get: async function(key) {
                 // Built-in safety check
-                if (!UcursedntUtils.Browser.isExtensionContextValid()) {
+                if (!window.UcursedntUtils.Browser.isExtensionContextValid()) {
                     console.log('Extension context invalidated, returning null');
                     return null;
                 }
@@ -26,7 +26,7 @@
             
             set: async function(key, value) {
                 // Built-in safety check
-                if (!UcursedntUtils.Browser.isExtensionContextValid()) {
+                if (!window.UcursedntUtils.Browser.isExtensionContextValid()) {
                     console.log('Extension context invalidated, skipping set');
                     return;
                 }
@@ -119,8 +119,14 @@
             },
 
             getCourseName: function() {
-                const titleEl = document.querySelector('.curso h1, .curso h2');
-                return titleEl ? titleEl.textContent.trim() : 'Curso Desconocido';
+                const h1 = document.querySelector('.curso h1');
+                if (!h1) return null;
+
+                return Array.from(h1.childNodes)
+                    .filter(node => node.nodeType === Node.TEXT_NODE)
+                    .map(node => node.nodeValue)
+                    .join('')
+                    .trim();
             },
 
             getTasksUrl: function(campus, year, semester, courseId, courseSubId) {
@@ -146,4 +152,37 @@
             }
         }
     };
+
+    // ── 6. GLOBAL ALIASES (Backward Compatibility) ───────────────────────
+    // Expose functions globally so existing code doesn't need to be renamed
+    
+    // Storage
+    window.getStorageItem = window.UcursedntUtils.Storage.get;
+    window.setStorageItem = window.UcursedntUtils.Storage.set;
+    window.getAllChromeStorageItems = window.UcursedntUtils.Storage.getAll;
+    window.removeChromeStorageItem = window.UcursedntUtils.Storage.remove;
+    window.clearChromeStorage = window.UcursedntUtils.Storage.clear;
+    
+    // Legacy safe storage wrappers
+    window.safeChromeStorageGet = window.UcursedntUtils.Storage.get;
+    window.safeChromeStorageSet = window.UcursedntUtils.Storage.set;
+
+    // DOM / Clipboard
+    window.copyToClipboard = window.UcursedntUtils.DOM.copyToClipboard;
+
+    // Browser Context
+    window.isExtensionContextValid = window.UcursedntUtils.Browser.isExtensionContextValid;
+    window.contextCheck = window.UcursedntUtils.Browser.isExtensionContextValid; // From AI Popup
+    window.safeSendRuntimeMessage = window.UcursedntUtils.Browser.safeSendRuntimeMessage;
+    window.openExtensionSidePanel = window.UcursedntUtils.Browser.openSidePanel;
+
+    // U-Cursos Specifics
+    window.isForumPage = window.UcursedntUtils.Ucursos.isForumPage;
+    window.getCourseName = window.UcursedntUtils.Ucursos.getCourseName;
+    window.getTasksUrl = window.UcursedntUtils.Ucursos.getTasksUrl;
+    window.toJSON = window.UcursedntUtils.Ucursos.toJSON;
+
+    // Date
+    window.startOfWeek = window.UcursedntUtils.Date.startOfWeek;
+
 })();
