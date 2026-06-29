@@ -29,6 +29,75 @@ Extensión para mejorar tu experiencia en U-Cursos
         <div class="changelog-section">
             <div class="version-header">
                 <div class="version-title">
+                    <span class="version-number">Versión 26.6.2</span>
+                    <span class="version-date">Junio 2026</span>
+                    <span class="version-badge badge-feature">Feature</span>
+                </div>
+                <div class="version-description">
+                    Autocompletado de formularios de tareas y correcciones en búsqueda, navegación, build y utilidades.
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-added">+</div>
+                        Nuevas Características
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Autocompletado de Tareas:</strong> Se añadió <code>tareaPrefill.js</code> para rellenar automáticamente el formulario de entrega en la vista de detalle de tareas. Calcula una estimación de tiempo a partir de los datos de la tarea, completa el comentario por defecto y respeta la desactivación desde la configuración de la extensión.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-improved">↑</div>
+                        Mejoras y Correcciones
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Búsqueda Difusa:</strong> Se ajustó <code>fuzzySearch.js</code> para reintegrar correctamente la inserción de resultados y el control de navegación en contenedores como <code>navdiv</code>.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Autocarga Asíncrona:</strong> Se corrigió el re-disparo de <code>autoPreload.js</code> para que el infinite scroll vuelva a cargar contenido de forma confiable.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Renombrar Cursos:</strong> Se reparó la lógica de <code>renameCourses.js</code> afectada por cambios de layout en la interfaz.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Pipeline de Build:</strong> <code>build.py</code> volvió a archivar correctamente los ZIP antiguos sin romper el proceso de empaquetado.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Corrección menor:</strong> Se corrigió un error tipográfico en <code>weekCounter.js</code> de "apróximado" a "aproximado".
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
                     <span class="version-number">Versión 26.6.1</span>
                     <span class="version-date">Junio 2026</span>
                     <span class="version-badge badge-major">Major</span>
