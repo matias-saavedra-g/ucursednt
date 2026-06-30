@@ -82,7 +82,13 @@
             botonHorizontal.style.cursor = 'pointer';
             botonHorizontal.style.marginRight = '0px';
             botonHorizontal.style.color = "inherit";
-            botonHorizontal.onclick = () => copiarIntegrantes('horizontal', categoria);
+            botonHorizontal.onclick = () => {
+                copiarIntegrantes('horizontal', categoria);
+                botonHorizontal.innerHTML = '<i class="fa-regular fa-check"></i>';
+                setTimeout(() => {
+                    botonHorizontal.innerHTML = '<i class="fa-regular fa-arrows-alt-h"></i>';
+                }, 2000);
+            };
             botonesContainer.appendChild(botonHorizontal);
 
             // Botón para copiar verticalmente
@@ -93,7 +99,13 @@
             botonVertical.style.border = 'transparent';
             botonVertical.style.cursor = 'pointer';
             botonVertical.style.color = "inherit";
-            botonVertical.onclick = () => copiarIntegrantes('vertical', categoria);
+            botonVertical.onclick = () => {
+                copiarIntegrantes('vertical', categoria);
+                botonVertical.innerHTML = '<i class="fa-regular fa-check"></i>';
+                setTimeout(() => {
+                    botonVertical.innerHTML = '<i class="fa-regular fa-arrows-alt-v"></i>';
+                }, 2000);
+            };
             botonesContainer.appendChild(botonVertical);
 
             // Insertar los botones en el contenedor de la categoría correspondiente

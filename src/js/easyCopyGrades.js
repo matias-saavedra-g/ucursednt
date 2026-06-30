@@ -84,7 +84,13 @@
         botonSuma.style.cursor = 'pointer';
         botonSuma.style.marginRight = '0px';
         botonSuma.style.color = "inherit";
-        botonSuma.onclick = () => copiarNotas('suma');
+        botonSuma.onclick = () => {
+            copiarNotas('suma');
+            botonSuma.innerHTML = '<i class="fa-regular fa-check"></i>';
+            setTimeout(() => {
+                botonSuma.innerHTML = '<i class="fa-regular fa-plus"></i>';
+            }, 1000);
+        };
         botonesContainer.appendChild(botonSuma);
 
         // Botón para copiar horizontalmente
@@ -95,7 +101,13 @@
         botonHorizontal.style.border = 'transparent';
         botonHorizontal.style.cursor = 'pointer';
         botonHorizontal.style.color = "inherit";
-        botonHorizontal.onclick = () => copiarNotas('horizontal');
+        botonHorizontal.onclick = () => {
+            copiarNotas('horizontal');
+            botonHorizontal.innerHTML = '<i class="fa-regular fa-check"></i>';
+            setTimeout(() => {
+                botonHorizontal.innerHTML = '<i class="fa-regular fa-arrows-alt-h"></i>';
+            }, 1000);
+        };
         botonesContainer.appendChild(botonHorizontal);
 
         // Botón para copiar verticalmente
@@ -106,7 +118,13 @@
         botonVertical.style.border = 'transparent';
         botonVertical.style.cursor = 'pointer';
         botonVertical.style.color = "inherit";
-        botonVertical.onclick = () => copiarNotas('vertical');
+        botonVertical.onclick = () => {
+            copiarNotas('vertical');
+            botonVertical.innerHTML = '<i class="fa-regular fa-check"></i>';
+            setTimeout(() => {
+                botonVertical.innerHTML = '<i class="fa-regular fa-arrows-alt-v"></i>';
+            }, 1000);
+        };
         botonesContainer.appendChild(botonVertical);
 
         // Insertar los botones en el contenedor de notas

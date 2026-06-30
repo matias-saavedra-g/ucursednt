@@ -36,7 +36,13 @@
         courseNameButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
         // Centra el innerHTML del botón en el centro
         courseNameButton.style.alignItems = "center";
-        courseNameButton.onclick = () => UcursedntUtils.DOM.copyToClipboard(courseName);
+        courseNameButton.onclick = () => {
+            UcursedntUtils.DOM.copyToClipboard(courseName);
+            courseNameButton.innerHTML = `<i class="fa-regular fa-check"></i>`;
+            setTimeout(() => {
+                courseNameButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
+            }, 1000);
+        };
         // Hace el fondo color #222 y opacidad 0.2
         courseNameButton.style.backgroundColor = "rgba(34, 34, 34, 0)";
         // Remueve el borde de botón
@@ -50,7 +56,13 @@
         courseCodeButton.classList.add("btn", "btn-default", "btn-sm");
         courseCodeButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
         courseCodeButton.style.alignItems = "center";
-        courseCodeButton.onclick = () => UcursedntUtils.DOM.copyToClipboard(courseCode);
+        courseCodeButton.onclick = () => {
+            UcursedntUtils.DOM.copyToClipboard(courseCode);
+            courseCodeButton.innerHTML = `<i class="fa-regular fa-check"></i>`;
+            setTimeout(() => {
+                courseCodeButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
+            }, 1000);
+        };
         courseCodeButton.style.backgroundColor = "rgba(34, 34, 34, 0)";
         courseCodeButton.style.border = "none";
         courseCodeButton.style.padding = "4px";
