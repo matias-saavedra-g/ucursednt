@@ -2,23 +2,17 @@
 
 Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales a la plataforma de [U-Cursos](https://www.u-cursos.cl/) y respectivos logros por hacer cada una de ellas. Desarrollado por [matias-saavedra-g](https://github.com/matias-saavedra-g/), basado en la idea de [Eric K](https://github.com/Nyveon), [PuntitOWO](https://github.com/PuntitOwO), [sebcp](https://github.com/sebcp), [vmkovacs](https://github.com/vmkovacs), y [TaconeoMental](https://github.com/TaconeoMental): [tU-Cursos](https://github.com/Nyveon/tU-Cursos).
 
-<!-- Google Chrome Web Store Badge Container -->
-<div style="display: inline-block; width: 206px; height: 58px; vertical-align: middle;">
-  <a href="https://chromewebstore.google.com/detail/u-cursednt/jappfnpemaaconilafnlhdkndccfkgen">
-    <img src="https://developer.chrome.com/static/docs/webstore/branding/image/YT2Grfi9vEBa2wAPzhWa.png" 
-         style="width: 100%; height: 100%; object-fit: contain;" 
-         alt="Chrome Web Store"/>
-  </a>
-</div>
+<p align="left">
+<a href="https://addons.mozilla.org/en-US/firefox/addon/u-cursedn-t/">
+    <img alt="Firefox Add-Ons" src="https://addons.mozilla.org/static-frontend/02ea754b37fd50cca41d6aa1747a3848.png" height="50">
 
-<!-- Firefox Add-on Badge Container (Cropped & Rounded) -->
-<div style="display: inline-block; width: 206px; height: 58px; border-radius: 8px; overflow: hidden; vertical-align: middle; margin-left: 10px;">
-  <a href="https://addons.mozilla.org/en-US/firefox/addon/u-cursedn-t/">
-    <img src="https://addons.mozilla.org/static-frontend/02ea754b37fd50cca41d6aa1747a3848.png" 
-         style="width: 100%; height: 100%; object-fit: cover;" 
-         alt="Firefox Add-on"/>
-  </a>
-</div>
+</a>
+
+<a href="https://chromewebstore.google.com/detail/u-cursednt/jappfnpemaaconilafnlhdkndccfkgen">
+    <img height="50" alt="image" src="https://developer.chrome.com/static/docs/webstore/branding/image/YT2Grfi9vEBa2wAPzhWa.png" />
+</a>
+</p>
+<br>
 
 
 ![Version](https://img.shields.io/badge/versión-26.6.2-blue) ![Manifest](https://img.shields.io/badge/manifest-v3-green) ![License](https://img.shields.io/github/license/matias-saavedra-g/ucursednt)
