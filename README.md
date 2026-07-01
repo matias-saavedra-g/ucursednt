@@ -4,7 +4,7 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 
 <p align="left">
 <a href="https://addons.mozilla.org/en-US/firefox/addon/u-cursedn-t/">
-    <img alt="Firefox Add-Ons" src="https://addons.mozilla.org/static-frontend/02ea754b37fd50cca41d6aa1747a3848.png" height="50">
+    <img alt="Firefox Add-Ons" src="https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png" height="50">
 
 </a>
 
