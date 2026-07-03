@@ -22,10 +22,15 @@ if (typeof window.showExtensionAlert === 'undefined') {
 (async function() {
     'use strict';
 
-    // ── Storage Utilities ────────────────────────────────────────────────────
-    
+    // ── DEBUG CONFIGURATION ──────────────────────────────────────────────────
+    const VERBOSE_DEBUG = false;
 
-    
+    function debug(...args) {
+        if (VERBOSE_DEBUG) {
+            console.log('%c[WeekCounter Debug]', 'color: #bada55; font-weight: bold;', ...args);
+        }
+    }
+    // ─────────────────────────────────────────────────────────────────────────
 
     // ── Date Utilities ───────────────────────────────────────────────────────
     function getWeek(date) {
@@ -54,8 +59,6 @@ if (typeof window.showExtensionAlert === 'undefined') {
         }
         return false;
     }
-
-    
 
     function weeksBetween(d1, d2) {
         let semana = 7 * 24 * 60 * 60 * 1000;
@@ -99,31 +102,37 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
     // ── Core Logic ───────────────────────────────────────────────────────────
     async function addCounter() {
+        debug("Script initialized. Waiting for DOM...");
+        if (document.readyState === 'loading') {
+            await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
+        }
+        debug("DOM Loaded.");
+
         // 1. Target UI element
         const weekSpan = document.querySelector('ul.paginas li.sel span');
-        if (!weekSpan) return;
+        if (!weekSpan) {
+            debug("Target UI element 'ul.paginas li.sel span' not found. Exiting.");
+            return;
+        }
 
         // 2. Fetch current date from URL parameters safely
         const urlParams = new URLSearchParams(window.location.search);
         const fechaParam = urlParams.get('fecha');
         let current_date = new Date(); // Default to today
         if (fechaParam) {
-            // Append fixed time to avoid timezone shift inconsistencies
             current_date = new Date(fechaParam + 'T12:00:00'); 
         }
+        debug("Current evaluated date:", current_date);
 
         // 3. Build a precise cache key using user data and URL context
         let cacheKey = '';
         const path = window.location.pathname;
 
         if (path.includes('/usuario/')) {
-            // It's the user's personal schedule
             const userId = await UcursedntUtils.Storage.get('userId') || 'unknown';
             const academicInfo = await UcursedntUtils.Storage.get('currentAcademicInfo') || { year: current_date.getFullYear(), semester: current_date.getMonth() > 6 ? 2 : 1 };
             cacheKey = `weekCache_user_${userId}_${academicInfo.year}_${academicInfo.semester}`;
         } else {
-            // It's a course schedule
-            // Extract from URL: /ingenieria/2026/1/ME5120/2/horario_curso/...
             const match = path.match(/^\/([^\/]+)\/(\d{4})\/([12])\/([^\/]+)\/([^\/]+)/);
             if (match) {
                 cacheKey = `weekCache_course_${match[1]}_${match[4]}_${match[5]}_${match[2]}_${match[3]}`;
@@ -131,18 +140,20 @@ if (typeof window.showExtensionAlert === 'undefined') {
                 cacheKey = `weekCache_fallback_${current_date.getFullYear()}`;
             }
         }
+        debug("Using Cache Key:", cacheKey);
 
         // 4. Check Cache
         let class_weeks = [];
         const cachedData = await UcursedntUtils.Storage.get(cacheKey);
 
         if (cachedData && cachedData.class_weeks && cachedData.class_weeks.length > 0) {
-            // Cache Hit: Rebuild Date objects from stored timestamps
             class_weeks = cachedData.class_weeks.map(t => new Date(t));
+            debug(`Cache Hit! Loaded ${class_weeks.length} weeks from storage.`);
         } else {
-            // Cache Miss: Scrape the heatmap
+            debug("Cache Miss. Scraping heatmap...");
             const heatmapCells = document.querySelectorAll('.github table td a.n');
             if (heatmapCells.length === 0) {
+                debug("No heatmap cells found. Appending '(Off)'.");
                 weekSpan.append(" (Off)");
                 return;
             }
@@ -160,24 +171,77 @@ if (typeof window.showExtensionAlert === 'undefined') {
             });
 
             if (classDates.length === 0) {
+                debug("No valid class dates found in heatmap. Appending '(Off)'.");
                 weekSpan.append(" (Off)");
                 return;
             }
 
             classDates.sort((d1, d2) => d1 - d2);
             class_weeks = reduceWeek(classDates);
+            debug(`Scraped ${class_weeks.length} weeks from heatmap. Saving to cache.`);
 
-            // Save array of timestamps to storage
             await UcursedntUtils.Storage.set(cacheKey, {
                 class_weeks: class_weeks.map(d => d.getTime()),
                 savedAt: Date.now()
             });
         }
 
+        // ── NEW LOGIC: Dynamic Correction based on Required Keywords ──
+        const bloques = document.querySelectorAll('.bloque');
+        debug(`Found ${bloques.length} '.bloque' elements on the page.`);
+        
+        if (bloques.length > 0) {
+            let matchLog = [];
+            
+            const hasValidClass = Array.from(bloques).some((bloque, index) => {
+                const html = bloque.innerHTML.toLowerCase();
+                const text = bloque.innerText ? bloque.innerText.replace(/\n/g, ' ') : 'NO_TEXT';
+                
+                const isMatch = html.includes('control') || 
+                                html.includes('evaluación') || 
+                                html.includes('evaluacion') || 
+                                html.includes('taller') || 
+                                html.includes('cátedra') || 
+                                html.includes('catedra') || 
+                                html.includes('auxiliar');
+                
+                matchLog.push(`Block [${index}]: Match=${isMatch} | Text="${text.substring(0, 50)}..."`);
+                return isMatch;
+            });
+
+            debug("Block evaluation summary:", matchLog);
+            debug(`Overall hasValidClass result: ${hasValidClass}`);
+
+            if (!hasValidClass) {
+                const initialLength = class_weeks.length;
+                class_weeks = class_weeks.filter(w => !areInSameWeek(w, current_date));
+                debug(`Week ruled out. Removed from class_weeks. Length dropped from ${initialLength} to ${class_weeks.length}`);
+                
+                if (class_weeks.length < initialLength) {
+                    debug("Updating cache with new filtered class_weeks array.");
+                    await UcursedntUtils.Storage.set(cacheKey, {
+                        class_weeks: class_weeks.map(d => d.getTime()),
+                        savedAt: Date.now()
+                    });
+                }
+            } else {
+                debug("Week confirmed as a valid class week.");
+            }
+        } else {
+            debug("No '.bloque' elements found to evaluate.");
+        }
+        // ───────────────────────────────────────────────────────────
+
         // 5. Calculate Weeks
         const total_weeks = weeksBetween(class_weeks[0], current_date) + 1;
         const past_recess_weeks = recessWeeksUntil(current_date, class_weeks);
         const is_class_week = isNormalWeek(current_date, class_weeks);
+
+        debug("Final Calculations:", {
+            total_weeks: total_weeks,
+            past_recess_weeks: past_recess_weeks,
+            is_class_week: is_class_week
+        });
 
         if (total_weeks < 1) {
             weekSpan.innerHTML += `<br>Semana lectiva: Pre-semestre`;
@@ -186,8 +250,6 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
         const text = is_class_week ? (total_weeks - past_recess_weeks) : "Off (Receso/Feriado)";
         weekSpan.innerHTML += `<br>Semana lectiva: ${text}`;
-
-        weekSpan.innerHTML += `<br><i>aproximado, comprobar si había tareas en semana de receso</i>`;
 
         // 6. Alert configuration
         let firstHoverScheduleDate = await UcursedntUtils.Storage.get("scheduleDateFirstHover") !== true;
@@ -202,8 +264,10 @@ if (typeof window.showExtensionAlert === 'undefined') {
     }
 
     // ── Init ─────────────────────────────────────────────────────────────────
+    debug("Checking user settings...");
     const settings = await UcursedntUtils.Storage.get("settings");
     if (settings && settings.features && settings.features.weekCounter === false) {
+        debug("Extension feature disabled in settings. Exiting.");
         return; 
     }
 
