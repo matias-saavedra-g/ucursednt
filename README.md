@@ -167,7 +167,7 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 > Archivo: `tareaPrefill.js`
 
 - Rellena automáticamente el tiempo invertido y un comentario base al abrir el formulario de entrega de una tarea.
-  - Se usa $ (\Delta \text{Días}) \cdot (60 \, \text{min/día}) \cdot [\text{random}(0.8, 1.2)] $ para el tiempo invertido.
+  - Se usa " $(\Delta \text{Días}) \cdot (60 \, \text{min/día}) \cdot [\text{random}(0.8, 1.2)]$ " para el tiempo invertido.
   - Se usa el formato "Se hace entrega de <título de la tarea>".
 - Solo actúa en la vista de detalle de tareas y respeta lo que el usuario ya haya escrito.
 - Se puede activar o desactivar desde el menú de configuración de la extensión.
