@@ -524,7 +524,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         
         const title = document.createElement("div");
         title.className = "settings-title";
-        title.innerHTML = `<i class="fa-regular fa-cogs"></i> Configuración de U-Cursedn't`;
+        UcursedntUtils.DOM.safeSetHTML(title, `<i class="fa-regular fa-cogs"></i> Configuración de U-Cursedn't`);
         
         const subtitle = document.createElement("div");
         subtitle.className = "settings-subtitle";
@@ -579,13 +579,13 @@ if (typeof window.showExtensionAlert === 'undefined') {
             const label = document.createElement("label");
             label.className = "feature-label";
             label.setAttribute("for", feature.id);
-            label.innerHTML = `
+            UcursedntUtils.DOM.safeSetHTML(label, `
                 <span style="margin-right: 8px; font-size: 16px;">${feature.icon}</span>
                 <div style="flex: 1;">
                     <div style="font-weight: 600; margin-bottom: 2px;">${feature.name}</div>
                     <div style="font-size: 12px; color: #6c757d; font-weight: 400;">${feature.description}</div>
                 </div>
-            `;
+            `);
 
             const statusSpan = document.createElement("span");
             statusSpan.className = `feature-status ${features[feature.id] ? 'enabled' : 'disabled'}`;
@@ -625,7 +625,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         // Section header
         const sectionHeader = document.createElement('div');
         sectionHeader.className = 'ai-config-header';
-        sectionHeader.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(sectionHeader, `
             <h3><i class="fa-regular fa-robot"></i> Configuración de Chat IA - Gemini</h3>
             <p>Configura tu API key de Google AI Studio para usar el chat flotante con Gemini</p>
             <div class="gemini-info">
@@ -641,7 +641,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
                     <strong>⚠️ Advertencia:</strong> Exponer una clave de API en una aplicación del lado del cliente no es una práctica recomendada para su uso en producción, ya que puede ser sustraída por actores maliciosos. Este método solo es adecuado para pruebas iniciales y la creación de prototipos.
                 </div>
             </div>
-        `;
+        `);
 
         // API Key input
         const apiKeyGroup = document.createElement('div');
@@ -649,7 +649,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         
         const apiKeyLabel = document.createElement('label');
         apiKeyLabel.className = 'config-label';
-        apiKeyLabel.innerHTML = '<i class="fa-regular fa-key"></i> API Key de Gemini:';
+        UcursedntUtils.DOM.safeSetHTML(apiKeyLabel, '<i class="fa-regular fa-key"></i> API Key de Gemini:');
 
         const apiKeyContainer = document.createElement('div');
         apiKeyContainer.className = 'api-key-container';
@@ -663,7 +663,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         const toggleKeyBtn = document.createElement('button');
         toggleKeyBtn.className = 'toggle-key-btn';
         toggleKeyBtn.type = 'button';
-        toggleKeyBtn.innerHTML = '<i class="fa-regular fa-eye"></i>';
+        UcursedntUtils.DOM.safeSetHTML(toggleKeyBtn, '<i class="fa-regular fa-eye"></i>');
         toggleKeyBtn.title = 'Mostrar/Ocultar API Key';
 
         // System Instructions
@@ -673,7 +673,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         
         const systemLabel = document.createElement('label');
         systemLabel.className = 'config-label';
-        systemLabel.innerHTML = '<i class="fa-regular fa-robot"></i> Instrucciones del Sistema:';
+        UcursedntUtils.DOM.safeSetHTML(systemLabel, '<i class="fa-regular fa-robot"></i> Instrucciones del Sistema:');
 
         const systemTextarea = document.createElement('textarea');
         systemTextarea.className = 'config-textarea';
@@ -687,12 +687,12 @@ if (typeof window.showExtensionAlert === 'undefined') {
         const resetToDefaultBtn = document.createElement('button');
         resetToDefaultBtn.className = 'modern-button btn-secondary reset-default-btn';
         resetToDefaultBtn.type = 'button';
-        resetToDefaultBtn.innerHTML = '<i class="fa-regular fa-undo"></i> Restaurar Recomendadas';
+        UcursedntUtils.DOM.safeSetHTML(resetToDefaultBtn, '<i class="fa-regular fa-undo"></i> Restaurar Recomendadas');
         resetToDefaultBtn.title = 'Restaurar las instrucciones recomendadas para U-Cursos';
 
         const saveBtn = document.createElement('button');
         saveBtn.className = 'modern-button btn-primary save-ai-config-btn';
-        saveBtn.innerHTML = '<i class="fa-regular fa-save"></i> Guardar Configuración';
+        UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-save"></i> Guardar Configuración');
 
         // Load existing settings
         const aiSettings = await UcursedntUtils.Storage.get('aiChatSettings') || {};
@@ -745,7 +745,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         toggleKeyBtn.addEventListener('click', () => {
             const isPassword = apiKeyInput.type === 'password';
             apiKeyInput.type = isPassword ? 'text' : 'password';
-            toggleKeyBtn.innerHTML = isPassword ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
+            UcursedntUtils.DOM.safeSetHTML(toggleKeyBtn, isPassword ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>');
         });
 
         resetToDefaultBtn.addEventListener('click', () => {
@@ -759,12 +759,12 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 }
                 
                 // Show success message temporarily
-                resetToDefaultBtn.innerHTML = '<i class="fa-regular fa-check"></i> ¡Restaurado!';
+                UcursedntUtils.DOM.safeSetHTML(resetToDefaultBtn, '<i class="fa-regular fa-check"></i> ¡Restaurado!');
                 resetToDefaultBtn.classList.remove('btn-secondary');
                 resetToDefaultBtn.classList.add('btn-success');
                 
                 setTimeout(() => {
-                    resetToDefaultBtn.innerHTML = '<i class="fa-regular fa-undo"></i> Restaurar Recomendadas';
+                    UcursedntUtils.DOM.safeSetHTML(resetToDefaultBtn, '<i class="fa-regular fa-undo"></i> Restaurar Recomendadas');
                     resetToDefaultBtn.classList.remove('btn-success');
                     resetToDefaultBtn.classList.add('btn-secondary');
                 }, 2000);
@@ -787,12 +787,12 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
             }
 
             // Show success message
-            saveBtn.innerHTML = '<i class="fa-regular fa-check"></i> ¡Guardado!';
+            UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-check"></i> ¡Guardado!');
             saveBtn.classList.remove('btn-primary');
             saveBtn.classList.add('btn-success');
             
             setTimeout(() => {
-                saveBtn.innerHTML = '<i class="fa-regular fa-save"></i> Guardar Configuración';
+                UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-save"></i> Guardar Configuración');
                 saveBtn.classList.remove('btn-success');
                 saveBtn.classList.add('btn-primary');
             }, 2000);
@@ -838,17 +838,17 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 
         const header = document.createElement('div');
         header.className = 'sound-config-header';
-        header.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(header, `
             <h3><i class="fa-regular fa-music"></i> Configuración de Sonido de Entrega</h3>
             <p>Personaliza el sonido que se reproduce al entregar una tarea. Ingresa una URL o ID de YouTube.</p>
-        `;
+        `);
 
         const urlGroup = document.createElement('div');
         urlGroup.className = 'config-group';
 
         const urlLabel = document.createElement('label');
         urlLabel.className = 'config-label';
-        urlLabel.innerHTML = '<i class="fa-brands fa-youtube"></i> URL o ID del video de YouTube:';
+        UcursedntUtils.DOM.safeSetHTML(urlLabel, '<i class="fa-brands fa-youtube"></i> URL o ID del video de YouTube:');
 
         const urlInput = document.createElement('input');
         urlInput.type = 'text';
@@ -861,14 +861,14 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 
         const helper = document.createElement('div');
         helper.className = 'config-helper';
-        helper.innerHTML = `<small>
+        UcursedntUtils.DOM.safeSetHTML(helper, `<small>
             <strong>Por defecto:</strong> <a href="https://www.youtube.com/watch?v=${defaultVideoId}" target="_blank" style="color: #17a2b8;">https://www.youtube.com/watch?v=${defaultVideoId}</a><br>
             Acepta URLs completas de YouTube o solo el ID del video (11 caracteres). Dejar vacío para usar el sonido por defecto.
-        </small>`;
+        </small>`);
 
         const saveBtn = document.createElement('button');
         saveBtn.className = 'modern-button btn-success save-sound-config-btn';
-        saveBtn.innerHTML = '<i class="fa-regular fa-save"></i> Guardar Sonido';
+        UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-save"></i> Guardar Sonido');
 
         saveBtn.addEventListener('click', async () => {
             const input = urlInput.value.trim();
@@ -883,11 +883,11 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 }
             }
             await UcursedntUtils.Storage.set('taskSubmissionSoundSettings', { videoId });
-            saveBtn.innerHTML = '<i class="fa-regular fa-check"></i> ¡Guardado!';
+            UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-check"></i> ¡Guardado!');
             saveBtn.classList.remove('btn-success');
             saveBtn.classList.add('btn-primary');
             setTimeout(() => {
-                saveBtn.innerHTML = '<i class="fa-regular fa-save"></i> Guardar Sonido';
+                UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-save"></i> Guardar Sonido');
                 saveBtn.classList.remove('btn-primary');
                 saveBtn.classList.add('btn-success');
             }, 2000);
@@ -922,7 +922,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         actionContainer.className = 'action-buttons';
 
         const clearButton = document.createElement('button');
-        clearButton.innerHTML = '<i class="fa-regular fa-trash-alt"></i> Borrar Almacenamiento Local';
+        UcursedntUtils.DOM.safeSetHTML(clearButton, '<i class="fa-regular fa-trash-alt"></i> Borrar Almacenamiento Local');
         clearButton.className = 'modern-button btn-danger';
         clearButton.id = 'clearChromeStorageButton';
 
@@ -943,7 +943,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         // Crea un botón que hace alterna el mostrar el Chrome storage
         const showChromeStorageButton = document.createElement('button');
         const chromeStorageList = document.createElement('ul');
-        showChromeStorageButton.innerHTML = '<i class="fa-regular fa-database"></i> Mostrar Almacenamiento Local';
+        UcursedntUtils.DOM.safeSetHTML(showChromeStorageButton, '<i class="fa-regular fa-database"></i> Mostrar Almacenamiento Local');
         showChromeStorageButton.className = 'modern-button btn-secondary';
         showChromeStorageButton.id = 'showChromeStorageButton';
 
@@ -951,7 +951,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
 
         // Función para actualizar la lista del almacenamiento Chrome
         async function updateChromeStorageList() {
-            chromeStorageList.innerHTML = '';
+            UcursedntUtils.DOM.safeSetHTML(chromeStorageList, '');
             const storageItems = await UcursedntUtils.Storage.getAll();
             
             Object.keys(storageItems).forEach(key => {
@@ -971,7 +971,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'delete-storage-btn';
-                deleteBtn.innerHTML = '<i class="fa-regular fa-trash"></i>';
+                UcursedntUtils.DOM.safeSetHTML(deleteBtn, '<i class="fa-regular fa-trash"></i>');
                 deleteBtn.title = 'Eliminar este elemento';
                 deleteBtn.addEventListener('click', async function(e) {
                     e.stopPropagation();
@@ -992,11 +992,11 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         // Agrega funcionalidad al botón
         showChromeStorageButton.addEventListener('click', async function() {
             if (!bodyBlankPage.contains(chromeStorageList)) {
-                showChromeStorageButton.innerHTML = '<i class="fa-regular fa-eye-slash"></i> Ocultar Almacenamiento Local';
+                UcursedntUtils.DOM.safeSetHTML(showChromeStorageButton, '<i class="fa-regular fa-eye-slash"></i> Ocultar Almacenamiento Local');
                 await updateChromeStorageList();
                 bodyBlankPage.appendChild(chromeStorageList);
             } else {
-                showChromeStorageButton.innerHTML = '<i class="fa-regular fa-database"></i> Mostrar Almacenamiento Local';
+                UcursedntUtils.DOM.safeSetHTML(showChromeStorageButton, '<i class="fa-regular fa-database"></i> Mostrar Almacenamiento Local');
                 chromeStorageList.remove();
             }
         });

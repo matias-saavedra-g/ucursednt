@@ -4,7 +4,7 @@ const ulElement = document.querySelector("#menu_curso"); // Replace with your se
 
 if (ulElement) {
   const newLi = document.createElement('li');
-  newLi.innerHTML = '<a href="#" class="opcion"><i class="fa-regular fa-trash"></i><span> Borrar U-Cursos</span></a>';
+  UcursedntUtils.DOM.safeSetHTML(newLi, '<a href="#" class="opcion"><i class="fa-regular fa-trash"></i><span> Borrar U-Cursos</span></a>');
   ulElement.appendChild(newLi);
 
   newLi.addEventListener('click', () => {
@@ -34,7 +34,7 @@ if (ulElement) {
     document.documentElement.style.opacity = 0;
     setTimeout(() => {
       // Removes all content after 15 s
-      document.documentElement.innerHTML = '';
+      UcursedntUtils.DOM.safeSetHTML(document.documentElement, '');
     }, 15000);
   });
 }
@@ -229,7 +229,7 @@ if (window.location.href.includes('/usuario/') && window.location.href.includes(
       // Create explosion effect
       setTimeout(() => {
         // Clear the entire body
-        document.body.innerHTML = '';
+        UcursedntUtils.DOM.safeSetHTML(document.body, '');
         
         // Create the YouTube video iframe
         const iframe = document.createElement('iframe');

@@ -18,33 +18,25 @@ if (typeof window.showExtensionAlert === 'undefined') {
 // Basado en https://github.com/Nyveon/tU-Cursos - Modificado por matias-saavedra-g el 2024.07.16
 
 (async function() {
-
-    // Function to set an item in Chrome Storage
-    
-
-    // Function to get an item from Chrome Storage
-    
-
     const paragraph_limit = 5;
     const text = document.getElementsByClassName('texto');
 
     /**
-     * Function that counts the amount of paragraphs in a HTML element
-     */
-    /**
-     * Counts the number of lines in an HTML element.
-     *
-     * @param {HTMLElement} elem - The HTML element to count the lines from.
-     * @returns {number} The number of lines in the element.
+     * Smartly counts the number of lines/paragraphs in an HTML element 
+     * by checking for <p> tags, <br> tags, or plain text newlines.
      */
     function countLines(elem) {
-        var paragraphs = elem.innerHTML.split("<br>").filter(String);
-        var len = paragraphs.length;
-        if (len === 0) {
-            return 1;
-        } else {
-            return len;
-        }
+        // 1. Check if the post uses <p> tags
+        const pTags = elem.querySelectorAll('p').length;
+        if (pTags > 0) return pTags;
+        
+        // 2. Check if the post uses <br> tags (1 break = 2 lines)
+        const brTags = elem.querySelectorAll('br').length;
+        if (brTags > 0) return brTags + 1;
+        
+        // 3. Fallback: Count visual newlines in the raw text
+        const textLines = elem.innerText.split('\n').filter(line => line.trim().length > 0);
+        return textLines.length > 0 ? textLines.length : 1;
     }
 
     const settings = await UcursedntUtils.Storage.get("settings");
@@ -103,33 +95,43 @@ if (typeof window.showExtensionAlert === 'undefined') {
     // Initialize styles
     addMuchoTextoStyles();
 
-    /**
-     * Iterate over the divs with class "texto", first we remove the last children for formatting purposes
-     * then we count the amount of paragraphs, check if it's greater than the admitted threshold. If it's
-     * over the threshold we generate a cut version of the text and the original text, then we change the
-     * innerHTML, displaying the short version and adding a button to toggle between the short text and the
-     * complete text. Finally we re-add the children we had removed.
-     */
     for (let i = 0; i < text.length; i++) {
         const options = text[i].lastElementChild;
-        text[i].removeChild(options); // Removed
-        const text_length = countLines(text[i]);
-        if (text_length > paragraph_limit) {
-            const long_text = text[i].innerHTML;
-            text[i].innerHTML = '<div class="mucho-texto-content">' + long_text + '</div><button class="show-more-button" data-more="0"><i class="fa-regular fa-expand-alt"></i> Es Mucho Texto</button>';
+        // Safety check: Ensure we are only pulling out the options menu, not actual text
+        const hasOptions = options && options.classList.contains('opciones');
+        
+        if (hasOptions) text[i].removeChild(options);
 
-            // Añadir alerta la primera vez que se hace clic en el botón de "Es Mucho Texto"
-            const showMoreButton = text[i].querySelector('.show-more-button');
-            showMoreButton.addEventListener('click', async function () {
+        const text_length = countLines(text[i]);
+        
+        if (text_length > paragraph_limit) {
+            
+            // 1. Create the wrapper
+            const wrapper = document.createElement('div');
+            wrapper.className = 'mucho-texto-content';
+            
+            // 2. Physically move all existing child nodes into the wrapper safely
+            while (text[i].firstChild) {
+                wrapper.appendChild(text[i].firstChild);
+            }
+
+            // 3. Create the toggle button
+            const btn = document.createElement('button');
+            btn.className = 'show-more-button';
+            btn.setAttribute('data-more', '0');
+            UcursedntUtils.DOM.safeSetHTML(btn, '<i class="fa-regular fa-expand-alt"></i> Es Mucho Texto');
+
+            // 4. Attach event listener
+            btn.addEventListener('click', async function () {
                 if (await UcursedntUtils.Storage.get("showMoreFirstClick") !== true) {
                     window.showExtensionAlert("Mucho texto...");
-                    await UcursedntUtils.Storage.set("showMoreFirstClick", true); // Marcar que ya se mostró la alerta
+                    await UcursedntUtils.Storage.set("showMoreFirstClick", true);
                 }
                 
                 // Toggle de texto corto y largo
                 const moreText = this.getAttribute('data-more') === "0";
                 this.setAttribute('data-more', moreText ? "1" : "0");
-                this.innerHTML = moreText ? '<i class="fa-regular fa-compress-alt"></i> Menos texto' : '<i class="fa-regular fa-expand-alt"></i> Es Mucho Texto';
+                UcursedntUtils.DOM.safeSetHTML(this, moreText ? '<i class="fa-regular fa-compress-alt"></i> Menos texto' : '<i class="fa-regular fa-expand-alt"></i> Es Mucho Texto');
 
                 const textContent = this.previousElementSibling;
                 if (moreText) {
@@ -140,7 +142,13 @@ if (typeof window.showExtensionAlert === 'undefined') {
                     textContent.classList.remove("expanded");
                 }
             });
+
+            // 5. Inject the wrapper and button back into the post
+            text[i].appendChild(wrapper);
+            text[i].appendChild(btn);
         }
-        text[i].append(options); // Added
+        
+        // 6. Put the options footer back at the bottom if it existed
+        if (hasOptions) text[i].appendChild(options);
     }
 })();

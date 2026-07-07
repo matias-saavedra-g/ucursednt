@@ -161,11 +161,11 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         // UCursitos mascot button
         const mascotButton = document.createElement('div');
         mascotButton.className = 'ucursitos-mascot';
-        mascotButton.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(mascotButton, `
             <img src="${browser.runtime.getURL('images/ucursitos.png')}" 
                  alt="UCursitos" 
                  title="Chat con IA Gemini - Haz clic para expandir/contraer">
-        `;
+        `);
 
         // Chat iframe container
         const chatFrame = document.createElement('div');
@@ -175,7 +175,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         // Chat header
         const chatHeader = document.createElement('div');
         chatHeader.className = 'ai-chat-header';
-        chatHeader.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(chatHeader, `
             <div class="chat-header-content">
                 <span class="provider-icon">✨</span>
                 <span class="provider-name">U-Cursedn't AI</span>
@@ -194,7 +194,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                     </button>
                 </div>
             </div>
-        `;
+        `);
 
         // Chat content
         const chatContent = document.createElement('div');
@@ -205,7 +205,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
             await createGeminiAPIInterface(chatContent);
         } else {
             // No API key configured
-            chatContent.innerHTML = `
+            UcursedntUtils.DOM.safeSetHTML(chatContent, `
                 <div class="api-config-notice">
                     <p>Para usar el chat integrado, configura tu API key de Google AI Studio.</p>
                     <div class="api-setup-info">
@@ -225,7 +225,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                         <i class="fa-regular fa-cog"></i> Ir a Configuración
                     </button>
                 </div>
-            `;
+            `);
         }
 
         // Assemble the chat frame
@@ -254,7 +254,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         // Load chat history
         await loadChatHistory();
         
-        container.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(container, `
             <div class="custom-api-interface">
                 <div class="chat-messages" id="chat-messages">
                     <div class="system-message" id="system-message">
@@ -282,7 +282,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 <span class="status-indicator connected"></span>
                 <span class="status-text">Conectado a Gemini Flash Lite Latest</span>
             </div>
-        `;
+        `);
 
         // Load and display chat history
         const messagesContainer = container.querySelector('#chat-messages');
@@ -290,12 +290,12 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
             // Show welcome message only if no history
             const welcomeMessage = document.createElement('div');
             welcomeMessage.className = 'welcome-message';
-            welcomeMessage.innerHTML = `
+            UcursedntUtils.DOM.safeSetHTML(welcomeMessage, `
                 <div class="message-content">
                     ¡Hola! Soy tu asistente de IA powered by Gemini. ¿En qué puedo ayudarte hoy?
                 </div>
                 <div class="message-time">${new Date().toLocaleTimeString()}</div>
-            `;
+            `);
             messagesContainer.appendChild(welcomeMessage);
         } else {
             // Display chat history
@@ -481,10 +481,10 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         messageDiv.id = messageId;
         
         const messageTime = new Date(timestamp).toLocaleTimeString();
-        messageDiv.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(messageDiv, `
             <div class="message-content">${content}</div>
             <div class="message-time">${messageTime}</div>
-        `;
+        `);
         
         container.appendChild(messageDiv);
         container.scrollTop = container.scrollHeight;
@@ -550,7 +550,7 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                 if (messagesContainer) {
                     // Keep system message, remove everything else
                     const systemMessage = messagesContainer.querySelector('.system-message');
-                    messagesContainer.innerHTML = '';
+                    UcursedntUtils.DOM.safeSetHTML(messagesContainer, '');
                     
                     if (systemMessage) {
                         messagesContainer.appendChild(systemMessage);
@@ -559,24 +559,24 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
                     // Add welcome message
                     const welcomeMessage = document.createElement('div');
                     welcomeMessage.className = 'welcome-message';
-                    welcomeMessage.innerHTML = `
+                    UcursedntUtils.DOM.safeSetHTML(welcomeMessage, `
                         <div class="message-content">
                             ¡Historial borrado! Soy tu asistente de IA powered by Gemini. ¿En qué puedo ayudarte hoy?
                         </div>
                         <div class="message-time">${new Date().toLocaleTimeString()}</div>
-                    `;
+                    `);
                     messagesContainer.appendChild(welcomeMessage);
                 }
                 
                 // Show temporary success notification
                 const clearBtn = document.querySelector('.clear-history-btn');
                 if (clearBtn) {
-                    const originalHTML = clearBtn.innerHTML;
-                    clearBtn.innerHTML = '<i class="fa-regular fa-check"></i>';
+                    const originalHTML = UcursedntUtils.DOM.getHTML(clearBtn);
+                    UcursedntUtils.DOM.safeSetHTML(clearBtn, '<i class="fa-regular fa-check"></i>');
                     clearBtn.style.color = '#4caf50';
                     
                     setTimeout(() => {
-                        clearBtn.innerHTML = originalHTML;
+                        UcursedntUtils.DOM.safeSetHTML(clearBtn, originalHTML);
                         clearBtn.style.color = '';
                     }, 2000);
                 }

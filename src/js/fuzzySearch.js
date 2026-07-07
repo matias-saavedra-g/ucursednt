@@ -75,7 +75,7 @@
 
     const button = document.createElement('button');
     button.type = 'submit';
-    button.innerHTML = '<i class="fa fa-search"></i>'; 
+    UcursedntUtils.DOM.safeSetHTML(button, '<i class="fa fa-search"></i>'); 
 
     form.appendChild(input);
     form.appendChild(button);

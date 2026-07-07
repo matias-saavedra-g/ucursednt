@@ -394,12 +394,12 @@ function renderChatList() {
     const list = document.getElementById('chat-list');
     if (!list) return;
 
-    list.innerHTML = '';
+    UcursedntUtils.DOM.safeSetHTML(list, '');
     chatsHistory.forEach(chat => {
         const item = document.createElement('div');
         item.className = `sp-chat-item${chat.id === currentChatId ? ' sp-chat-active' : ''}`;
         item.setAttribute('role', 'listitem');
-        item.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(item, `
           <div class="sp-chat-item-body">
             <div class="sp-chat-item-title">${escapeHtml(chat.title)}</div>
             <div class="sp-chat-item-preview">${escapeHtml(chat.preview ?? '')}</div>
@@ -416,7 +416,7 @@ function renderChatList() {
               <i class="fa-regular fa-trash" aria-hidden="true"></i>
             </button>
           </div>
-        `;
+        `);
 
         item.addEventListener('click', e => {
             if (e.target.closest('[data-action]')) return;
@@ -440,7 +440,7 @@ function renderChatList() {
 function renderMessages() {
     const container = document.getElementById('chat-messages');
     if (!container) return;
-    container.innerHTML = '';
+    UcursedntUtils.DOM.safeSetHTML(container, '');
 
     if (!apiKey) {
         renderApiNotice(container);
@@ -448,25 +448,25 @@ function renderMessages() {
     }
 
     if (chatHistory.length === 0) {
-        container.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(container, `
           <div class="sp-welcome">
             <div class="sp-welcome-icon">✨</div>
             <h3>¡Hola! Soy UCursitos AI</h3>
             <p>Asistente virtual de U-Cursos, powered by Gemini.<br>¿En qué puedo ayudarte hoy?</p>
           </div>
-        `;
+        `);
         return;
     }
 
     chatHistory.forEach(msg => {
         const div = document.createElement('div');
         div.className = `chat-message ${msg.role}-message`;
-        div.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(div, `
           <div class="message-content">
             ${msg.role === 'assistant' ? formatMarkdown(msg.content) : escapeHtml(msg.content)}
           </div>
           <div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>
-        `;
+        `);
         container.appendChild(div);
     });
 
@@ -474,7 +474,7 @@ function renderMessages() {
 }
 
 function renderApiNotice(container) {
-    container.innerHTML = `
+    UcursedntUtils.DOM.safeSetHTML(container, `
       <div class="sp-api-notice">
         <h3>🔑 API Key requerida</h3>
         <p>Para usar el chat, configura tu API key de <strong>Google AI Studio</strong>.</p>
@@ -487,7 +487,7 @@ function renderApiNotice(container) {
           <i class="fa-regular fa-cog" aria-hidden="true"></i> Abrir Configuración
         </button>
       </div>
-    `;
+    `);
     document.getElementById('open-settings-btn')
         ?.addEventListener('click', openSettings);
 }
@@ -501,12 +501,12 @@ function appendMessageBubble(role, content, timestamp) {
 
     const div = document.createElement('div');
     div.className = `chat-message ${role}-message`;
-    div.innerHTML = `
+    UcursedntUtils.DOM.safeSetHTML(div, `
       <div class="message-content">
         ${role === 'assistant' ? content : escapeHtml(content)}
       </div>
       <div class="message-time">${new Date(timestamp).toLocaleTimeString()}</div>
-    `;
+    `);
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
 }
@@ -516,11 +516,11 @@ function appendTypingIndicator() {
     const el = document.createElement('div');
     el.className = 'sp-typing';
     el.setAttribute('aria-label', 'Escribiendo…');
-    el.innerHTML = `
+    UcursedntUtils.DOM.safeSetHTML(el, `
       <div class="sp-typing-dot"></div>
       <div class="sp-typing-dot"></div>
       <div class="sp-typing-dot"></div>
-    `;
+    `);
     container.appendChild(el);
     container.scrollTop = container.scrollHeight;
     return el;
@@ -530,9 +530,9 @@ function appendErrorBubble(htmlMsg) {
     const container = document.getElementById('chat-messages');
     const div = document.createElement('div');
     div.className = 'chat-message assistant-message';
-    div.innerHTML = `
+    UcursedntUtils.DOM.safeSetHTML(div, `
       <div class="message-content" style="color:var(--mt-danger)">${htmlMsg}</div>
-    `;
+    `);
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
 }
@@ -556,9 +556,9 @@ function updateInferencePill(mode) {
 
     const useNano = mode === 'nano' || (nanoAvailable && mode !== 'cloud');
     pill.className = `sp-inference-pill${useNano ? ' nano' : ''}`;
-    pill.innerHTML = useNano
+    UcursedntUtils.DOM.safeSetHTML(pill, useNano
         ? '<i class="fa-regular fa-microchip" aria-hidden="true"></i> Gemini Nano'
-        : '<i class="fa-regular fa-cloud" aria-hidden="true"></i> Gemini Cloud';
+        : '<i class="fa-regular fa-cloud" aria-hidden="true"></i> Gemini Cloud');
     if (hint) hint.textContent = useNano ? 'Local · Sin internet' : 'gemini-2.5-flash';
 }
 

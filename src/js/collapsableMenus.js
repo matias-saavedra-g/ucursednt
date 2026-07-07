@@ -93,7 +93,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
             
             // The click to collapse only should work when clicking the fa-regular fa-minus button
             const button = document.createElement("button");
-            button.innerHTML = '<i class="fa-regular fa-minus"></i>';
+            UcursedntUtils.DOM.safeSetHTML(button, '<i class="fa-regular fa-minus"></i>');
             button.classList.add("collapsable-button");
             // Makes background of button #222 in rgba with opacity 0.2
             button.style.backgroundColor = "rgba(34, 34, 34, 0)";
@@ -132,7 +132,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
                     const icon = button.querySelector("i");
                     icon.style.transform = "rotate(180deg)";
                     setTimeout(() => {
-                        button.innerHTML = '<i class="fa-regular fa-minus"></i>';
+                        UcursedntUtils.DOM.safeSetHTML(button, '<i class="fa-regular fa-minus"></i>');
                         icon.style.transform = "rotate(0deg)";
                     }, 100);
                     
@@ -145,7 +145,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
                     const icon = button.querySelector("i");
                     icon.style.transform = "rotate(180deg)";
                     setTimeout(() => {
-                        button.innerHTML = '<i class="fa-regular fa-plus"></i>';
+                        UcursedntUtils.DOM.safeSetHTML(button, '<i class="fa-regular fa-plus"></i>');
                         icon.style.transform = "rotate(0deg)";
                     }, 100);
                 }
@@ -217,7 +217,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
                 content.classList.remove("expanded");
                 content.classList.add("collapsed");
                 if (button) {
-                    button.innerHTML = '<i class="fa-regular fa-plus"></i>';
+                    UcursedntUtils.DOM.safeSetHTML(button, '<i class="fa-regular fa-plus"></i>');
                 }
             } else {
                 // Apply expanded state (default)
@@ -225,7 +225,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
                 content.classList.add("expanded");
                 content.style.maxHeight = content.scrollHeight + "px";
                 if (button) {
-                    button.innerHTML = '<i class="fa-regular fa-minus"></i>';
+                    UcursedntUtils.DOM.safeSetHTML(button, '<i class="fa-regular fa-minus"></i>');
                 }
             }
         });

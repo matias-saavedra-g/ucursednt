@@ -446,7 +446,7 @@
         // Header section
         const header = document.createElement('div');
         header.className = 'achievements-header';
-        header.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(header, `
             <div class="achievements-title">
                 <i class="fa-regular fa-trophy"></i>
                 <span>Colección de Logros</span>
@@ -454,7 +454,7 @@
             <div class="achievements-subtitle">
                 Desbloquea logros explorando y usando las características de U-Cursedn't
             </div>
-        `;
+        `);
 
         // Progress section
         const progressSection = document.createElement('div');
@@ -463,7 +463,7 @@
         // Progress bar
         const progressBarContainer = document.createElement('div');
         progressBarContainer.className = 'progress-bar-container';
-        progressBarContainer.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(progressBarContainer, `
             <div class="progress-text">
                 Progreso de Logros
                 <span class="progress-percentage">${completionPercentage}%</span>
@@ -471,12 +471,12 @@
             <div class="progress-bar">
                 <div class="progress-fill" style="width: ${completionPercentage}%"></div>
             </div>
-        `;
+        `);
 
         // Statistics grid
         const statsGrid = document.createElement('div');
         statsGrid.className = 'stats-grid';
-        statsGrid.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(statsGrid, `
             <div class="stat-card total">
                 <div class="stat-icon" style="color: #007bff;"><i class="fa-regular fa-trophy"></i></div>
                 <div class="stat-number" style="color: #007bff;">${totalAchievements}</div>
@@ -492,7 +492,7 @@
                 <div class="stat-number" style="color: #dc3545;">${lockedAchievements}</div>
                 <div class="stat-label">Logros Bloqueados</div>
             </div>
-        `;
+        `);
 
         // Completion message
         const messageElement = document.createElement('div');
@@ -521,11 +521,11 @@
 
             const categoryHeader = document.createElement('div');
             categoryHeader.className = 'category-header';
-            categoryHeader.innerHTML = `
+            UcursedntUtils.DOM.safeSetHTML(categoryHeader, `
                 <div class="category-icon"><i class="${categoryData.icon}"></i></div>
                 <h3 class="category-title">${categoryData.title}</h3>
                 <div class="category-count">${categoryUnlocked}/${categoryAchievements.length}</div>
-            `;
+            `);
 
             const achievementsGrid = document.createElement('div');
             achievementsGrid.className = 'achievements-grid';
@@ -534,14 +534,14 @@
                 const achievementCard = document.createElement('div');
                 achievementCard.className = `achievement-card ${achievement.unlocked ? 'unlocked' : 'locked'}`;
                 
-                achievementCard.innerHTML = `
+                UcursedntUtils.DOM.safeSetHTML(achievementCard, `
                     <div class="achievement-rarity rarity-${achievement.rarity}">${achievement.rarity}</div>
                     <div class="achievement-icon">
                         <i class="fas ${achievement.icon}"></i>
                     </div>
                     <div class="achievement-name">${achievement.name}</div>
                     <div class="achievement-description">${achievement.description}</div>
-                `;
+                `);
 
                 achievementsGrid.appendChild(achievementCard);
             });

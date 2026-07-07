@@ -33,14 +33,14 @@
         // Crear botones
         const courseNameButton = document.createElement("button");
         courseNameButton.classList.add("btn", "btn-default", "btn-sm");
-        courseNameButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
+        UcursedntUtils.DOM.safeSetHTML(courseNameButton, `<i class="fa-regular fa-paste"></i>`);
         // Centra el innerHTML del botón en el centro
         courseNameButton.style.alignItems = "center";
         courseNameButton.onclick = () => {
             UcursedntUtils.DOM.copyToClipboard(courseName);
-            courseNameButton.innerHTML = `<i class="fa-regular fa-check"></i>`;
+            UcursedntUtils.DOM.safeSetHTML(courseNameButton, `<i class="fa-regular fa-check"></i>`);
             setTimeout(() => {
-                courseNameButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
+                UcursedntUtils.DOM.safeSetHTML(courseNameButton, `<i class="fa-regular fa-paste"></i>`);
             }, 1000);
         };
         // Hace el fondo color #222 y opacidad 0.2
@@ -54,13 +54,13 @@
 
         const courseCodeButton = document.createElement("button");
         courseCodeButton.classList.add("btn", "btn-default", "btn-sm");
-        courseCodeButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
+        UcursedntUtils.DOM.safeSetHTML(courseCodeButton, `<i class="fa-regular fa-paste"></i>`);
         courseCodeButton.style.alignItems = "center";
         courseCodeButton.onclick = () => {
             UcursedntUtils.DOM.copyToClipboard(courseCode);
-            courseCodeButton.innerHTML = `<i class="fa-regular fa-check"></i>`;
+            UcursedntUtils.DOM.safeSetHTML(courseCodeButton, `<i class="fa-regular fa-check"></i>`);
             setTimeout(() => {
-                courseCodeButton.innerHTML = `<i class="fa-regular fa-paste"></i>`;
+                UcursedntUtils.DOM.safeSetHTML(courseCodeButton, `<i class="fa-regular fa-paste"></i>`);
             }, 1000);
         };
         courseCodeButton.style.backgroundColor = "rgba(34, 34, 34, 0)";

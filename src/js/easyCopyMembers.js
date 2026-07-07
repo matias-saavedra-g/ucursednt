@@ -47,11 +47,11 @@
         const botonHorizontal = document.querySelector(`tbody:nth-child(${categoria-1}) > tr > td > div > button:nth-child(1)`);
         const botonVertical = document.querySelector(`tbody:nth-child(${categoria-1}) > tr > td > div > button:nth-child(2)`);
         if (formato === 'horizontal') {
-            botonHorizontal.innerHTML = '<i class="fa-regular fa-check"></i>';
-            setTimeout(() => botonHorizontal.innerHTML = '<i class="fa-regular fa-arrows-alt-h"></i>', 2000);
+            UcursedntUtils.DOM.safeSetHTML(botonHorizontal, '<i class="fa-regular fa-check"></i>');
+            setTimeout(() => UcursedntUtils.DOM.safeSetHTML(botonHorizontal, '<i class="fa-regular fa-arrows-alt-h"></i>'), 2000);
         } else if (formato === 'vertical') {
-            botonVertical.innerHTML = '<i class="fa-regular fa-check"></i>';
-            setTimeout(() => botonVertical.innerHTML = '<i class="fa-regular fa-arrows-alt-v"></i>', 2000);
+            UcursedntUtils.DOM.safeSetHTML(botonVertical, '<i class="fa-regular fa-check"></i>');
+            setTimeout(() => UcursedntUtils.DOM.safeSetHTML(botonVertical, '<i class="fa-regular fa-arrows-alt-v"></i>'), 2000);
         }
     }
 
@@ -75,7 +75,7 @@
 
             // Botón para copiar horizontalmente
             const botonHorizontal = document.createElement('button');
-            botonHorizontal.innerHTML = '<i class="fa-regular fa-arrows-alt-h"></i>'; // Icono FontAwesome para horizontal
+            UcursedntUtils.DOM.safeSetHTML(botonHorizontal, '<i class="fa-regular fa-arrows-alt-h"></i>'); // Icono FontAwesome para horizontal
             botonHorizontal.title = `Copiar Horizontal - Categoría ${categoria}`;
             botonHorizontal.style.background = 'transparent';
             botonHorizontal.style.border = 'transparent';
@@ -84,16 +84,16 @@
             botonHorizontal.style.color = "inherit";
             botonHorizontal.onclick = () => {
                 copiarIntegrantes('horizontal', categoria);
-                botonHorizontal.innerHTML = '<i class="fa-regular fa-check"></i>';
+                UcursedntUtils.DOM.safeSetHTML(botonHorizontal, '<i class="fa-regular fa-check"></i>');
                 setTimeout(() => {
-                    botonHorizontal.innerHTML = '<i class="fa-regular fa-arrows-alt-h"></i>';
+                    UcursedntUtils.DOM.safeSetHTML(botonHorizontal, '<i class="fa-regular fa-arrows-alt-h"></i>');
                 }, 2000);
             };
             botonesContainer.appendChild(botonHorizontal);
 
             // Botón para copiar verticalmente
             const botonVertical = document.createElement('button');
-            botonVertical.innerHTML = '<i class="fa-regular fa-arrows-alt-v"></i>'; // Icono FontAwesome para vertical
+            UcursedntUtils.DOM.safeSetHTML(botonVertical, '<i class="fa-regular fa-arrows-alt-v"></i>'); // Icono FontAwesome para vertical
             botonVertical.title = `Copiar Vertical - Categoría ${categoria}`;
             botonVertical.style.background = 'transparent';
             botonVertical.style.border = 'transparent';
@@ -101,9 +101,9 @@
             botonVertical.style.color = "inherit";
             botonVertical.onclick = () => {
                 copiarIntegrantes('vertical', categoria);
-                botonVertical.innerHTML = '<i class="fa-regular fa-check"></i>';
+                UcursedntUtils.DOM.safeSetHTML(botonVertical, '<i class="fa-regular fa-check"></i>');
                 setTimeout(() => {
-                    botonVertical.innerHTML = '<i class="fa-regular fa-arrows-alt-v"></i>';
+                    UcursedntUtils.DOM.safeSetHTML(botonVertical, '<i class="fa-regular fa-arrows-alt-v"></i>');
                 }, 2000);
             };
             botonesContainer.appendChild(botonVertical);

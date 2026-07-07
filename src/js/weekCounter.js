@@ -194,7 +194,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
             let matchLog = [];
             
             const hasValidClass = Array.from(bloques).some((bloque, index) => {
-                const html = bloque.innerHTML.toLowerCase();
+                const html = UcursedntUtils.DOM.getHTML(bloque).toLowerCase();
                 const text = bloque.innerText ? bloque.innerText.replace(/\n/g, ' ') : 'NO_TEXT';
                 
                 const isMatch = html.includes('control') || 
@@ -244,12 +244,12 @@ if (typeof window.showExtensionAlert === 'undefined') {
         });
 
         if (total_weeks < 1) {
-            weekSpan.innerHTML += `<br>Semana lectiva: Pre-semestre`;
+            UcursedntUtils.DOM.safeAppendHTML(weekSpan, `<br>Semana lectiva: Pre-semestre`);
             return;
         }
 
         const text = is_class_week ? (total_weeks - past_recess_weeks) : "Off (Receso/Feriado)";
-        weekSpan.innerHTML += `<br>Semana lectiva: ${text}`;
+        UcursedntUtils.DOM.safeAppendHTML(weekSpan, `<br>Semana lectiva: ${text}`);
 
         // 6. Alert configuration
         let firstHoverScheduleDate = await UcursedntUtils.Storage.get("scheduleDateFirstHover") !== true;

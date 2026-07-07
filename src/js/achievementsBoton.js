@@ -47,10 +47,10 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
         const button = document.createElement('a');
         button.href = 'javascript:void(0)';
-        button.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(button, `
             <img src="https://static.u-cursos.cl/images/servicios/novedades_v33873.svg" alt="Imagen">
             <span>Logros</span>
-        `;
+        `);
 
         // Añadir funcionalidad al botón
         button.addEventListener('click', async () => {

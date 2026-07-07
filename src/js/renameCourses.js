@@ -99,7 +99,7 @@
         const renameCourseButton = document.createElement("button");
         renameCourseButton.id = "ucursednt-rename-btn";
         renameCourseButton.classList.add("btn", "btn-default", "btn-sm");
-        renameCourseButton.innerHTML = `<i class="fa-regular fa-pencil"></i><span> Renombrar</span>`;
+        UcursedntUtils.DOM.safeSetHTML(renameCourseButton, `<i class="fa-regular fa-pencil"></i><span> Renombrar</span>`);
         renameCourseButton.style.alignItems = "center";
         renameCourseButton.style.backgroundColor = "rgba(34, 34, 34, 0)";
         renameCourseButton.style.border = "none";

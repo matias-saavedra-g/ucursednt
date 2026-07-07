@@ -175,15 +175,15 @@ ${postData.content}`;
 
     // Show temporary feedback on link (for native integration)
     function showLinkFeedback(link, text, duration = 2000) {
-        const originalHTML = link.innerHTML;
+        const originalHTML = UcursedntUtils.DOM.getHTML(link);
         const originalStyle = link.style.cssText;
         
-        link.innerHTML = text;
+        UcursedntUtils.DOM.safeSetHTML(link, text);
         link.style.cssText = originalStyle + '; color: #4caf50 !important; font-weight: bold !important;';
         link.style.pointerEvents = 'none';
         
         setTimeout(() => {
-            link.innerHTML = originalHTML;
+            UcursedntUtils.DOM.safeSetHTML(link, originalHTML);
             link.style.cssText = originalStyle;
             link.style.pointerEvents = '';
         }, duration);
@@ -255,7 +255,7 @@ ${postData.content}`;
         const trigger = document.createElement('a');
         trigger.href = '#';
         trigger.className = 'forum-ia-trigger';
-        trigger.innerHTML = 'Funciones IA <i class="fa fa-caret-down"></i>';
+        UcursedntUtils.DOM.safeSetHTML(trigger, 'Funciones IA <i class="fa fa-caret-down"></i>');
 
         const menu = document.createElement('div');
         menu.className = 'forum-ia-menu';
@@ -263,7 +263,7 @@ ${postData.content}`;
         items.forEach(({ label, icon, handler }) => {
             const link = document.createElement('a');
             link.href = '#';
-            link.innerHTML = `<i class="${icon}"></i> ${label}`;
+            UcursedntUtils.DOM.safeSetHTML(link, `<i class="${icon}"></i> ${label}`);
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();

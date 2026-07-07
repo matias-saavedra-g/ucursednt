@@ -358,7 +358,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
         // Trigger button
         const trigger = document.createElement('button');
         trigger.className = 'fdt-trigger';
-        trigger.innerHTML = '<i class="fa fa-download"></i> Descargar Foro <i class="fa fa-caret-down"></i>';
+        UcursedntUtils.DOM.safeSetHTML(trigger, '<i class="fa fa-download"></i> Descargar Foro <i class="fa fa-caret-down"></i>');
 
         // Dropdown panel
         const panel = document.createElement('div');
@@ -366,7 +366,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
         const inner = document.createElement('div');
         inner.id = 'fdt-panel-inner';
-        inner.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(inner, `
 <div class="fdt-row">
     <label>P&aacute;gs.&nbsp;<input type="number" id="fdt-from" min="1" max="${totalPages}" value="1"> &ndash; <input type="number" id="fdt-to" min="1" max="${totalPages}" value="${totalPages}"></label>
     <span style="opacity:.6">de&nbsp;${totalPages}</span>
@@ -387,7 +387,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
 <div id="fdt-progress">
     <div class="fdt-bar-wrap"><div class="fdt-bar-fill" id="fdt-fill"></div></div>
     <span id="fdt-status"></span>
-</div>`;
+</div>`);
 
         panel.appendChild(inner);
         widget.appendChild(trigger);

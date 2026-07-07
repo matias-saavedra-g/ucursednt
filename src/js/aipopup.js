@@ -247,18 +247,18 @@ function loadMessages() {
         return;
     }
 
-    messagesContainer.innerHTML = '';
+    UcursedntUtils.DOM.safeSetHTML(messagesContainer, '');
 
     if (chatHistory.length === 0) {
         // Show welcome message
         const welcomeMessage = document.createElement('div');
         welcomeMessage.className = 'welcome-message';
-        welcomeMessage.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(welcomeMessage, `
             <div class="message-content">
                 ¡Hola! Soy tu asistente de IA powered by Gemini. ¿En qué puedo ayudarte hoy?
             </div>
             <div class="message-time">${new Date().toLocaleTimeString()}</div>
-        `;
+        `);
         messagesContainer.appendChild(welcomeMessage);
     } else {
         // Display chat history
@@ -278,7 +278,7 @@ function renderChatMessages() {
 
 // Show API configuration notice
 function showAPIConfigNotice(container) {
-    container.innerHTML = `
+    UcursedntUtils.DOM.safeSetHTML(container, `
         <div class="api-config-notice">
             <h3>🤖 Configuración de API requerida</h3>
             <p>Para usar el chat integrado, configura tu API key de Google AI Studio.</p>
@@ -299,7 +299,7 @@ function showAPIConfigNotice(container) {
                 <i class="fa-regular fa-cog"></i> Ir a Configuración
             </button>
         </div>
-    `;
+    `);
 
     // Add event listener for the config button
     const configBtn = container.querySelector('#config-btn-inline');
@@ -317,10 +317,10 @@ function displayMessage(role, content, timestamp) {
     messageDiv.className = `chat-message ${role}-message`;
     
     const messageTime = new Date(timestamp).toLocaleTimeString();
-    messageDiv.innerHTML = `
+    UcursedntUtils.DOM.safeSetHTML(messageDiv, `
         <div class="message-content">${content}</div>
         <div class="message-time">${messageTime}</div>
-    `;
+    `);
     
     messagesContainer.appendChild(messageDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -494,12 +494,12 @@ function openExtensionSettings() {
 function showError(message) {
     const messagesContainer = document.getElementById('chat-messages');
     if (messagesContainer) {
-        messagesContainer.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(messagesContainer, `
             <div class="api-config-notice">
                 <h3>⚠️ Error</h3>
                 <p>${message}</p>
             </div>
-        `;
+        `);
     }
 }
 
@@ -673,7 +673,7 @@ function renderChatList() {
     const chatList = document.getElementById('chat-list');
     if (!chatList) return;
     
-    chatList.innerHTML = '';
+    UcursedntUtils.DOM.safeSetHTML(chatList, '');
     
     chatsHistory.forEach(chat => {
         const chatItem = document.createElement('div');
@@ -688,7 +688,7 @@ function renderChatList() {
             minute: '2-digit'
         });
         
-        chatItem.innerHTML = `
+        UcursedntUtils.DOM.safeSetHTML(chatItem, `
             <div class="chat-item-header">
                 <div class="chat-item-title" title="${chat.title}">${chat.title}</div>
                 <div class="chat-item-date">${formattedDate}</div>
@@ -702,7 +702,7 @@ function renderChatList() {
                     <i class="fa-regular fa-trash"></i>
                 </button>
             </div>
-        `;
+        `);
         
         // Add event listeners for the action buttons
         const renameBtn = chatItem.querySelector('.rename-btn');
@@ -754,9 +754,9 @@ function toggleExplorer() {
     if (explorer && toggleBtn) {
         explorerVisible = !explorerVisible;
         explorer.style.display = explorerVisible ? 'flex' : 'none';
-        toggleBtn.innerHTML = explorerVisible ? 
+        UcursedntUtils.DOM.safeSetHTML(toggleBtn, explorerVisible ? 
             '<i class="fa-regular fa-times"></i>' : 
-            '<i class="fa-regular fa-map"></i>';
+            '<i class="fa-regular fa-map"></i>');
         toggleBtn.title = explorerVisible ? 'Ocultar explorador' : 'Mostrar explorador';
     }
 }
@@ -765,7 +765,7 @@ function updateExplorerMinimap() {
     const minimap = document.getElementById('explorer-minimap');
     if (!minimap || !explorerVisible) return;
     
-    minimap.innerHTML = '';
+    UcursedntUtils.DOM.safeSetHTML(minimap, '');
     
     chatHistory.forEach((message, index) => {
         const minimapItem = document.createElement('div');

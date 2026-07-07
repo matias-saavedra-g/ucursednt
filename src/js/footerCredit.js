@@ -31,7 +31,7 @@
             creditLink.href = 'https://mt.mattia.cl';
             creditLink.target = '_blank';
             creditLink.rel = 'noopener noreferrer';
-            creditLink.innerHTML = 'Made with ❤️ by Matías Ignacio';
+            UcursedntUtils.DOM.safeSetHTML(creditLink, 'Made with ❤️ by Matías Ignacio');
             
             creditLi.appendChild(creditLink);
             
