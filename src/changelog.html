@@ -29,6 +29,54 @@ Extensión para mejorar tu experiencia en U-Cursos
         <div class="changelog-section">
             <div class="version-header">
                 <div class="version-title">
+                    <span class="version-number">Versión 26.7.2</span>
+                    <span class="version-date">Julio 2026</span>
+                    <span class="version-badge badge-hotfix">Hotfix</span>
+                </div>
+                <div class="version-description">
+                    Correcciones en CSP, parseo DOM, build y documentación.
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-improved">↑</div>
+                        Mejoras y Correcciones
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Compatibilidad con CSP y Parseo DOM:</strong> Se reemplazaron asignaciones inseguras de <code>innerHTML</code> por utilidades seguras basadas en <code>DOMParser</code> y <code>safeSetHTML</code>, cerrando problemas de compatibilidad con la política de contenido y corrigiendo el manejo del DOM en módulos de la extensión.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Conteo de Texto Largo:</strong> <code>muchoTexto.js</code> ahora reconoce mejor párrafos, saltos de línea y etiquetas <code>&lt;br&gt;</code> para calcular el largo del contenido con mayor precisión.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Registro de Build:</strong> <code>build.py</code> ahora guarda sus salidas en <code>scripts/logs/</code> para facilitar la depuración y el seguimiento de errores de empaquetado.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Corrección de Documentación:</strong> Se reparó una ecuación matemática en <code>README.md</code> que no se mostraba correctamente.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
                     <span class="version-number">Versión 26.7.1</span>
                     <span class="version-date">Julio 2026</span>
                     <span class="version-badge badge-hotfix">Hotfix</span>
