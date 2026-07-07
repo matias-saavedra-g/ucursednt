@@ -15,7 +15,7 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 <br>
 
 
-![Version](https://img.shields.io/badge/versión-26.7.1-blue) ![Manifest](https://img.shields.io/badge/manifest-v3-green) ![License](https://img.shields.io/github/license/matias-saavedra-g/ucursednt)
+![Version](https://img.shields.io/badge/versión-26.7.2-blue) ![Manifest](https://img.shields.io/badge/manifest-v3-green) ![License](https://img.shields.io/github/license/matias-saavedra-g/ucursednt)
 
 ---
 
