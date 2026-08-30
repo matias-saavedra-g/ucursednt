@@ -29,6 +29,57 @@ Extensión para mejorar tu experiencia en U-Cursos
         <div class="changelog-section">
             <div class="version-header">
                 <div class="version-title">
+                    <span class="version-number">Versión 26.8.1</span>
+                    <span class="version-date">Agosto 2026</span>
+                    <span class="version-badge badge-hotfix">Hotfix</span>
+                </div>
+                <div class="version-description">
+                    Botón manual para contar semanas, adaptación semestral y corrección en el contador de semanas lectivas.
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-added">+</div>
+                        Nuevas Características
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Botón "Contar semanas":</strong> Se añadió un botón manual en la vista de horario junto a "Add Event" / "Agregar Evento" con el tooltip <em>"Contar semanas para el semestre actual, en caso de que el automático haya fallado"</em>, permitiendo invalidar el caché e invocar el cálculo de semanas bajo demanda.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-improved">↑</div>
+                        Mejoras y Correcciones
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Adaptación por Semestre en Horario:</strong> <code>weekCounter.js</code> ahora filtra las fechas del mapa de calor por el semestre académico activo (Otoño/Primavera), impidiendo que el contador sume semanas del semestre anterior y superando el límite real de 18 semanas por semestre.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Validación Bilingüe y Enlaces de Cursos:</strong> Se amplió el reconocimiento de bloques a términos en inglés (<em>Lecture</em>, <em>TA Session</em>, etc.), enlaces de cursos y pastillas de ramos para evitar que semanas lectivas activas se descarten incorrectamente como receso.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
                     <span class="version-number">Versión 26.7.2</span>
                     <span class="version-date">Julio 2026</span>
                     <span class="version-badge badge-hotfix">Hotfix</span>
