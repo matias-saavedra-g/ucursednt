@@ -5,6 +5,16 @@
     // Function to get an item from Chrome Storage
     
 
+    // Logro "Animaciones de Navegación": se marca la primera vez que se pasa el cursor por el menú
+    let discovered = false;
+    async function markDiscovered() {
+        if (discovered) return;
+        discovered = true;
+        if (await UcursedntUtils.Storage.get("navigationAnimationsDiscovered") !== true) {
+            await UcursedntUtils.Storage.set("navigationAnimationsDiscovered", true);
+        }
+    }
+
     // Function to add macOS dock-like animations to the navigation menu
     function addNavigationAnimations() {
         const style = document.createElement('style');
@@ -51,7 +61,10 @@
         }
 
         items.forEach((item, index) => {
-            item.addEventListener('mouseenter', () => applyDock(index));
+            item.addEventListener('mouseenter', () => {
+                applyDock(index);
+                markDiscovered();
+            });
         });
 
         nav.addEventListener('mouseleave', resetDock);

@@ -125,7 +125,7 @@
         { id: 'scheduleDateFirstHover', service: 'calendario', name: 'Primer Hover en Fecha de Programación', description: 'Pasa el cursor sobre una fecha programada.', rarity: 'epic' },
         { id: 'collapsableMenusFirstClick', service: 'favoritos', name: 'Primer Click en Menús Colapsables', description: 'Colapsa una sección de la página principal.', rarity: 'rare' },
         { id: 'taskSubmissionSoundFirstClick', icon: 'music', name: 'Primer Sonido de Entrega', description: 'Escucha el sonido de entrega de tareas.', rarity: 'legendary' },
-        { id: 'navigationAnimationsDiscovered', flag: 'navigationAnimations', icon: 'sparkles', name: 'Animaciones de Navegación', description: 'Descubre las animaciones del menú de navegación.', rarity: 'legendary' },
+        { id: 'navigationAnimationsDiscovered', icon: 'sparkles', name: 'Animaciones de Navegación', description: 'Descubre las animaciones del menú de navegación.', rarity: 'legendary' },
         { id: 'forumDownloadFirstUse', service: 'foro', name: 'Archivista del Foro', description: 'Descarga un foro por primera vez.', rarity: 'epic' },
         { id: 'systemThemeFirstUse', icon: 'contrast', name: 'Camaleón', description: 'Elige un tema que se adapta a tu sistema.', rarity: 'rare' },
         { id: 'gradesWeightsFirstUse', icon: 'calculator', name: 'Calculadora en Mano', description: 'Ingresa tu primer peso en el ponderador de notas.', rarity: 'rare' },
