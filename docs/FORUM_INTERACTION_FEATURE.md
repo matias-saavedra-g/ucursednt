@@ -1,3 +1,5 @@
+> **Actualizado en 26.10.1:** el menú "Funciones IA" ahora es un `<select>` nativo y envía el contenido a Claude, ChatGPT, Gemini o Perplexity en vez del chat con API de Gemini, que fue retirado. Partes de este documento describen el comportamiento anterior.
+
 # Forum Interaction Feature - Documentación Técnica
 
 ## Descripción General

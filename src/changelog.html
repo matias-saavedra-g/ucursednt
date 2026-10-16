@@ -1,4 +1,3 @@
-<script src="js/browser-polyfill.min.js"></script>
 <!DOCTYPE html>
 
 <html lang="es">
@@ -6,6 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>U-Cursedn't - Changelog</title>
+<script src="js/browser-polyfill.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="css/changelog.css">
 </head>
@@ -26,6 +29,123 @@ Extensión para mejorar tu experiencia en U-Cursos
 </div>
 
     <div class="content">
+        <div class="changelog-section">
+            <div class="version-header">
+                <div class="version-title">
+                    <span class="version-number">Versión 26.10.1</span>
+                    <span class="version-date">Octubre 2026</span>
+                    <span class="version-badge badge-feature">Feature</span>
+                </div>
+                <div class="version-description">
+                    Ponderador de notas, IA a través de Claude, ChatGPT, Gemini o Perplexity, notificaciones de logros, tema según el sistema, rediseño de Configuración y Logros, y releases automáticas.
+                </div>
+            </div>
+
+            <div class="changes-list">
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-added">+</div>
+                        Nuevas Características
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Logros de U-Cursos:</strong> Se añadió <code>ucursosActivity.js</code> con 39 logros nuevos por acciones típicas de U-Cursos, agrupados en Foros, Ramos, Comunidad y Hábitos: publicar en el foro, abrir un hilo caliente, revisar las notas 5 veces el mismo día, entregar una tarea a las 23:xx, votar, subir un afiche, rachas de 7 y 30 días, Fiestas Patrias y más.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Tema según el Sistema:</strong> Se añadió <code>systemTheme.js</code>, que reemplaza la lista de temas del pie de página por un menú desplegable con las opciones <em>Focus (Sistema)</em> y <em>Clásico (Sistema)</em> junto a los cuatro temas nativos. Detecta <code>prefers-color-scheme</code> y aplica automáticamente la variante clara u oscura del tema elegido, actualizándose en vivo cuando el sistema cambia de modo. Elegir un tema nativo desactiva el modo automático.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Ponderador de Notas:</strong> Se añadió <code>gradesWeights.js</code>, que agrega una columna "Peso" a la tabla de notas y un peso por grupo de evaluaciones, y muestra arriba la nota final ponderada (Σ<sub>j</sub> W<sub>j</sub> Σ<sub>i</sub> w<sub>ij</sub>·g<sub>i</sub>). Los campos vacíos se reparten en partes iguales el porcentaje libre, el grupo "Notas para el Acta" parte en 0%, y si faltan notas indica el porcentaje evaluado y el promedio sobre lo evaluado. Los pesos se guardan por curso.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Preguntar a la IA:</strong> UCursitos ahora abre tu pregunta en Claude, ChatGPT, Gemini o Perplexity en una pestaña nueva, con el texto ya escrito y, si quieres, el contenido de la página como contexto. No requiere API key (<code>askAI.js</code>, <code>UcursedntUtils.AI</code>).
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Material Docente con IA:</strong> Cada archivo de Material Docente y Material Alumnos tiene un menú "Funciones IA" que lo abre ya adjunto en Claude, ChatGPT, Gemini o Perplexity, sin pasar por la carpeta de descargas (<code>materialAI.js</code>, <code>aiAttach.js</code>). El acceso a esos sitios es un permiso opcional que se pide solo la primera vez.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Notificaciones de Logros:</strong> Al desbloquear un logro aparece un aviso al estilo de Steam con la medalla y su rareza (<code>achievementToast.js</code>). Los logros de interacción ahora también se guardan de forma permanente.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-added"></div>
+                            <div class="change-text">
+                                <strong>Nuevos Logros:</strong> "Tema según el Sistema", "Camaleón", "Ponderador de Notas", "Calculadora en Mano" y "Segunda Opinión".
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="change-category">
+                    <div class="category-title">
+                        <div class="category-icon icon-improved">↑</div>
+                        Mejoras y Correcciones
+                    </div>
+                    <ul class="change-list">
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Nuevo Diseño del Changelog:</strong> Esta página se rediseñó como una bitácora de lectura: tipografía nueva, número de versión fijo a la izquierda en ventanas anchas, colores por tipo de cambio y tema claro u oscuro según el sistema. Pensada primero para el popup de 400 px.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-technical"></div>
+                            <div class="change-text">
+                                <strong>Crawler de U-Cursos:</strong> <code>scripts/crawl_ucursos.py</code> recorre tus cursos con tu sesión (solo GET, sin seguir enlaces de acciones) y genera un reporte de formularios y selectores para verificar los logros de U-Cursos.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Funciones IA del Foro:</strong> El menú "Funciones IA" ahora es un <code>&lt;select&gt;</code> nativo, consistente con el selector de temas y los filtros de U-Cursos. Copia el post o el hilo, o lo envía a un asistente web. Se corrigió la extracción del autor, título y fecha en los posts raíz.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-removed"></div>
+                            <div class="change-text">
+                                <strong>Chat IA con API de Gemini Retirado:</strong> Se eliminaron el chat flotante con API, el panel lateral, el popup de IA y las llamadas a Gemini del background, junto con el permiso <code>sidePanel</code> y el acceso a <code>generativelanguage.googleapis.com</code>. Al actualizar se borran la API key y el historial guardados.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Logros Permanentes:</strong> Los logros desbloqueados se guardan con su fecha en <code>unlockedAchievements</code> y ya no se pierden al desactivar la función que los otorgó.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Rediseño de Configuración y Logros:</strong> Ambas páginas usan los componentes nativos de U-Cursos (formularios, pills, barras de progreso, botones) y siguen el tema activo, incluido el modo oscuro. Las funciones se agrupan por categoría con íconos de servicios de U-Cursos y un filtro de búsqueda, y los logros se muestran como medallas SVG por rareza. El catálogo compartido vive en el nuevo <code>extensionPages.js</code>.
+                            </div>
+                        </li>
+                        <li class="change-item">
+                            <div class="change-bullet bullet-improved"></div>
+                            <div class="change-text">
+                                <strong>Releases Automáticas:</strong> Nuevo workflow de GitHub Actions (<code>release.yml</code>) que ejecuta <code>build.py</code> y sube los zips de Chrome y Firefox a GitHub Releases cada vez que cambia la versión del manifest.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <div class="changelog-section">
             <div class="version-header">
                 <div class="version-title">
@@ -323,7 +443,7 @@ Extensión para mejorar tu experiencia en U-Cursos
 
                 <div class="change-category">
                     <div class="category-title">
-                        <div class="category-icon icon-technical">🔧</div>
+                        <div class="category-icon icon-technical">{}</div>
                         Mejoras Técnicas y de Arquitectura
                     </div>
                     <ul class="change-list">
@@ -448,7 +568,7 @@ Extensión para mejorar tu experiencia en U-Cursos
 
                 <div class="change-category">
                     <div class="category-title">
-                        <div class="category-icon icon-technical">🔧</div>
+                        <div class="category-icon icon-technical">{}</div>
                         Mejoras Técnicas
                     </div>
                     <ul class="change-list">
@@ -505,7 +625,7 @@ Extensión para mejorar tu experiencia en U-Cursos
 
                 <div class="change-category">
                     <div class="category-title">
-                        <div class="category-icon icon-technical">🔧</div>
+                        <div class="category-icon icon-technical">{}</div>
                         Mejoras Técnicas
                     </div>
                     <ul class="change-list">
@@ -648,11 +768,11 @@ Extensión para mejorar tu experiencia en U-Cursos
                 Código Fuente
             </a>
             <a href="https://github.com/matias-saavedra-g/ucursednt/issues" target="_blank" rel="noopener" class="footer-link">
-                <i class="fa-regular fa-bug"></i>
+                <i class="fa-solid fa-bug"></i>
                 Reportar Problemas
             </a>
             <a href="https://github.com/matias-saavedra-g/ucursednt/releases" target="_blank" rel="noopener" class="footer-link">
-                <i class="fa-regular fa-download"></i>
+                <i class="fa-solid fa-download"></i>
                 Descargas
             </a>
         </div>

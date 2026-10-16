@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U-Cursedn't - Adjuntar en asistentes IA</title>
+<style>
+    :root { color-scheme: light dark; --bg: #f4f6f8; --card: #fff; --text: #1f2933; --muted: #5f6b7a; --accent: #1f6feb; --border: #d8dee4; }
+    @media (prefers-color-scheme: dark) {
+        :root { --bg: #11161d; --card: #1c2532; --text: #e6edf3; --muted: #9aa7b4; --accent: #2f81f7; --border: #2e3c4f; }
+    }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px; box-sizing: border-box;
+        background: var(--bg); color: var(--text); font: 15px/1.5 'Segoe UI', Arial, sans-serif; }
+    main { width: 100%; max-width: 460px; padding: 24px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); box-sizing: border-box; }
+    header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    header img { width: 32px; height: 32px; }
+    h1 { margin: 0; font-size: 18px; }
+    p { margin: 0 0 12px; }
+    ul { margin: 0 0 12px; padding-left: 20px; color: var(--muted); }
+    .muted { color: var(--muted); font-size: 13px; }
+    .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+    button { padding: 8px 14px; border-radius: 6px; border: 1px solid var(--border); background: transparent; color: inherit; font: inherit; cursor: pointer; }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+    <header>
+        <img src="icons/icon48.png" alt="">
+        <h1>Adjuntar archivos en asistentes IA</h1>
+    </header>
+    <div id="request" hidden>
+        <p>Para adjuntar <strong id="file-name"></strong> en <strong id="provider"></strong> automáticamente, U-Cursedn't necesita acceso a estos sitios:</p>
+        <ul id="origins"></ul>
+        <p class="muted">Solo se usa para poner el archivo y el texto en el cuadro de mensaje, sin enviarlo. La extensión no lee tus conversaciones. Se pide una sola vez.</p>
+        <div class="actions">
+            <button type="button" class="primary" id="grant">Permitir y continuar</button>
+            <button type="button" id="cancel">Cancelar</button>
+        </div>
+    </div>
+    <p id="status" hidden></p>
+</main>
+<script src="js/browser-polyfill.min.js"></script>
+<script src="js/aiPermission.js"></script>
+</body>
+</html>

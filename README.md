@@ -15,15 +15,14 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 <br>
 
 
-![Version](https://img.shields.io/badge/versión-26.7.2-blue) ![Manifest](https://img.shields.io/badge/manifest-v3-green) ![License](https://img.shields.io/github/license/matias-saavedra-g/ucursednt)
+![Version](https://img.shields.io/badge/versión-26.10.1-blue) ![Manifest](https://img.shields.io/badge/manifest-v3-green) ![License](https://img.shields.io/github/license/matias-saavedra-g/ucursednt)
 
 ---
 
 # Índice - [Funcionalidades](#funcionalidades)
 - [Índice - Funcionalidades](#índice---funcionalidades)
 - [Funcionalidades](#funcionalidades)
-  - [🤖 Chat IA Flotante con Gemini](#-chat-ia-flotante-con-gemini)
-  - [🪟 Panel Lateral de IA (Side Panel)](#-panel-lateral-de-ia-side-panel)
+  - [🤖 Preguntar a la IA (Claude, ChatGPT, Gemini, Perplexity)](#-preguntar-a-la-ia-claude-chatgpt-gemini-perplexity)
   - [📋 Utilidades de Copia Fácil](#-utilidades-de-copia-fácil)
       - [Copia Fácil de Notas](#copia-fácil-de-notas)
       - [Copia Fácil de Miembros](#copia-fácil-de-miembros)
@@ -34,11 +33,13 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
       - [💥 Secciones Colapsables](#-secciones-colapsables)
       - [🔄 Autocarga de Páginas (Infinite Scroll)](#-autocarga-de-páginas-infinite-scroll)
       - [💬 Interacción con Foros](#-interacción-con-foros)
+      - [🧮 Ponderador de Notas](#-ponderador-de-notas)
       - [📖 Recortar Texto Largo ("Mucho Texto")](#-recortar-texto-largo-mucho-texto)
       - [📐 Redimensionar Vista Previa de PDF](#-redimensionar-vista-previa-de-pdf)
       - [🔊 Sonido de Entrega de Tareas](#-sonido-de-entrega-de-tareas)
       - [✍️ Autocompletar Tareas](#️-autocompletar-tareas)
       - [✨ Animaciones de Navegación](#-animaciones-de-navegación)
+      - [🌓 Tema según el Sistema](#-tema-según-el-sistema)
   - [🔔 Notificaciones y Atajos](#-notificaciones-y-atajos)
       - [Notificación de Tareas y Pendientes](#notificación-de-tareas-y-pendientes)
       - [📆 Contador de Semanas Inteligente](#-contador-de-semanas-inteligente)
@@ -52,34 +53,23 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
   - [Firefox](#firefox)
   - [Opera](#opera)
   - [Microsoft Edge](#microsoft-edge)
+  - [Verificar selectores de U-Cursos](#verificar-selectores-de-u-cursos)
 
 ---
 
 # Funcionalidades
 
-## 🤖 Chat IA Flotante con Gemini
+## 🤖 Preguntar a la IA (Claude, ChatGPT, Gemini, Perplexity)
 <img src="src/images/ucursitos.png" width="200"/>
 
-> Archivo: `aiChatPopup.js`
+> Archivos: `askAI.js`, `utilities.js` (`UcursedntUtils.AI`)
 
-- **Asistente Virtual:** Un popup flotante con la mascota "UCursitos" te da acceso directo a la IA de Gemini.
-- **Conversaciones Multi-turn:** Soporte para historial de conversación completo enviado al modelo en cada consulta, para respuestas más contextuales.
-- **Historial de Chat:** Guarda tus conversaciones y permite exportarlas.
-- **Personalización:** Configura tu propia API Key de Google AI Studio y personaliza las instrucciones del sistema para adaptar el comportamiento del asistente a tus necesidades.
-- **Integración con Foros:** Envía hilos o posts completos del foro directamente al chat para obtener resúmenes, explicaciones o ayuda.
-- **Modelo actualizado:** Ahora conecta con Gemini Flash Lite Latest.
+- **UCursitos:** La mascota flotante abre un panel donde escribes tu pregunta, eliges el asistente y se abre en una pestaña nueva con el texto ya escrito, usando tu propia sesión. No se necesita API key.
+- **Contexto de la página:** Opcionalmente incluye el texto de la página de U-Cursos que estás viendo.
+- **Proveedores:** Claude (`claude.ai/new?q=`), ChatGPT (`chatgpt.com/?q=`) y Perplexity reciben el texto en el enlace. Gemini no acepta texto por enlace, así que se copia al portapapeles para pegarlo; lo mismo ocurre con textos muy largos en cualquier proveedor.
+- **Configuración:** Elige el asistente por defecto y las instrucciones que se anteponen a cada envío desde el menú de configuración.
 
----
-
-## 🪟 Panel Lateral de IA (Side Panel)
-
-> Archivos: `sidepanel.html`, `sidepanel.js`, `sidepanel.css`
-
-- **Chat IA en el Panel Lateral:** Abre un panel lateral nativo de Chrome con el asistente UCursedn't AI directamente integrado en el navegador, sin interrumpir tu navegación.
-- **Arquitectura Amnesia-Proof MV3:** El estado del chat se persiste en `chrome.storage` para sobrevivir reinicios del service worker.
-- **Historial persistente:** Guarda y accede a múltiples conversaciones anteriores desde el panel.
-- **Soporte Gemini Nano (Local):** Detección automática de Gemini Nano para procesamiento local si está disponible.
-- **Acceso rápido:** Abre el panel lateral directamente desde el popup de la extensión o el sidebar action en Firefox.
+> El antiguo chat con API de Gemini, el panel lateral y el popup de IA fueron retirados en la versión 26.10.1. Al actualizar, la extensión borra la API key y el historial que tenían guardados.
 
 ---
 
@@ -140,7 +130,16 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 
 > Archivo: `forumInteraction.js`
 
-- **Copia y envía al Chat IA:** Copia el contenido de un post o de un hilo completo, o envíalo directamente al Chat IA para un análisis rápido. Los botones se integran de forma nativa en las opciones del foro.
+- **Funciones IA:** Un menú desplegable nativo junto a "Reply" y "Permalink" permite copiar un post o el hilo completo, o enviarlo a Claude, ChatGPT, Gemini o Perplexity para resumirlo o analizarlo.
+
+#### 🧮 Ponderador de Notas
+> Archivo: `gradesWeights.js`
+
+- Agrega una columna **Peso** a la tabla de notas y un campo **Peso del grupo** en cada grupo de evaluaciones (Casos prácticos, Tareas, Test...).
+- Muestra arriba de la tabla tu **nota final ponderada**, calculada como $\sum_j W_j \sum_i w_{ij}\, g_i$, donde $W_j$ es el peso del grupo $j$ y $w_{ij}$ el peso de la evaluación $i$ dentro de ese grupo.
+- Los campos vacíos se reparten en partes iguales el porcentaje que queda libre, así que funciona sin configurar nada. El grupo "Notas para el Acta" parte en 0% para no contar dos veces la nota oficial.
+- Si aún faltan notas, indica qué porcentaje del peso llevas evaluado y tu promedio sobre lo evaluado. Avisa cuando los pesos no suman 100%.
+- Los pesos se guardan por curso.
 
 #### 📖 Recortar Texto Largo ("Mucho Texto")
 <img src="src/images/muchoTexto.png"/>
@@ -179,6 +178,15 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 
 - Añade un efecto de magnificación al estilo del Dock de macOS al menú de navegación principal: los ítems se escalan suavemente al pasar el cursor, dando una experiencia más fluida y moderna.
 
+#### 🌓 Tema según el Sistema
+> Archivo: `systemTheme.js`
+
+- Reemplaza la lista de temas del pie de página de U-Cursos por un menú desplegable que agrega **Focus (Sistema)** y **Clásico (Sistema)** a los cuatro temas nativos.
+- Detecta la preferencia de tu sistema operativo (`prefers-color-scheme`) y aplica automáticamente la variante clara u oscura del tema elegido (`focus` / `focus-dark` o `classic` / `classic-dark`).
+- Reacciona en vivo: si tu sistema cambia de claro a oscuro (o viceversa), el tema de U-Cursos se actualiza solo.
+- Elegir manualmente cualquier tema nativo (Focus, Focus Oscuro, Claro, Oscuro) desactiva el modo automático.
+- Se puede activar o desactivar desde el menú de configuración de la extensión.
+
 ---
 
 ## 🔔 Notificaciones y Atajos
@@ -214,10 +222,19 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 ## 🏆 Sistema de Logros
 <img src="src/images/achievementsGen.png"/>
 
-> Archivos: `achievementsGen.js`, `achievementsBoton.js`
+> Archivos: `achievementsGen.js`, `achievementsBoton.js`, `achievementToast.js`, `ucursosActivity.js`, `catalog.js`, `extensionPages.js`
 
-- **Gamificación:** Desbloquea logros al utilizar las diferentes funcionalidades de la extensión.
-- **Página de Logros:** Accede a una página dedicada desde el menú principal para ver tu progreso, el total de logros y los que te faltan por descubrir.
+- **Gamificación:** 71 logros en tres familias: 18 por activar funciones de la extensión, 14 por interactuar con ellas y 39 por hacer lo de siempre en U-Cursos.
+- **Logros de U-Cursos:** `ucursosActivity.js` detecta acciones típicas de un estudiante de la U. de Chile, agrupadas en cuatro categorías:
+  - **Foros:** entrar al foro de un curso o de la facultad, publicar tu primer mensaje (y 10 más), abrir un hilo con 10 o más respuestas, leer un hilo de compraventa ("Vendo mi TI-Nspire") o uno preguntando por las notas.
+  - **Ramos, notas y tareas:** revisar las notas 5 veces el mismo día ("F5 a las Notas"), entregar una tarea (o entregarla entre las 23:00 y las 23:59), abrir Mis Tareas sin pendientes, descargar 10 archivos de material, responder una encuesta, revisar asistencias, historial o Clase Virtual.
+  - **Comunidad y perfil:** marcar estrellas, reaccionar, agregar Favoritos o una página de inicio, votar, subir un afiche, enviar un correo, visitar 3 comunidades o el perfil de otra persona.
+  - **Hábitos y exploración:** temas oscuros, U-Cursos en inglés, el buscador, cursos de hace 5 años o más, la página 50 de un listado, 12 módulos distintos, trasnoches, fines de semana, Fiestas Patrias y rachas de 7 y 30 días.
+- **Privacidad:** Todo se calcula en tu navegador con contadores guardados en el almacenamiento de la extensión (`ucursosActivity`); no se envía nada a ningún servidor.
+- **Página de Logros:** Accede a una página dedicada desde el menú principal para ver tu progreso, el total de logros y los que te faltan por descubrir, como medallas por rareza (común, raro, épico, legendario).
+- **Logros permanentes:** Cada logro se guarda con su fecha de desbloqueo y se mantiene aunque después desactives la función que lo otorgó.
+- **Notificaciones:** Al desbloquear un logro aparece un aviso en la esquina inferior derecha, al estilo de Steam, con la medalla y su rareza.
+- **Estilo nativo:** La página usa los componentes de U-Cursos y sigue el tema activo, claro u oscuro.
 
 ---
 
@@ -229,9 +246,9 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 ## ⚙️ Menú de Configuración
 <img src="src/images/menuGen.png"/>
 
-> Archivos: `menuGen.js`, `menuBoton.js`
+> Archivos: `menuGen.js`, `menuBoton.js`, `extensionPages.js`
 
-- **Control Total:** Activa o desactiva cualquier funcionalidad de la extensión a través de un menú de configuración dedicado y fácil de usar.
+- **Control Total:** Activa o desactiva cualquier funcionalidad de la extensión desde un menú agrupado por categoría, con filtro de búsqueda y el estilo nativo de U-Cursos (sigue el tema claro u oscuro).
 - **Gestión de Datos:** Visualiza y gestiona los datos que la extensión guarda en tu navegador.
 
 ---
@@ -278,6 +295,20 @@ python scripts/build.py
 1. Realizar los pasos de compilación con `python scripts/build.py`.
 2. Abrir Microsoft Edge y navegar a `edge://extensions/`.
 3. Activar Modo Desarrollador y cargar la carpeta descomprimida **`dist/chrome/`**.
+
+---
+
+## Verificar selectores de U-Cursos
+
+`scripts/crawl_ucursos.py` recorre tus cursos, comunidades y módulos con tu sesión y genera un reporte con los formularios y selectores que usa `ucursosActivity.js`. Solo hace peticiones GET y nunca sigue enlaces con `csrf`, `accion`, `subaccion` o `logout`, así que no publica, no vota ni cierra tu sesión.
+
+```bash
+pip install requests beautifulsoup4
+python scripts/crawl_ucursos.py                                          # cookies del perfil de Zen Browser
+python scripts/crawl_ucursos.py --cookies scripts/logs/ucursos_cookies.json  # export JSON de cookies
+```
+
+El HTML de cada página y `report.md` quedan en `scripts/logs/ucursos_crawl_<fecha>/`. Guarda el archivo de cookies dentro de `scripts/logs/`, que está ignorado por git: esas cookies dan acceso a tu cuenta.
 
 ---
 

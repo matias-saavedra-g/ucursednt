@@ -1,7 +1,7 @@
 {
   "name": "U-Cursedn't",
-  "version": "26.8.1",
-  "description": "Esta extensi\u00f3n agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
+  "version": "26.10.1",
+  "description": "Esta extensión agrega funciones adicionales a la plataforma de U-Cursos y respectivos logros por hacer cada una de ellas.",
   "manifest_version": 3,
   "author": "matias-saavedra-g",
   "browser_specific_settings": {
@@ -9,7 +9,9 @@
       "id": "ucursednt@matias-saavedra-g",
       "strict_min_version": "142.0",
       "data_collection_permissions": {
-        "required": ["websiteContent"]
+        "required": [
+          "websiteContent"
+        ]
       }
     }
   },
@@ -17,22 +19,21 @@
     "activeTab",
     "clipboardWrite",
     "storage",
-    "tabs"
+    "tabs",
+    "scripting"
   ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src https://generativelanguage.googleapis.com"
-  },
-  "sidebar_action": {
-    "default_panel": "sidepanel.html"
-  },
   "host_permissions": [
-    "*://*.u-cursos.cl/*",
-    "https://generativelanguage.googleapis.com/*"
+    "*://*.u-cursos.cl/*"
+  ],
+  "optional_host_permissions": [
+    "https://claude.ai/*",
+    "https://chatgpt.com/*",
+    "https://gemini.google.com/*",
+    "https://www.perplexity.ai/*"
   ],
   "background": {
     "scripts": [
       "js/browser-polyfill.min.js",
-      "js/utilities.js",
       "js/background.js"
     ],
     "type": "module"
@@ -78,6 +79,17 @@
         "js/browser-polyfill.min.js",
         "js/utilities.js",
         "js/easyCopyGrades.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/*/*/*/*/*/notas/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/gradesWeights.js"
       ],
       "run_at": "document_end"
     },
@@ -130,6 +142,18 @@
     },
     {
       "matches": [
+        "*://*.u-cursos.cl/*/*/*/*/*/material_docente/*",
+        "*://*.u-cursos.cl/*/*/*/*/*/material_alumnos/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/materialAI.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
         "*://*.u-cursos.cl/ingenieria/2/foro_institucion/*",
         "*://www.u-cursos.cl/ingenieria/*/*/*/*/foro/*",
         "*://www.u-cursos.cl/uchile/4/foro_institucion/",
@@ -177,6 +201,8 @@
       "js": [
         "js/browser-polyfill.min.js",
         "js/utilities.js",
+        "js/catalog.js",
+        "js/extensionPages.js",
         "js/achievementsGen.js"
       ],
       "run_at": "document_end"
@@ -201,6 +227,8 @@
       "js": [
         "js/browser-polyfill.min.js",
         "js/utilities.js",
+        "js/catalog.js",
+        "js/extensionPages.js",
         "js/menuGen.js"
       ],
       "run_at": "document_end"
@@ -292,7 +320,7 @@
       ],
       "run_at": "document_end"
     },
-        {
+    {
       "matches": [
         "*://*.u-cursos.cl/*/*/*/*/*/tareas/detalle*"
       ],
@@ -310,7 +338,7 @@
       "js": [
         "js/browser-polyfill.min.js",
         "js/utilities.js",
-        "js/aiChatPopup.js"
+        "js/askAI.js"
       ],
       "run_at": "document_end"
     },
@@ -327,6 +355,17 @@
     },
     {
       "matches": [
+        "*://www.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/systemTheme.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
         "*://*.u-cursos.cl/*"
       ],
       "js": [
@@ -335,6 +374,19 @@
         "js/fuzzySearchHelper.js",
         "js/fuzzySearch.js",
         "js/autoPreload.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/catalog.js",
+        "js/achievementToast.js",
+        "js/ucursosActivity.js"
       ],
       "run_at": "document_end"
     }
@@ -351,26 +403,6 @@
     {
       "resources": [
         "popup.html"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    },
-    {
-      "resources": [
-        "aipopup.html",
-        "js/aipopup.js",
-        "css/aipopup.css"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    },
-    {
-      "resources": [
-        "sidepanel.html",
-        "js/sidepanel.js",
-        "css/sidepanel.css"
       ],
       "matches": [
         "<all_urls>"
