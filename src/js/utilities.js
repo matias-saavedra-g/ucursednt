@@ -277,6 +277,53 @@
 
                 await Utils.Storage.set('aiProviderFirstUse', true);
                 return { provider: provider.label, viaClipboard, copied };
+            },
+
+            // Adjuntar archivos (material docente): el archivo se descarga aquí con la sesión de
+            // U-Cursos y el background lo adjunta en la pestaña del asistente (js/aiAttach.js).
+            // Requiere el permiso opcional sobre el sitio del asistente; si falta, el background
+            // abre aiPermission.html para pedirlo.
+            MAX_FILE_BYTES: 30 * 1024 * 1024,
+
+            MIME_TYPES: {
+                pdf: 'application/pdf', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg',
+                txt: 'text/plain', csv: 'text/csv', zip: 'application/zip',
+                docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            },
+
+            sendFile: async function(providerId, file, text) {
+                const Utils = window.UcursedntUtils;
+                const AI = Utils.AI;
+                const settings = await AI.getSettings();
+                const id = AI.PROVIDERS[providerId] ? providerId : settings.provider;
+
+                const response = await fetch(file.url, { credentials: 'include' });
+                if (!response.ok) throw new Error(`No se pudo descargar el archivo (HTTP ${response.status})`);
+                const blob = await response.blob();
+                // Con la sesión expirada U-Cursos responde con una página HTML en vez del archivo
+                if (blob.type.startsWith('text/html')) throw new Error('U-Cursos no entregó el archivo. ¿Expiró tu sesión?');
+                if (blob.size > AI.MAX_FILE_BYTES) throw new Error('El archivo pesa más de 30 MB');
+
+                const extension = (file.name.split('.').pop() || '').toLowerCase();
+                const type = blob.type && blob.type !== 'application/octet-stream' ? blob.type : (AI.MIME_TYPES[extension] || 'application/octet-stream');
+                const data = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(String(reader.result).split(',')[1] || '');
+                    reader.onerror = () => reject(reader.error);
+                    reader.readAsDataURL(blob);
+                });
+
+                const result = await browser.runtime.sendMessage({
+                    type: 'ucd-ai-send-file',
+                    provider: id,
+                    prompt: AI.buildPrompt(text, settings.instructions),
+                    file: { name: file.name, type, data }
+                });
+
+                await Utils.Storage.set('aiProviderFirstUse', true);
+                return Object.assign({ provider: AI.PROVIDERS[id].label }, result);
             }
         },
 

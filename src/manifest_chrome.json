@@ -8,10 +8,17 @@
     "activeTab",
     "clipboardWrite",
     "storage",
-    "tabs"
+    "tabs",
+    "scripting"
   ],
   "host_permissions": [
     "*://*.u-cursos.cl/*"
+  ],
+  "optional_host_permissions": [
+    "https://claude.ai/*",
+    "https://chatgpt.com/*",
+    "https://gemini.google.com/*",
+    "https://www.perplexity.ai/*"
   ],
   "background": {
     "service_worker": "js/background.js"
@@ -115,6 +122,18 @@
         "js/browser-polyfill.min.js",
         "js/utilities.js",
         "js/resizePreviewPDF.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "*://*.u-cursos.cl/*/*/*/*/*/material_docente/*",
+        "*://*.u-cursos.cl/*/*/*/*/*/material_alumnos/*"
+      ],
+      "js": [
+        "js/browser-polyfill.min.js",
+        "js/utilities.js",
+        "js/materialAI.js"
       ],
       "run_at": "document_end"
     },

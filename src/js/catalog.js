@@ -68,6 +68,8 @@
 
         { id: 'forumInteraction', group: 'courses', service: 'foro', name: 'Interacción con foros', description: 'Copia posts e hilos, o envíalos a Claude, ChatGPT, Gemini o Perplexity.',
           achievement: { name: 'Interacción con Foros', rarity: 'rare' } },
+        { id: 'materialAI', group: 'courses', service: 'material_docente', name: 'Material docente con IA', description: 'Envía un archivo del material docente, ya adjunto, a Claude, ChatGPT, Gemini o Perplexity.',
+          achievement: { name: 'Estudio Asistido', rarity: 'rare' } },
         { id: 'muchoTexto', group: 'courses', icon: 'textFold', name: 'Recortar texto largo', description: 'Colapsa los posts muy largos del foro tras un botón "Mucho Texto".',
           achievement: { name: 'Recortar Texto Largo', rarity: 'common' } },
         { id: 'otrasRealizaciones', group: 'courses', service: 'todos_cursos', name: 'Otras realizaciones del curso', description: 'Acceso directo a versiones anteriores del mismo curso.',
