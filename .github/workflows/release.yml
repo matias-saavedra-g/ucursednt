@@ -1,0 +1,99 @@
+name: Build & Release
+
+# Builds the Chrome and Firefox packages with scripts/build.py and uploads
+# them to a GitHub Release tagged v<version> (taken from the manifests).
+# Runs automatically when a manifest version changes on main, or manually.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/manifest_chrome.json"
+      - "src/manifest_firefox.json"
+  workflow_dispatch:
+    inputs:
+      overwrite:
+        description: "Replace the assets if the release for this version already exists"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Read and validate version
+        id: version
+        run: |
+          CHROME=$(python -c "import json; print(json.load(open('src/manifest_chrome.json', encoding='utf-8'))['version'])")
+          FIREFOX=$(python -c "import json; print(json.load(open('src/manifest_firefox.json', encoding='utf-8'))['version'])")
+          if [ "$CHROME" != "$FIREFOX" ]; then
+            echo "::error::Manifest versions differ (chrome=$CHROME, firefox=$FIREFOX)"
+            exit 1
+          fi
+          echo "version=$CHROME" >> "$GITHUB_OUTPUT"
+          echo "tag=v$CHROME" >> "$GITHUB_OUTPUT"
+
+      - name: Check for existing release
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.version.outputs.tag }}" > /dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip (release already exists)
+        if: steps.existing.outputs.exists == 'true' && inputs.overwrite != true
+        run: echo "::notice::Release ${{ steps.version.outputs.tag }} already exists, nothing to do."
+
+      - name: Build extension
+        if: steps.existing.outputs.exists == 'false' || inputs.overwrite == true
+        run: python scripts/build.py
+
+      - name: Upload build log
+        if: always() && (steps.existing.outputs.exists == 'false' || inputs.overwrite == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: scripts/logs/
+          if-no-files-found: ignore
+
+      - name: Create release
+        if: steps.existing.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.tag }}" \
+            dist/chrome_v${{ steps.version.outputs.version }}.zip \
+            dist/firefox_v${{ steps.version.outputs.version }}.zip \
+            --target "${{ github.sha }}" \
+            --title "U-Cursedn't ${{ steps.version.outputs.version }}" \
+            --generate-notes
+
+      - name: Replace release assets
+        if: steps.existing.outputs.exists == 'true' && inputs.overwrite == true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${{ steps.version.outputs.tag }}" \
+            dist/chrome_v${{ steps.version.outputs.version }}.zip \
+            dist/firefox_v${{ steps.version.outputs.version }}.zip \
+            --clobber
