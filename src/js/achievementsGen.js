@@ -86,7 +86,7 @@
         const section = document.createElement('section');
         section.setAttribute('aria-label', 'Progreso');
         UcursedntUtils.DOM.safeSetHTML(section, `
-            <p class="lead">Desbloquea logros activando y usando las funciones de U-Cursedn't. Una vez desbloqueado, un logro se mantiene aunque después desactives la función.</p>
+            <p class="lead">Desbloquea logros activando y usando las funciones de U-Cursedn't, y también haciendo lo de siempre en U-Cursos: foros, notas, tareas y más. Una vez desbloqueado, un logro se mantiene aunque después desactives la función.</p>
             <div class="ucd-progress">
                 <div class="ucd-progress-count">${unlockedCount}<small> / ${total}</small></div>
                 <div class="porcentaje" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percentage}" aria-label="Logros desbloqueados">
@@ -120,11 +120,17 @@
 
         const featureAchievements = Pages.featureAchievements();
         const interactionAchievements = Pages.INTERACTIONS;
-        const all = featureAchievements.concat(interactionAchievements);
+        const all = featureAchievements.concat(interactionAchievements, Pages.UCURSOS_ACTIONS);
 
         page.appendChild(createProgressSection(all, unlocked));
         page.appendChild(createCategorySection('Funciones de la extensión', 'sliders', featureAchievements, unlocked));
         page.appendChild(createCategorySection('Interacciones y descubrimientos', 'pointer', interactionAchievements, unlocked));
+
+        // Logros por usar U-Cursos en sí, agrupados por tipo de acción
+        Pages.ACTION_GROUPS.forEach(group => {
+            const ofGroup = Pages.UCURSOS_ACTIONS.filter(a => a.group === group.id);
+            if (ofGroup.length) page.appendChild(createCategorySection(group.title, group.icon, ofGroup, unlocked));
+        });
     }
 
     await initPage();

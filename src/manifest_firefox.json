@@ -385,7 +385,8 @@
         "js/browser-polyfill.min.js",
         "js/utilities.js",
         "js/catalog.js",
-        "js/achievementToast.js"
+        "js/achievementToast.js",
+        "js/ucursosActivity.js"
       ],
       "run_at": "document_end"
     }

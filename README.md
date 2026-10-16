@@ -53,6 +53,7 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
   - [Firefox](#firefox)
   - [Opera](#opera)
   - [Microsoft Edge](#microsoft-edge)
+  - [Verificar selectores de U-Cursos](#verificar-selectores-de-u-cursos)
 
 ---
 
@@ -221,9 +222,15 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
 ## 🏆 Sistema de Logros
 <img src="src/images/achievementsGen.png"/>
 
-> Archivos: `achievementsGen.js`, `achievementsBoton.js`, `achievementToast.js`, `catalog.js`, `extensionPages.js`
+> Archivos: `achievementsGen.js`, `achievementsBoton.js`, `achievementToast.js`, `ucursosActivity.js`, `catalog.js`, `extensionPages.js`
 
-- **Gamificación:** Desbloquea logros al utilizar las diferentes funcionalidades de la extensión.
+- **Gamificación:** 71 logros en tres familias: 18 por activar funciones de la extensión, 14 por interactuar con ellas y 39 por hacer lo de siempre en U-Cursos.
+- **Logros de U-Cursos:** `ucursosActivity.js` detecta acciones típicas de un estudiante de la U. de Chile, agrupadas en cuatro categorías:
+  - **Foros:** entrar al foro de un curso o de la facultad, publicar tu primer mensaje (y 10 más), abrir un hilo con 10 o más respuestas, leer un hilo de compraventa ("Vendo mi TI-Nspire") o uno preguntando por las notas.
+  - **Ramos, notas y tareas:** revisar las notas 5 veces el mismo día ("F5 a las Notas"), entregar una tarea (o entregarla entre las 23:00 y las 23:59), abrir Mis Tareas sin pendientes, descargar 10 archivos de material, responder una encuesta, revisar asistencias, historial o Clase Virtual.
+  - **Comunidad y perfil:** marcar estrellas, reaccionar, agregar Favoritos o una página de inicio, votar, subir un afiche, enviar un correo, visitar 3 comunidades o el perfil de otra persona.
+  - **Hábitos y exploración:** temas oscuros, U-Cursos en inglés, el buscador, cursos de hace 5 años o más, la página 50 de un listado, 12 módulos distintos, trasnoches, fines de semana, Fiestas Patrias y rachas de 7 y 30 días.
+- **Privacidad:** Todo se calcula en tu navegador con contadores guardados en el almacenamiento de la extensión (`ucursosActivity`); no se envía nada a ningún servidor.
 - **Página de Logros:** Accede a una página dedicada desde el menú principal para ver tu progreso, el total de logros y los que te faltan por descubrir, como medallas por rareza (común, raro, épico, legendario).
 - **Logros permanentes:** Cada logro se guarda con su fecha de desbloqueo y se mantiene aunque después desactives la función que lo otorgó.
 - **Notificaciones:** Al desbloquear un logro aparece un aviso en la esquina inferior derecha, al estilo de Steam, con la medalla y su rareza.
@@ -288,6 +295,20 @@ python scripts/build.py
 1. Realizar los pasos de compilación con `python scripts/build.py`.
 2. Abrir Microsoft Edge y navegar a `edge://extensions/`.
 3. Activar Modo Desarrollador y cargar la carpeta descomprimida **`dist/chrome/`**.
+
+---
+
+## Verificar selectores de U-Cursos
+
+`scripts/crawl_ucursos.py` recorre tus cursos, comunidades y módulos con tu sesión y genera un reporte con los formularios y selectores que usa `ucursosActivity.js`. Solo hace peticiones GET y nunca sigue enlaces con `csrf`, `accion`, `subaccion` o `logout`, así que no publica, no vota ni cierra tu sesión.
+
+```bash
+pip install requests beautifulsoup4
+python scripts/crawl_ucursos.py                                          # cookies del perfil de Zen Browser
+python scripts/crawl_ucursos.py --cookies scripts/logs/ucursos_cookies.json  # export JSON de cookies
+```
+
+El HTML de cada página y `report.md` quedan en `scripts/logs/ucursos_crawl_<fecha>/`. Guarda el archivo de cookies dentro de `scripts/logs/`, que está ignorado por git: esas cookies dan acceso a tu cuenta.
 
 ---
 

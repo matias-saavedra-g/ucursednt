@@ -38,6 +38,14 @@
         compass: '<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
         calculator: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01M8.5 15h.01M12 15h.01M15.5 15v2.5M8.5 18h.01M12 18h.01"/>',
         send: '<path d="M4 12l16-8-6 16-2.5-6.5z"/><path d="M11.5 13.5L20 4"/>',
+        star: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z"/>',
+        flame: '<path d="M12 21a6 6 0 0 0 6-6c0-4-3-6-4-10-2.5 2-3.5 4-3.5 6.5C9.5 10 9 9 8.5 8 7 9.5 6 12 6 15a6 6 0 0 0 6 6z"/><path d="M12 21a2.5 2.5 0 0 0 2.5-2.5c0-2-2.5-3.5-2.5-3.5s-2.5 1.5-2.5 3.5A2.5 2.5 0 0 0 12 21z"/>',
+        moon: '<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/>',
+        clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/>',
+        palette: '<path d="M12 3.5a8.5 8.5 0 0 0 0 17c1.2 0 1.8-.8 1.8-1.7 0-1.4-1.3-1.6-1.3-2.8 0-.9.7-1.5 1.6-1.5h2.2a4.2 4.2 0 0 0 4.2-4.2C20.5 6.6 16.7 3.5 12 3.5z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/>',
+        home: '<path d="M4 11l8-6.5 8 6.5"/><path d="M6 9.5V20h12V9.5M10 20v-5h4v5"/>',
+        globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.5 3.5 5.5 3.5 8.5s-1 6-3.5 8.5c-2.5-2.5-3.5-5.5-3.5-8.5s1-6 3.5-8.5z"/>',
+        flag: '<path d="M5.5 21V4M5.5 4.5h11l-2.5 4 2.5 4h-11"/>',
         x: '<path d="M6 6l12 12M18 6L6 18"/>'
     };
 
@@ -124,6 +132,59 @@
         { id: 'aiProviderFirstUse', icon: 'send', name: 'Segunda Opinión', description: 'Envía contenido de U-Cursos a un asistente de IA.', rarity: 'epic' }
     ];
 
+    // ── 4. Logros por acciones típicas de U-Cursos (los desbloquea ucursosActivity.js) ──
+    const ACTION_GROUPS = [
+        { id: 'forum', title: 'Foros', icon: 'book' },
+        { id: 'courses', title: 'Ramos, notas y tareas', icon: 'calendarCheck' },
+        { id: 'community', title: 'Comunidad y perfil', icon: 'heart' },
+        { id: 'habits', title: 'Hábitos y exploración', icon: 'compass' }
+    ];
+
+    const UCURSOS_ACTIONS = [
+        { id: 'ucForumVisit', group: 'forum', service: 'foro', name: 'Lurker del Foro', description: 'Entra al foro de un curso.', rarity: 'common' },
+        { id: 'ucForoInstitucion', group: 'forum', service: 'foro', name: 'Plaza Pública', description: 'Visita el foro de tu facultad o de las comunidades.', rarity: 'common' },
+        { id: 'ucFirstPost', group: 'forum', icon: 'send', name: 'Rompiendo el Hielo', description: 'Publica tu primer mensaje en un foro.', rarity: 'rare' },
+        { id: 'ucForumRegular', group: 'forum', icon: 'send', name: 'Foreador Frecuente', description: 'Publica 10 mensajes en los foros.', rarity: 'epic' },
+        { id: 'ucHotThread', group: 'forum', icon: 'flame', name: 'Hilo Caliente', description: 'Abre un foro con un hilo de 10 respuestas o más.', rarity: 'rare' },
+        { id: 'ucMarketplace', group: 'forum', icon: 'calculator', name: 'Vendo mi TI-Nspire', description: 'Lee un hilo de compraventa (vendo, compro, regalo...).', rarity: 'rare' },
+        { id: 'ucGradesThread', group: 'forum', service: 'notas', name: '¿Y las Notas?', description: 'Lee un hilo del foro preguntando por las notas.', rarity: 'rare' },
+
+        { id: 'ucGradesF5', group: 'courses', service: 'notas', name: 'F5 a las Notas', description: 'Revisa las notas de un curso 5 veces en un mismo día.', rarity: 'epic' },
+        { id: 'ucAttendance', group: 'courses', service: 'asistencias2', name: 'Presente, Profe', description: 'Revisa tus asistencias.', rarity: 'common' },
+        { id: 'ucVirtualClass', group: 'courses', service: 'clases', name: 'Clase en Pijama', description: 'Entra a una Clase Virtual.', rarity: 'common' },
+        { id: 'ucMaterialHoarder', group: 'courses', service: 'material_docente', name: 'Juntador de Apuntes', description: 'Descarga 10 archivos de material.', rarity: 'rare' },
+        { id: 'ucTaskSubmit', group: 'courses', service: 'tareas', name: 'Entregado', description: 'Entrega una tarea por U-Cursos.', rarity: 'rare' },
+        { id: 'ucLastMinute', group: 'courses', icon: 'clock', name: 'Al Filo del Plazo', description: 'Entrega una tarea entre las 23:00 y las 23:59.', rarity: 'epic' },
+        { id: 'ucNoHomework', group: 'courses', service: 'tareas_usuario', name: 'Al Día', description: 'Abre Mis Tareas sin tener tareas pendientes.', rarity: 'rare' },
+        { id: 'ucSurvey', group: 'courses', service: 'encuestas', name: 'La Voz del Pueblo', description: 'Responde una encuesta, como la encuesta docente.', rarity: 'rare' },
+        { id: 'ucHistorial', group: 'courses', service: 'historial', name: 'Ponerse al Día', description: 'Revisa el historial de un curso.', rarity: 'common' },
+
+        { id: 'ucStar', group: 'community', icon: 'star', name: 'Estrellita en la Frente', description: 'Agrega una publicación a tus Estrellas.', rarity: 'common' },
+        { id: 'ucReaction', group: 'community', icon: 'heart', name: 'Dedo pa\' Arriba', description: 'Reacciona a una publicación.', rarity: 'common' },
+        { id: 'ucFavorite', group: 'community', service: 'favoritos', name: 'Marcapáginas', description: 'Agrega un módulo a tus Favoritos.', rarity: 'common' },
+        { id: 'ucHomePage', group: 'community', icon: 'home', name: 'Hogar, Dulce Hogar', description: 'Establece un módulo como tu página de inicio.', rarity: 'rare' },
+        { id: 'ucPosters', group: 'community', service: 'afiches', name: 'Diario Mural', description: 'Revisa los Afiches.', rarity: 'common' },
+        { id: 'ucPosterUpload', group: 'community', service: 'afiches', name: 'Publicista', description: 'Sube un afiche.', rarity: 'epic' },
+        { id: 'ucNews', group: 'community', service: 'novedades_institucion', name: 'Bien Informado', description: 'Lee las novedades de tu facultad.', rarity: 'common' },
+        { id: 'ucVote', group: 'community', service: 'votaciones', name: 'Democracia Estudiantil', description: 'Vota en una votación de U-Cursos.', rarity: 'epic' },
+        { id: 'ucCommunities', group: 'community', service: 'comunidades', name: 'Animal Social', description: 'Visita 3 comunidades distintas.', rarity: 'rare' },
+        { id: 'ucMail', group: 'community', service: 'correo', name: 'Cartero', description: 'Envía un correo desde U-Cursos.', rarity: 'rare' },
+        { id: 'ucProfileVisit', group: 'community', service: 'datos_usuario', name: 'Curiosidad', description: 'Visita el perfil de otra persona.', rarity: 'common' },
+
+        { id: 'ucSearch', group: 'habits', icon: 'search', name: 'Detective', description: 'Usa el buscador de U-Cursos.', rarity: 'common' },
+        { id: 'ucThemeChange', group: 'habits', icon: 'palette', name: 'Decorador de Interiores', description: 'Cambia el tema de U-Cursos.', rarity: 'common' },
+        { id: 'ucDarkTheme', group: 'habits', icon: 'contrast', name: 'Modo Murciélago', description: 'Usa U-Cursos con un tema oscuro.', rarity: 'common' },
+        { id: 'ucEnglish', group: 'habits', icon: 'globe', name: 'Exchange Student', description: 'Usa U-Cursos en inglés.', rarity: 'rare' },
+        { id: 'ucArchaeologist', group: 'habits', service: 'todos_cursos', name: 'Arqueólogo', description: 'Visita un curso de hace 5 años o más.', rarity: 'epic' },
+        { id: 'ucDeepScroll', group: 'habits', service: 'historial', name: 'Excavación Profunda', description: 'Llega a la página 50 de un listado.', rarity: 'epic' },
+        { id: 'ucExplorer', group: 'habits', icon: 'compass', name: 'Explorador', description: 'Visita 12 módulos distintos de U-Cursos.', rarity: 'epic' },
+        { id: 'ucNightOwl', group: 'habits', icon: 'moon', name: 'Trasnoche', description: 'Usa U-Cursos entre las 00:00 y las 05:00.', rarity: 'rare' },
+        { id: 'ucWeekend', group: 'habits', icon: 'calendarCheck', name: 'Fin de Semana Productivo', description: 'Usa U-Cursos un sábado o domingo.', rarity: 'common' },
+        { id: 'ucDieciocho', group: 'habits', icon: 'flag', name: 'Estudiando pa\'l Dieciocho', description: 'Usa U-Cursos en Fiestas Patrias (17 al 19 de septiembre).', rarity: 'legendary' },
+        { id: 'ucStreak7', group: 'habits', icon: 'flame', name: 'Rutina Universitaria', description: 'Usa U-Cursos 7 días seguidos.', rarity: 'rare' },
+        { id: 'ucStreak30', group: 'habits', icon: 'flame', name: 'Habitante de U-Cursos', description: 'Usa U-Cursos 30 días seguidos.', rarity: 'legendary' }
+    ];
+
     const RARITIES = {
         common: { label: 'Común', color: '#8b969e' },
         rare: { label: 'Raro', color: '#3d8fd6' },
@@ -176,7 +237,10 @@
 
     // Busca un logro (de función o de interacción) por id
     function findAchievement(id) {
-        return featureAchievements().find(a => a.id === id) || INTERACTIONS.find(a => a.id === id) || null;
+        return featureAchievements().find(a => a.id === id)
+            || INTERACTIONS.find(a => a.id === id)
+            || UCURSOS_ACTIONS.find(a => a.id === id)
+            || null;
     }
 
     window.UcursedntCatalog = {
@@ -184,6 +248,8 @@
         GROUPS,
         FEATURES,
         INTERACTIONS,
+        ACTION_GROUPS,
+        UCURSOS_ACTIONS,
         RARITIES,
         icon,
         entryIcon,
