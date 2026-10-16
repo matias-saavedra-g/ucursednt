@@ -54,6 +54,7 @@ Extensión multiplataforma (Chromium y Firefox) que agrega funciones adicionales
   - [Opera](#opera)
   - [Microsoft Edge](#microsoft-edge)
   - [Verificar selectores de U-Cursos](#verificar-selectores-de-u-cursos)
+  - [Actualizar las capturas del README](#actualizar-las-capturas-del-readme)
 
 ---
 
@@ -309,6 +310,26 @@ python scripts/crawl_ucursos.py --cookies scripts/logs/ucursos_cookies.json  # e
 ```
 
 El HTML de cada página y `report.md` quedan en `scripts/logs/ucursos_crawl_<fecha>/`. Guarda el archivo de cookies dentro de `scripts/logs/`, que está ignorado por git: esas cookies dan acceso a tu cuenta.
+
+## Actualizar las capturas del README
+
+`scripts/screenshot_ucursos.py` abre U-Cursos en Chromium con la extensión de `dist/chrome` cargada y tu sesión, saca una captura de cada página que recorre y regenera las imágenes de `src/images/`. Usa las mismas reglas de solo lectura que `crawl_ucursos.py` y además bloquea en el navegador cualquier petición con `csrf`, `accion`, `theme` o `logout`, incluidas las de la extensión.
+
+```bash
+pip install playwright beautifulsoup4 requests
+python -m playwright install chromium
+python scripts/build.py
+python scripts/screenshot_ucursos.py                          # crawl + imágenes del README
+python scripts/screenshot_ucursos.py --only readme            # solo las páginas guardadas, sin crawl
+python scripts/screenshot_ucursos.py --only readme --images muchoTexto --url muchoTexto=https://www.u-cursos.cl/...
+```
+
+- La URL de donde salió cada imagen queda en `scripts/logs/readme_sources.json` (ignorado por git, porque incluye tu id de usuario). `--only readme` abre solo esas páginas y las fijas (`/logros/`, `/ucursednt/`, la portada), con el recorte y el difuminado de cada imagen. `--url NOMBRE=URL` fija a mano la página de una imagen.
+
+- Las capturas usan el tema Focus claro solo en ese navegador (`--theme focus-dark`, `classic`, `classic-dark` o `cuenta`); tu preferencia en U-Cursos no cambia.
+- Difumina nombres y fotos de otras personas (`--no-blur` lo desactiva) y oculta los avisos de logros.
+- Si una imagen no se puede generar (por ejemplo, no tienes tareas pendientes para `pendingTasks.png`), se conserva la anterior y el motivo queda en `scripts/logs/ucursos_screens_<fecha>/report.md`.
+- `navigationAnimations.gif` no se regenera. Revisa los cambios con `git diff --stat src/images` antes de hacer commit.
 
 ---
 
