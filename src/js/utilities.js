@@ -89,6 +89,14 @@
                 }
             },
 
+            escapeHTML: function(value) {
+                return String(value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            },
+
             getHTML: function(element) {
                 return element.innerHTML;
             },
@@ -131,16 +139,6 @@
             safeSendRuntimeMessage: async function(message) {
                 console.log('Runtime messages disabled - background worker removed');
                 return { success: false, error: 'background_worker_removed' };
-            },
-
-            openSidePanel: async function(tabId) {
-                if (typeof browser !== 'undefined' && browser.sidebarAction) {
-                    // Firefox implementation
-                    await browser.sidebarAction.open();
-                } else if (typeof chrome !== 'undefined' && chrome.sidePanel) {
-                    // Chromium implementation
-                    await chrome.sidePanel.open({ tabId: tabId });
-                }
             }
         },
 
@@ -182,10 +180,255 @@
                 d.setHours(0, 0, 0, 0);
                 return d;
             }
+        },
+
+        // ── 6. Achievements Utilities ────────────────────────────────────────
+        // Los logros desbloqueados se guardan como { [id]: timestamp } y nunca se
+        // quitan, aunque luego se desactive la función que los otorgó.
+        Achievements: {
+            STORAGE_KEY: 'unlockedAchievements',
+
+            getUnlocked: async function() {
+                const unlocked = await window.UcursedntUtils.Storage.get(window.UcursedntUtils.Achievements.STORAGE_KEY);
+                return unlocked && typeof unlocked === 'object' ? unlocked : {};
+            },
+
+            unlock: async function(ids) {
+                const list = (Array.isArray(ids) ? ids : [ids]).filter(Boolean);
+                const unlocked = await window.UcursedntUtils.Achievements.getUnlocked();
+                const now = Date.now();
+                let changed = false;
+
+                list.forEach(id => {
+                    if (!unlocked[id]) {
+                        unlocked[id] = now;
+                        changed = true;
+                    }
+                });
+
+                if (changed) {
+                    await window.UcursedntUtils.Storage.set(window.UcursedntUtils.Achievements.STORAGE_KEY, unlocked);
+                }
+                return unlocked;
+            }
+        },
+
+        // ── 7. Asistentes de IA web ──────────────────────────────────────────
+        // En vez de llamar a una API, abre el asistente en una pestaña nueva con el
+        // prompt ya escrito (parámetro ?q=). Si el proveedor no acepta prompt por URL,
+        // o el texto es demasiado largo para una URL, se copia al portapapeles.
+        AI: {
+            SETTINGS_KEY: 'aiProviderSettings',
+            MAX_URL_LENGTH: 7500,
+
+            PROVIDERS: {
+                claude: { label: 'Claude', url: 'https://claude.ai/new', param: 'q' },
+                chatgpt: { label: 'ChatGPT', url: 'https://chatgpt.com/', param: 'q' },
+                gemini: { label: 'Gemini', url: 'https://gemini.google.com/app', param: null },
+                perplexity: { label: 'Perplexity', url: 'https://www.perplexity.ai/search', param: 'q' }
+            },
+
+            DEFAULT_INSTRUCTIONS: 'Te comparto contenido de U-Cursos, la plataforma docente de la Universidad de Chile. Respóndeme en español de Chile, de forma clara y concisa.',
+
+            getSettings: async function() {
+                const AI = window.UcursedntUtils.AI;
+                const stored = await window.UcursedntUtils.Storage.get(AI.SETTINGS_KEY) || {};
+                return {
+                    provider: AI.PROVIDERS[stored.provider] ? stored.provider : 'claude',
+                    instructions: typeof stored.instructions === 'string' ? stored.instructions : AI.DEFAULT_INSTRUCTIONS
+                };
+            },
+
+            buildPrompt: function(text, instructions) {
+                return instructions && instructions.trim() ? `${instructions.trim()}\n\n${text}` : text;
+            },
+
+            // Debe llamarse desde un gesto del usuario (click, change) para que el navegador permita abrir la pestaña
+            send: async function(providerId, text) {
+                const Utils = window.UcursedntUtils;
+                const AI = Utils.AI;
+                const settings = await AI.getSettings();
+                const provider = AI.PROVIDERS[providerId] || AI.PROVIDERS[settings.provider];
+                const prompt = AI.buildPrompt(text, settings.instructions);
+
+                let url = provider.url;
+                let viaClipboard = true;
+                if (provider.param) {
+                    const candidate = `${provider.url}?${provider.param}=${encodeURIComponent(prompt)}`;
+                    if (candidate.length <= AI.MAX_URL_LENGTH) {
+                        url = candidate;
+                        viaClipboard = false;
+                    }
+                }
+
+                // Copiar antes de abrir: con la pestaña nueva enfocada el portapapeles ya no está disponible
+                let copied = false;
+                if (viaClipboard) copied = await Utils.DOM.copyToClipboard(prompt);
+
+                window.open(url, '_blank', 'noopener');
+
+                if (viaClipboard) {
+                    Utils.UI.toast(copied
+                        ? { eyebrow: provider.label, title: 'Texto copiado al portapapeles', message: provider.param
+                            ? `Es muy largo para enviarlo directo. Pégalo en ${provider.label} con Ctrl+V.`
+                            : `${provider.label} no acepta texto por enlace. Pégalo con Ctrl+V.` }
+                        : { eyebrow: provider.label, title: 'No se pudo copiar el texto', message: 'Copia el contenido manualmente y pégalo en el asistente.' });
+                }
+
+                await Utils.Storage.set('aiProviderFirstUse', true);
+                return { provider: provider.label, viaClipboard, copied };
+            }
+        },
+
+        // ── 8. Toasts (estilo notificación de Steam) ────────────────────────
+        UI: {
+            // Select compacto que conserva el estilo nativo del tema de U-Cursos (como #escala o #id_tema).
+            // Lo comparten el selector de temas del footer y las funciones IA del foro.
+            ensureSelectStyles: function() {
+                if (document.getElementById('ucd-select-styles')) return;
+                const style = document.createElement('style');
+                style.id = 'ucd-select-styles';
+                style.textContent = `
+                    select.ucd-select {
+                        height: auto; margin: 0; padding: .25em .45em;
+                        font-size: inherit; line-height: 1.4; max-width: 100%;
+                        vertical-align: middle; cursor: pointer;
+                    }
+                    select.ucd-select:focus-visible {
+                        outline: 2px solid color-mix(in srgb, currentColor 55%, transparent);
+                        outline-offset: 2px;
+                    }
+                `;
+                document.head.appendChild(style);
+            },
+
+            MAX_VISIBLE: 3,
+            _queue: [],
+            _visible: 0,
+
+            _ensureContainer: function() {
+                let container = document.getElementById('ucd-toasts');
+                if (container) return container;
+
+                if (!document.getElementById('ucd-toast-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'ucd-toast-styles';
+                    style.textContent = `
+                        #ucd-toasts {
+                            position: fixed; right: 20px; bottom: 92px; z-index: 100001;
+                            display: flex; flex-direction: column-reverse; gap: 8px;
+                            pointer-events: none;
+                        }
+                        .ucd-toast {
+                            --ucd-toast-accent: #66c0f4;
+                            width: 300px; max-width: calc(100vw - 40px); box-sizing: border-box;
+                            display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center;
+                            padding: 12px 14px;
+                            background: linear-gradient(180deg, #2e3c4f 0%, #1c2532 100%);
+                            color: #e6edf3; border-radius: 4px;
+                            box-shadow: 0 10px 28px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .07);
+                            font-family: 'Open Sans', 'Segoe UI', Arial, sans-serif; font-size: 13px; line-height: 1.35;
+                            pointer-events: auto; cursor: pointer;
+                            transform: translateY(24px); opacity: 0;
+                            transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .35s ease;
+                        }
+                        .ucd-toast.is-in { transform: translateY(0); opacity: 1; }
+                        .ucd-toast.is-out { transform: translateY(12px); opacity: 0; }
+                        .ucd-toast-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: var(--ucd-toast-accent); }
+                        .ucd-toast-icon > svg { width: 28px; height: 28px; }
+                        .ucd-toast-eyebrow { display: block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: #8fa3b8; }
+                        .ucd-toast-title { display: block; font-weight: 700; font-size: 14px; color: #fff; overflow-wrap: anywhere; }
+                        .ucd-toast-message { display: block; margin-top: 2px; color: #b8c4d0; overflow-wrap: anywhere; }
+                        .ucd-toast-message strong { color: var(--ucd-toast-accent); font-weight: 600; }
+                        .ucd-toast-medal { position: relative; width: 48px; height: 52px; }
+                        .ucd-toast-medal > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+                        .ucd-toast-medal .ucd-medal-fill { fill: color-mix(in srgb, var(--ucd-toast-accent) 22%, #1c2532); stroke: var(--ucd-toast-accent); stroke-width: 3; }
+                        .ucd-toast-medal .ucd-medal-inner { fill: none; stroke: var(--ucd-toast-accent); stroke-width: 1; opacity: .5; }
+                        .ucd-toast-medal .ucd-entry-icon {
+                            position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; transform: translate(-50%, -50%);
+                            display: flex; align-items: center; justify-content: center; color: var(--ucd-toast-accent);
+                        }
+                        .ucd-toast-medal .ucd-entry-icon svg { width: 18px; height: 18px; }
+                        @media (prefers-reduced-motion: reduce) {
+                            .ucd-toast { transition: opacity .2s ease; transform: none !important; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                container = document.createElement('div');
+                container.id = 'ucd-toasts';
+                container.setAttribute('role', 'status');
+                container.setAttribute('aria-live', 'polite');
+                document.body.appendChild(container);
+                return container;
+            },
+
+            // options: { eyebrow, title, message, iconHTML, accent, duration, onDone }
+            toast: function(options) {
+                const UI = window.UcursedntUtils.UI;
+                if (!document.body) return;
+                if (UI._visible >= UI.MAX_VISIBLE) {
+                    UI._queue.push(options);
+                    return;
+                }
+                UI._show(options);
+            },
+
+            _show: function(options) {
+                const Utils = window.UcursedntUtils;
+                const UI = Utils.UI;
+                const container = UI._ensureContainer();
+                const { eyebrow = "U-Cursedn't", title = '', message = '', iconHTML, accent, duration = 5500, onDone } = options;
+
+                const toast = document.createElement('div');
+                toast.className = 'ucd-toast';
+                if (accent) toast.style.setProperty('--ucd-toast-accent', accent);
+
+                const iconBox = document.createElement('div');
+                iconBox.className = 'ucd-toast-icon';
+                Utils.DOM.safeSetHTML(iconBox, iconHTML || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/></svg>');
+
+                const text = document.createElement('div');
+                const eyebrowEl = document.createElement('span');
+                eyebrowEl.className = 'ucd-toast-eyebrow';
+                eyebrowEl.textContent = eyebrow;
+                const titleEl = document.createElement('span');
+                titleEl.className = 'ucd-toast-title';
+                titleEl.textContent = title;
+                text.append(eyebrowEl, titleEl);
+                if (message) {
+                    const messageEl = document.createElement('span');
+                    messageEl.className = 'ucd-toast-message';
+                    Utils.DOM.safeSetHTML(messageEl, message);
+                    text.appendChild(messageEl);
+                }
+
+                toast.append(iconBox, text);
+                container.appendChild(toast);
+                UI._visible++;
+                requestAnimationFrame(() => requestAnimationFrame(() => toast.classList.add('is-in')));
+
+                let closed = false;
+                const close = () => {
+                    if (closed) return;
+                    closed = true;
+                    toast.classList.add('is-out');
+                    setTimeout(() => {
+                        toast.remove();
+                        UI._visible--;
+                        if (typeof onDone === 'function') onDone();
+                        const next = UI._queue.shift();
+                        if (next) UI._show(next);
+                    }, 400);
+                };
+                toast.addEventListener('click', close);
+                setTimeout(close, duration);
+            }
         }
     };
 
-    // ── 6. GLOBAL ALIASES (Backward Compatibility) ───────────────────────
+    // ── 9. GLOBAL ALIASES (Backward Compatibility) ───────────────────────
     // Expose functions globally so existing code doesn't need to be renamed
     
     // Storage
@@ -209,7 +452,6 @@
     window.isExtensionContextValid = window.UcursedntUtils.Browser.isExtensionContextValid;
     window.contextCheck = window.UcursedntUtils.Browser.isExtensionContextValid; // From AI Popup
     window.safeSendRuntimeMessage = window.UcursedntUtils.Browser.safeSendRuntimeMessage;
-    window.openExtensionSidePanel = window.UcursedntUtils.Browser.openSidePanel;
 
     // U-Cursos Specifics
     window.isForumPage = window.UcursedntUtils.Ucursos.isForumPage;

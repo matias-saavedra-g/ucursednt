@@ -18,27 +18,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
 // Función para copiar texto al portapapeles utilizando el API del navegador
 
 
-// Open the AI side panel when the user clicks the "Abrir Chat IA" button.
-// chrome.sidePanel.open() must be called in response to a user gesture.
 document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('open-sidepanel-btn');
-    if (!btn) return;
-
-    btn.addEventListener('click', async () => {
-        try {
-            const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-            if (tab?.id) {
-                await UcursedntUtils.Browser.openSidePanel(tab.id );
-                window.close(); // Close the popup after launching the panel
-            }
-        } catch (err) {
-            console.error('Could not open side panel:', err);
-            // Fallback: open as a full page tab
-            browser.tabs.create({ url: browser.runtime.getURL('sidepanel.html') });
-            window.close();
-        }
-    });
-
     // Populate extension version
     const versionEl = document.getElementById('version-info');
     if (versionEl) {
@@ -48,5 +28,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Auto-injected cross-browser side panel opener
 

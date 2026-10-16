@@ -1,5 +1,6 @@
 // forumInteraction.js - Forum interaction features for U-Cursos
-// Adds copy and AI chat integration functionality to forum threads and posts
+// Agrega a cada post un <select> nativo "Funciones IA" para copiar el post o el hilo,
+// o enviarlo a un asistente web (Claude, ChatGPT, Gemini o Perplexity).
 
 (async function() {
     'use strict';
@@ -10,538 +11,223 @@
     }
     window.forumInteractionLoaded = true;
 
-    // Import utility functions
-
-
-    // CSS Selectors for forum elements
+    // Selectores acotados a cada post: los posts raíz contienen a sus respuestas anidadas,
+    // así que todo se busca desde el .container propio del post.
     const SELECTORS = {
         thread: 'div[id^="raiz_"]',
         post: '.msg',
-        rootPost: '.msg.raiz',
-        replyPost: '.msg.hijo',
-        author: '.autor .usuario',
-        time: '.autor .tiempo_rel',
-        content: '.texto .ta',
-        postOptions: 'ul.opciones'  // Native options list for each post
+        threadTitle: '#mensaje-titulo',
+        threadAuthor: ':scope > .sticky h2 a.usuario',
+        threadTime: ':scope > .sticky h2 .tiempo_rel',
+        author: ':scope > .container > .autor .usuario',
+        time: ':scope > .container > .autor .tiempo_rel',
+        content: ':scope > .container > .texto > .ta',
+        postOptions: ':scope > .container > .texto > ul.opciones'
     };
-
-    // Check if we're on a forum page
-    
 
     // Check extension settings
     async function checkSettings() {
         try {
             const settings = await UcursedntUtils.Storage.get("settings");
-            if (settings && settings.features && settings.features.forumInteraction === false) {
-                return false;
-            }
-            return true;
+            return !(settings && settings.features && settings.features.forumInteraction === false);
         } catch (error) {
             console.error('Error checking settings:', error);
             return true; // Default to enabled if error
         }
     }
 
+    // .tiempo_rel trae varias versiones de la fecha; la de "excel" es la completa
+    function readTime(timeElement) {
+        if (!timeElement) return 'Fecha desconocida';
+        const full = timeElement.querySelector('.only-excel');
+        return (full || timeElement).textContent.trim();
+    }
+
+    // Texto del post con saltos de línea; funciona aunque el post esté colapsado (display: none)
+    function readContent(contentElement) {
+        const clone = contentElement.cloneNode(true);
+        clone.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+        clone.querySelectorAll('p, li, tr, h1, h2, h3').forEach(block => block.append('\n'));
+        clone.querySelectorAll('td').forEach(cell => cell.append('\t'));
+        return clone.textContent.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+    }
+
     // Extract post data from a post element
-    function extractPostData(postElement) {
-        const authorElement = postElement.querySelector(SELECTORS.author);
-        const timeElement = postElement.querySelector(SELECTORS.time);
-        const contentElement = postElement.querySelector(SELECTORS.content);
-
-        const author = authorElement ? authorElement.textContent.trim() : 'Autor desconocido';
-        const time = timeElement ? timeElement.textContent.trim() : 'Fecha desconocida';
-        const content = contentElement ? contentElement.textContent.trim() : 'Contenido no disponible';
-
+    function extractPostData(postElement, threadElement) {
         const isRoot = postElement.classList.contains('raiz');
-        const isReply = postElement.classList.contains('hijo');
+        const authorElement = postElement.querySelector(SELECTORS.author)
+            || (isRoot && threadElement ? threadElement.querySelector(SELECTORS.threadAuthor) : null);
+        const timeElement = postElement.querySelector(SELECTORS.time)
+            || (isRoot && threadElement ? threadElement.querySelector(SELECTORS.threadTime) : null);
+        const contentElement = postElement.querySelector(SELECTORS.content);
+        const titleElement = isRoot && threadElement ? threadElement.querySelector(SELECTORS.threadTitle) : null;
 
         return {
-            author,
-            time,
-            content,
-            isRoot,
-            isReply
+            title: titleElement ? titleElement.textContent.trim() : '',
+            author: authorElement ? authorElement.textContent.trim() : 'Autor desconocido',
+            time: readTime(timeElement),
+            content: contentElement ? readContent(contentElement) : 'Contenido no disponible',
+            isRoot
         };
     }
 
     // Format post data as plain text
     function formatPostAsText(postData, includePrefix = true) {
         const prefix = postData.isRoot ? '[HILO ORIGINAL]' : '[RESPUESTA]';
-        const prefixText = includePrefix ? `${prefix}\n` : '';
-        
-        return `${prefixText}Autor: ${postData.author}
-Fecha: ${postData.time}
-
-${postData.content}`;
+        const lines = [];
+        if (includePrefix) lines.push(prefix);
+        if (postData.title) lines.push(`Título: ${postData.title}`);
+        lines.push(`Autor: ${postData.author}`, `Fecha: ${postData.time}`, '', postData.content);
+        return lines.join('\n');
     }
 
     // Format thread data as plain text
     function formatThreadAsText(threadData) {
-        let formattedText = `=== HILO COMPLETO ===\n\n`;
-        
-        threadData.forEach((post, index) => {
-            if (index > 0) {
-                formattedText += '\n\n--- --- ---\n\n';
-            }
-            formattedText += formatPostAsText(post, true);
-        });
-        
-        return formattedText;
+        return '=== HILO COMPLETO ===\n\n' + threadData.map(post => formatPostAsText(post, true)).join('\n\n--- --- ---\n\n');
     }
 
-    // Copy text to clipboard
-    
-
-    // Send text to AI chat popup
-    function sendToAIChat(text) {
-        // First try to find existing chat input
-        let chatInput = document.querySelector('#chat-input');
-        
-        if (chatInput) {
-            // If chat is visible, insert text directly
-            insertTextIntoChat(chatInput, text);
-            return true;
-        }
-        
-        // Try to open the AI chat popup if it's not visible
-        const mascotButton = document.querySelector('.ucursitos-mascot');
-        if (mascotButton) {
-            // Click to open the popup
-            mascotButton.click();
-            
-            // Wait and try again
-            setTimeout(() => {
-                const chatInputAfterOpen = document.querySelector('#chat-input');
-                if (chatInputAfterOpen) {
-                    insertTextIntoChat(chatInputAfterOpen, text);
-                }
-            }, 500);
-            
-            return true;
-        }
-        
-        // If AI chat is not available, try to initialize it
-        if (window.aiChatPopup && typeof window.aiChatPopup.init === 'function') {
-            try {
-                window.aiChatPopup.init();
-                
-                // Wait for initialization and try again
-                setTimeout(() => {
-                    const chatInputAfterInit = document.querySelector('#chat-input');
-                    if (chatInputAfterInit) {
-                        insertTextIntoChat(chatInputAfterInit, text);
-                    }
-                }, 1000);
-                
-                return true;
-            } catch (error) {
-                console.error('Error initializing AI chat:', error);
-            }
-        }
-        
-        return false;
-    }
-    
-    // Helper function to insert text into chat input
-    function insertTextIntoChat(chatInput, text) {
-        // Insert the text
-        chatInput.value = text;
-        
-        // Focus the input
-        chatInput.focus();
-        
-        // Set cursor at the end
-        chatInput.setSelectionRange(chatInput.value.length, chatInput.value.length);
-        
-        // Trigger events to ensure proper handling
-        const inputEvent = new Event('input', { bubbles: true });
-        const changeEvent = new Event('change', { bubbles: true });
-        
-        chatInput.dispatchEvent(inputEvent);
-        chatInput.dispatchEvent(changeEvent);
-        
-        // If the chat popup is minimized, show it
-        const chatFrame = document.querySelector('.ai-chat-frame');
-        if (chatFrame && chatFrame.style.display === 'none') {
-            chatFrame.style.display = 'block';
-        }
-        
-        // Auto-resize textarea if it's a textarea
-        if (chatInput.tagName.toLowerCase() === 'textarea') {
-            chatInput.style.height = 'auto';
-            chatInput.style.height = chatInput.scrollHeight + 'px';
-        }
+    function getThreadData(threadElement) {
+        return Array.from(threadElement.querySelectorAll(SELECTORS.post))
+            .map(post => extractPostData(post, threadElement));
     }
 
-    // Show temporary feedback on link (for native integration)
-    function showLinkFeedback(link, text, duration = 2000) {
-        const originalHTML = UcursedntUtils.DOM.getHTML(link);
-        const originalStyle = link.style.cssText;
-        
-        UcursedntUtils.DOM.safeSetHTML(link, text);
-        link.style.cssText = originalStyle + '; color: #4caf50 !important; font-weight: bold !important;';
-        link.style.pointerEvents = 'none';
-        
-        setTimeout(() => {
-            UcursedntUtils.DOM.safeSetHTML(link, originalHTML);
-            link.style.cssText = originalStyle;
-            link.style.pointerEvents = '';
-        }, duration);
+    // Feedback breve en la primera opción del select
+    function showSelectFeedback(select, text) {
+        const placeholder = select.options[0];
+        const original = placeholder.dataset.label;
+        placeholder.textContent = text;
+        select.value = '';
+        setTimeout(() => { placeholder.textContent = original; }, 2000);
     }
 
-    // Handle copy post action
-    async function handleCopyPost(postElement, linkElement) {
-        const postData = extractPostData(postElement);
-        const formattedText = formatPostAsText(postData, false);
-        
-        const success = await UcursedntUtils.DOM.copyToClipboard(formattedText);
-        
-        if (success) {
-            showLinkFeedback(linkElement, '<span class="fa fa-check"></span> ¡Copiado!');
-        } else {
-            showLinkFeedback(linkElement, '<span class="fa fa-times"></span> Error', 2000);
+    async function runAction(action, postElement, threadElement, select) {
+        const [kind, target] = action.split(':');
+        const isThread = kind === 'thread';
+        const text = isThread
+            ? formatThreadAsText(getThreadData(threadElement))
+            : formatPostAsText(extractPostData(postElement, threadElement), false);
+
+        if (target === 'copy') {
+            const success = await UcursedntUtils.DOM.copyToClipboard(text);
+            showSelectFeedback(select, success ? '✓ Copiado' : 'No se pudo copiar');
+            return;
         }
+
+        const intro = isThread ? 'Hilo del foro de U-Cursos:' : 'Post del foro de U-Cursos:';
+        const result = await UcursedntUtils.AI.send(target, `${intro}\n\n${text}`);
+        showSelectFeedback(select, `✓ Abierto en ${result.provider}`);
     }
 
-    // Handle send post to chat action
-    function handleSendPostToChat(postElement, linkElement) {
-        const postData = extractPostData(postElement);
-        const formattedText = formatPostAsText(postData, false);
-        
-        const success = sendToAIChat(formattedText);
-        
-        if (success) {
-            showLinkFeedback(linkElement, '<span class="fa fa-check"></span> ¡Enviado!');
-        } else {
-            showLinkFeedback(linkElement, '<span class="fa fa-times"></span> Error', 2000);
-        }
+    function createOption(value, label) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = label;
+        return option;
     }
 
-    // Handle copy thread action
-    async function handleCopyThread(threadElement, trigger) {
-        const posts = threadElement.querySelectorAll(SELECTORS.post);
-        const threadData = Array.from(posts).map(post => extractPostData(post));
-        const formattedText = formatThreadAsText(threadData);
-        
-        const success = await UcursedntUtils.DOM.copyToClipboard(formattedText);
-        
-        if (success) {
-            showLinkFeedback(trigger, '<i class="fa-regular fa-check"></i> ¡Copiado!');
-        } else {
-            showLinkFeedback(trigger, '<i class="fa-regular fa-times"></i> Error', 2000);
-        }
-    }
+    // <select> nativo con las acciones del post (y del hilo, en el post raíz)
+    function createActionsSelect(postElement, threadElement) {
+        const isRoot = postElement.classList.contains('raiz') && threadElement;
+        const providers = UcursedntUtils.AI.PROVIDERS;
 
-    // Handle send thread to chat action
-    function handleSendThreadToChat(threadElement, trigger) {
-        const posts = threadElement.querySelectorAll(SELECTORS.post);
-        const threadData = Array.from(posts).map(post => extractPostData(post));
-        const formattedText = formatThreadAsText(threadData);
-        
-        const success = sendToAIChat(formattedText);
-        
-        if (success) {
-            showLinkFeedback(trigger, '<i class="fa-regular fa-check"></i> ¡Enviado!');
-        } else {
-            showLinkFeedback(trigger, '<i class="fa-regular fa-times"></i> Error', 2000);
-        }
-    }
+        const select = document.createElement('select');
+        select.className = 'ucd-select ucd-forum-ai';
+        select.setAttribute('aria-label', 'Funciones IA del post');
 
-    // Create a minimalist "Funciones IA" dropdown
-    function createIADropdown(items) {
-        const container = document.createElement('div');
-        container.className = 'forum-ia-dropdown';
+        const placeholder = createOption('', 'Funciones IA');
+        placeholder.dataset.label = 'Funciones IA';
+        select.appendChild(placeholder);
 
-        const trigger = document.createElement('a');
-        trigger.href = '#';
-        trigger.className = 'forum-ia-trigger';
-        UcursedntUtils.DOM.safeSetHTML(trigger, 'Funciones IA <i class="fa fa-caret-down"></i>');
+        const copyGroup = document.createElement('optgroup');
+        copyGroup.label = 'Copiar';
+        copyGroup.appendChild(createOption('post:copy', 'Copiar post'));
+        if (isRoot) copyGroup.appendChild(createOption('thread:copy', 'Copiar hilo completo'));
+        select.appendChild(copyGroup);
 
-        const menu = document.createElement('div');
-        menu.className = 'forum-ia-menu';
-
-        items.forEach(({ label, icon, handler }) => {
-            const link = document.createElement('a');
-            link.href = '#';
-            UcursedntUtils.DOM.safeSetHTML(link, `<i class="${icon}"></i> ${label}`);
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                closeIADropdownMenu(menu);
-                handler(trigger);
+        const scopes = isRoot ? [['post', 'Enviar post a'], ['thread', 'Enviar hilo a']] : [['post', 'Enviar post a']];
+        scopes.forEach(([scope, label]) => {
+            const group = document.createElement('optgroup');
+            group.label = label;
+            Object.entries(providers).forEach(([id, provider]) => {
+                group.appendChild(createOption(`${scope}:${id}`, provider.label));
             });
-            menu.appendChild(link);
+            select.appendChild(group);
         });
 
-        trigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            document.querySelectorAll('.forum-ia-menu.open').forEach(m => {
-                if (m !== menu) closeIADropdownMenu(m);
+        select.addEventListener('change', () => {
+            const action = select.value;
+            if (!action) return;
+            runAction(action, postElement, threadElement, select).catch(error => {
+                console.error('Forum action failed:', error);
+                showSelectFeedback(select, 'Error');
             });
-            if (menu.classList.contains('open')) {
-                closeIADropdownMenu(menu);
-            } else {
-                openIADropdownMenu(menu);
-            }
         });
 
-        container.appendChild(trigger);
-        container.appendChild(menu);
-
-        return container;
+        return select;
     }
 
-    function openIADropdownMenu(menu) {
-        menu.classList.add('open');
-        menu.style.maxHeight = menu.scrollHeight + 'px';
-    }
-
-    function closeIADropdownMenu(menu) {
-        menu.style.maxHeight = '0px';
-        menu.classList.remove('open');
-    }
-
-    // Add a single unified dropdown using native U-Cursos options structure.
-    // Root posts include both post and thread actions in the same menu.
-    function addPostButtons(postElement, threadElement) {
+    // Inserta el select al inicio de la lista nativa de opciones del post (Reply, Permalink...)
+    function addPostActions(postElement, threadElement) {
         const optionsList = postElement.querySelector(SELECTORS.postOptions);
-        if (!optionsList) {
-            console.warn('No options list (ul.opciones) found in post:', postElement);
-            return;
-        }
+        if (!optionsList || optionsList.querySelector('.ucd-forum-ai')) return;
 
-        if (optionsList.querySelector('.forum-ia-dropdown')) {
-            return;
-        }
-
-        try {
-            const actions = [
-                { label: 'Copiar Post', icon: 'fa fa-copy', handler: (t) => handleCopyPost(postElement, t) },
-                { label: 'Enviar Post al Chat', icon: 'fa fa-robot', handler: (t) => handleSendPostToChat(postElement, t) }
-            ];
-
-            if (postElement.classList.contains('raiz') && threadElement) {
-                actions.push(
-                    { label: 'Copiar Hilo', icon: 'fa-regular fa-copy', handler: (t) => handleCopyThread(threadElement, t) },
-                    { label: 'Enviar Hilo al Chat', icon: 'fa-regular fa-robot', handler: (t) => handleSendThreadToChat(threadElement, t) }
-                );
-            }
-
-            const container = createIADropdown(actions);
-
-            const listItem = document.createElement('li');
-            listItem.id = 'acciones';
-            listItem.className = 'forum-ia-item';
-            listItem.appendChild(container);
-
-            if (optionsList.firstChild) {
-                optionsList.insertBefore(listItem, optionsList.firstChild);
-            } else {
-                optionsList.appendChild(listItem);
-            }
-        } catch (error) {
-            console.error('Error inserting post dropdown into options list:', error);
-        }
+        const listItem = document.createElement('li');
+        listItem.className = 'ucd-forum-ai-item';
+        listItem.appendChild(createActionsSelect(postElement, threadElement));
+        optionsList.insertBefore(listItem, optionsList.firstChild);
     }
 
-    // Add CSS styles for forum interaction
     function addForumInteractionStyles() {
+        UcursedntUtils.UI.ensureSelectStyles();
         if (document.querySelector('#forum-interaction-styles')) return;
 
         const style = document.createElement('style');
         style.id = 'forum-interaction-styles';
         style.textContent = `
-            li.forum-ia-item {
-                padding-left: 0 !important;
-                margin-left: 0 !important;
-            }
-
-            .forum-ia-dropdown {
-                position: relative;
-                display: inline-flex;
-                flex-direction: column;
-                align-items: flex-start;
-                max-width: 100%;
-            }
-
-            .forum-ia-trigger {
-                background: none;
-                border: none;
-                padding: 0;
-                cursor: pointer;
-                font-size: 12px;
-                color: inherit;
-                opacity: 0.65;
-                text-decoration: underline;
-                text-underline-offset: 3px;
-                display: inline-flex;
-                align-items: center;
-                gap: 4px;
-                transition: opacity 0.2s ease;
-                font-family: inherit;
-            }
-
-            .forum-ia-trigger:hover {
-                opacity: 1;
-            }
-
-            .forum-ia-menu {
-                position: relative;
-                max-height: 0;
-                opacity: 0;
-                margin-top: 0;
-                background: #fff;
-                border: 1px solid rgba(0,0,0,0.12);
-                border-radius: 6px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                min-width: 170px;
-                overflow: hidden;
-                pointer-events: none;
-                transform-origin: top;
-                transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, margin-top 0.25s ease;
-            }
-
-            .forum-ia-menu.open {
-                opacity: 1;
-                margin-top: 6px;
-                pointer-events: auto;
-            }
-
-            .forum-ia-menu a {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                padding: 8px 12px;
-                color: inherit;
-                text-decoration: none;
-                font-size: 12px;
-                white-space: normal;
-                word-break: break-word;
-                transition: background 0.15s ease;
-            }
-
-            .forum-ia-menu a:hover {
-                background: rgba(0,0,0,0.05);
-                text-decoration: none;
-            }
+            ul.opciones > li.ucd-forum-ai-item { display: inline-block; vertical-align: middle; }
+            select.ucd-forum-ai { font-size: 12px; }
         `;
-
-        if (!window.forumIADropdownListenerAdded) {
-            window.forumIADropdownListenerAdded = true;
-            document.addEventListener('click', () => {
-                document.querySelectorAll('.forum-ia-menu.open').forEach(m => closeIADropdownMenu(m));
-            });
-        }
-        
         document.head.appendChild(style);
     }
 
-    // Initialize forum interaction features
-    async function initializeForumInteraction() {
-        // Check if we're on a forum page
-        if (!UcursedntUtils.Ucursos.isForumPage()) {
-            return;
-        }
-
-        // Check if feature is enabled
-        const enabled = await checkSettings();
-        if (!enabled) {
-            return;
-        }
-
-        // Wait for potential AI chat to be available
-        await waitForAIChat();
-
-        // Add CSS styles
-        addForumInteractionStyles();
-
-        // Find all thread containers
-        const threads = document.querySelectorAll(SELECTORS.thread);
-        
-        if (threads.length === 0) {
-            // If no threads found immediately, wait a bit and try again
-            setTimeout(() => {
-                const threadsRetry = document.querySelectorAll(SELECTORS.thread);
-                processThreads(threadsRetry);
-            }, 2000);
-            return;
-        }
-
-        processThreads(threads);
-    }
-    
     // Helper function to process threads
     function processThreads(threads) {
         threads.forEach(thread => {
-            // Find all posts within this thread and add one unified dropdown per post
-            const posts = thread.querySelectorAll(SELECTORS.post);
-            posts.forEach(post => {
-                addPostButtons(post, thread);
-            });
-        });
-
-        console.log(`Forum interaction initialized: ${threads.length} threads processed`);
-    }
-    
-    // Wait for AI chat to be potentially available
-    function waitForAIChat() {
-        return new Promise((resolve) => {
-            let attempts = 0;
-            const maxAttempts = 10;
-            
-            const checkAIChat = () => {
-                attempts++;
-                
-                // Check if AI chat is loaded
-                if (window.aiChatPopupLoaded || document.querySelector('.ucursitos-mascot')) {
-                    resolve();
-                    return;
-                }
-                
-                // If we've reached max attempts, continue anyway
-                if (attempts >= maxAttempts) {
-                    resolve();
-                    return;
-                }
-                
-                // Try again after a short delay
-                setTimeout(checkAIChat, 300);
-            };
-            
-            checkAIChat();
+            thread.querySelectorAll(SELECTORS.post).forEach(post => addPostActions(post, thread));
         });
     }
 
-    // Wait for DOM to be ready and extension utils to be available
-    function waitForDependencies() {
-        return new Promise((resolve) => {
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', resolve);
-            } else {
-                resolve();
-            }
-        });
+    let enabled = false;
+
+    // Initialize forum interaction features
+    async function initializeForumInteraction() {
+        if (!UcursedntUtils.Ucursos.isForumPage()) return;
+        if (!await checkSettings()) return;
+        enabled = true;
+
+        addForumInteractionStyles();
+
+        const threads = document.querySelectorAll(SELECTORS.thread);
+        if (threads.length === 0) {
+            // If no threads found immediately, wait a bit and try again
+            setTimeout(() => processThreads(document.querySelectorAll(SELECTORS.thread)), 2000);
+            return;
+        }
+        processThreads(threads);
     }
 
-    // Initialize when ready
-    waitForDependencies().then(() => {
-        // Wait a bit more for other scripts to load
-        setTimeout(initializeForumInteraction, 1000);
-    });
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeForumInteraction);
+    } else {
+        initializeForumInteraction();
+    }
 
-    // Also initialize when page changes (for SPA-like behavior)
-    let lastUrl = window.location.href;
-    const observer = new MutationObserver(() => {
-        if (window.location.href !== lastUrl) {
-            lastUrl = window.location.href;
-            setTimeout(initializeForumInteraction, 1000);
+    // Threads cargados después (autocarga de páginas) también reciben el select
+    const observer = new MutationObserver(mutations => {
+        if (enabled && mutations.some(m => Array.from(m.addedNodes).some(n => n.nodeType === 1 && (n.matches?.(SELECTORS.thread) || n.querySelector?.(SELECTORS.thread))))) {
+            processThreads(document.querySelectorAll(SELECTORS.thread));
         }
     });
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
+    observer.observe(document.body, { childList: true, subtree: true });
 
 })();

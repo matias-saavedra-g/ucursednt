@@ -5,7 +5,7 @@ if (typeof window.showExtensionAlert === 'undefined') {
             browser.storage.sync.get(['settings']).then(res => {
                 // Suppress the alert if tourGuide is explicitly disabled
                 if (res && res.settings && res.settings.features && res.settings.features.tourGuide === false) {
-                    return; 
+                    return;
                 }
                 alert(message);
             }).catch(() => alert(message));
@@ -17,808 +17,199 @@ if (typeof window.showExtensionAlert === 'undefined') {
 
 (async function() {
 
-    // Function to set an item in Chrome Storage
-    
-
-    // Function to get an item from Chrome Storage
-    
-
-    // Function to get all Chrome Storage items
-    
-
-    // Function to remove an item from Chrome Storage
-    
-
-    // Function to clear all Chrome Storage
-    
+    const Pages = window.UcursedntPages;
+    const { icon, entryIcon, escapeHTML } = Pages;
 
     // Inicializar configuraciones
     async function initSettings() {
-        const defaultSettings = {
-            features: {
-                easyCopyGrades: true,
-                easyCopyMembers: true,
-                muchoTexto: true,
-                forumInteraction: true,
-                forumDownload: true,
-                otrasRealizaciones: true,
-                popupGrading: true,
-                resizePreviewPDF: true,
-                weekCounter: true,
-                pendingTasks: true,
-                easyCopyCourseDetails: true,
-                collapsableMenus: true,
-                pendingNotifications: true,
-                renameCourses: true,
-                navigationAnimations: true,
-                taskSubmissionSound: true,
-                footerCredit: true,
-                aiChatPopup: true,
-                fuzzySearch: true,
-                autoPreloadPages: true,
-                tourGuide: false,
-                tareaPrefill: true
-            },
-        };
-
         if (!await UcursedntUtils.Storage.get("settings")) {
-            await UcursedntUtils.Storage.set("settings", defaultSettings);
+            await UcursedntUtils.Storage.set("settings", { features: Pages.defaultFeatureSettings() });
         }
     }
 
-    // Add modern CSS styles to the page
-    function addModernStyles() {
-
-        const style = document.createElement('style');
-        style.textContent = `
-            /* Modern U-Cursos-like styling for the settings menu */
-            #feature-menu {
-                background: #ffffff;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-                padding: 20px;
-                margin: 20px 0;
-                max-width: 800px;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            }
-
-            .feature-group {
-                margin-bottom: 16px;
-                padding: 16px;
-                background: #f8f9fa;
-                border-radius: 6px;
-                border-left: 4px solid #007bff;
-                transition: all 0.2s ease-in-out;
-                cursor: pointer;
-            }
-
-            .feature-group:hover {
-                background: #e9ecef;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-                transform: translateY(-1px);
-            }
-
-            .feature-group.enabled {
-                border-left-color: #28a745;
-                background: #d4edda;
-            }
-
-            .feature-group.enabled:hover {
-                background: #c3e6cb;
-            }
-
-            .feature-checkbox {
-                margin-right: 12px;
-                width: 18px;
-                height: 18px;
-                accent-color: #007bff;
-                cursor: pointer;
-            }
-
-            .feature-label {
-                font-size: 14px;
-                font-weight: 500;
-                color: #495057;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                user-select: none;
-            }
-
-            .feature-group.enabled .feature-label {
-                color: #155724;
-            }
-
-            .feature-status {
-                margin-left: auto;
-                font-size: 12px;
-                padding: 4px 8px;
-                border-radius: 12px;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-
-            .feature-status.enabled {
-                background: #28a745;
-                color: white;
-            }
-
-            .feature-status.disabled {
-                background: #6c757d;
-                color: white;
-            }
-
-            .settings-header {
-                text-align: center;
-                margin-bottom: 30px;
-                padding-bottom: 20px;
-                border-bottom: 2px solid #e9ecef;
-            }
-
-            .settings-title {
-                font-size: 24px;
-                font-weight: 600;
-                color: #212529;
-                margin-bottom: 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-            }
-
-            .settings-subtitle {
-                font-size: 14px;
-                color: #6c757d;
-                font-weight: 400;
-            }
-
-            .action-buttons {
-                display: flex;
-                gap: 12px;
-                justify-content: center;
-                margin-top: 30px;
-                flex-wrap: wrap;
-            }
-
-            .modern-button {
-                padding: 12px 24px;
-                border: none;
-                border-radius: 6px;
-                font-size: 14px;
-                font-weight: 500;
-                cursor: pointer;
-                transition: all 0.2s ease-in-out;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                text-decoration: none;
-                min-width: 140px;
-                justify-content: center;
-            }
-
-            .btn-primary {
-                background: #007bff;
-                color: white;
-            }
-
-            .btn-primary:hover {
-                background: #0056b3;
-                transform: translateY(-1px);
-                box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-            }
-
-            .btn-secondary {
-                background: #6c757d;
-                color: white;
-            }
-
-            .btn-secondary:hover {
-                background: #545b62;
-                transform: translateY(-1px);
-                box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
-            }
-
-            .btn-danger {
-                background: #dc3545;
-                color: white;
-            }
-
-            .btn-danger:hover {
-                background: #c82333;
-                transform: translateY(-1px);
-                box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
-            }
-
-            .storage-list {
-                background: #f8f9fa;
-                border-radius: 6px;
-                margin-top: 20px;
-                max-height: 300px;
-                overflow-y: auto;
-                border: 1px solid #dee2e6;
-            }
-
-            .storage-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 12px 16px;
-                border-bottom: 1px solid #dee2e6;
-                font-family: 'Courier New', monospace;
-                font-size: 12px;
-                background: white;
-                transition: background-color 0.2s ease;
-            }
-
-            .storage-item:hover {
-                background: #e9ecef;
-            }
-
-            .storage-item:last-child {
-                border-bottom: none;
-            }
-
-            .storage-key {
-                font-weight: 600;
-                color: #495057;
-                margin-right: 8px;
-            }
-
-            .storage-value {
-                flex: 1;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                max-width: 300px;
-                color: #6c757d;
-            }
-
-            .delete-storage-btn {
-                padding: 4px 8px;
-                background: #dc3545;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                font-size: 12px;
-                cursor: pointer;
-                transition: background-color 0.2s ease;
-            }
-
-            .delete-storage-btn:hover {
-                background: #c82333;
-            }
-
-            /* AI Configuration Section Styles */
-            .ai-config-section {
-                margin-top: 30px;
-                padding: 20px;
-                background: #f0f7ff;
-                border-radius: 8px;
-                border-left: 4px solid #007bff;
-            }
-
-            .ai-config-header {
-                margin-bottom: 20px;
-                text-align: center;
-            }
-
-            .ai-config-header h3 {
-                color: #007bff;
-                margin: 0 0 8px 0;
-                font-size: 18px;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .ai-config-header p {
-                color: #6c757d;
-                margin: 0;
-                font-size: 14px;
-            }
-
-            .config-group {
-                margin-bottom: 16px;
-            }
-
-            .config-label {
-                display: block;
-                margin-bottom: 8px;
-                font-weight: 600;
-                color: #495057;
-                font-size: 14px;
-            }
-
-            .config-select,
-            .config-input,
-            .config-textarea {
-                width: 100%;
-                padding: 10px 12px;
-                border: 1px solid #ced4da;
-                border-radius: 6px;
-                font-size: 14px;
-                background: white;
-                transition: border-color 0.2s ease;
-                font-family: inherit;
-                height: 45px;
-            }
-
-            .config-select:focus,
-            .config-input:focus,
-            .config-textarea:focus {
-                outline: none;
-                border-color: #007bff;
-                box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
-            }
-
-            .config-textarea {
-                resize: vertical;
-                min-height: 120px;
-            }
-
-            .system-buttons-container {
-                margin-top: 8px;
-                display: flex;
-                justify-content: flex-end;
-            }
-
-            .reset-default-btn {
-                font-size: 12px;
-                padding: 6px 12px;
-                margin-bottom: 8px;
-            }
-
-            .config-helper {
-                margin-top: 4px;
-                padding: 8px;
-                background: #f8f9fa;
-                border-radius: 4px;
-                border-left: 3px solid #17a2b8;
-            }
-
-            .config-helper small {
-                color: #6c757d;
-                font-size: 11px;
-                line-height: 1.4;
-            }
-
-            .api-warning {
-                background: #fff3cd;
-                border: 1px solid #ffeaa7;
-                border-radius: 6px;
-                padding: 12px;
-                margin-top: 15px;
-                font-size: 13px;
-                line-height: 1.4;
-                color: #856404;
-            }
-
-            .api-warning strong {
-                color: #d32f2f;
-            }
-
-            .gemini-info ul {
-                margin: 8px 0;
-                padding-left: 20px;
-            }
-
-            .gemini-info li {
-                margin-bottom: 6px;
-                line-height: 1.4;
-            }
-
-            .api-key-container {
-                display: flex;
-                gap: 8px;
-                align-items: center;
-            }
-
-            .api-key-input {
-                flex: 1;
-            }
-
-            .toggle-key-btn {
-                padding: 10px 12px;
-                border: 1px solid #ced4da;
-                border-radius: 6px;
-                background: #f8f9fa;
-                color: #6c757d;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                min-width: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .toggle-key-btn:hover {
-                background: #e9ecef;
-                color: #495057;
-            }
-
-            .save-ai-config-btn {
-                width: 100%;
-                margin-top: 16px;
-            }
-
-            .btn-success {
-                background: #28a745;
-                color: white;
-            }
-
-            .btn-success:hover {
-                background: #218838;
-            }
-
-            /* Sound Configuration Section Styles */
-            .sound-config-section {
-                margin-top: 30px;
-                padding: 20px;
-                background: #f0fff4;
-                border-radius: 8px;
-                border-left: 4px solid #28a745;
-            }
-
-            .sound-config-header {
-                margin-bottom: 20px;
-                text-align: center;
-            }
-
-            .sound-config-header h3 {
-                color: #28a745;
-                margin: 0 0 8px 0;
-                font-size: 18px;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .sound-config-header p {
-                color: #6c757d;
-                margin: 0;
-                font-size: 14px;
-            }
-
-            .save-sound-config-btn {
-                width: 100%;
-                margin-top: 16px;
-            }
-
-            /* Responsive design */
-            @media (max-width: 768px) {
-                #feature-menu {
-                    margin: 10px;
-                    padding: 16px;
-                }
-
-                .action-buttons {
-                    flex-direction: column;
-                    align-items: center;
-                }
-
-                .modern-button {
-                    width: 100%;
-                    max-width: 300px;
-                }
-            }
-        `;
-        document.head.appendChild(style);
+    // Muestra un estado temporal en un botón (p. ej. "¡Guardado!") y lo restaura
+    function flashButton(button, html, okClass, restoreClass) {
+        const originalHTML = UcursedntUtils.DOM.getHTML(button);
+        UcursedntUtils.DOM.safeSetHTML(button, html);
+        if (okClass) button.classList.add(okClass);
+        if (restoreClass) button.classList.remove(restoreClass);
+        setTimeout(() => {
+            UcursedntUtils.DOM.safeSetHTML(button, originalHTML);
+            if (okClass) button.classList.remove(okClass);
+            if (restoreClass) button.classList.add(restoreClass);
+        }, 2000);
     }
 
-    // Crear el menú de características
-    async function createFeatureMenu() {
-        const settings = await UcursedntUtils.Storage.get("settings");
+    // ── Funciones ───────────────────────────────────────────────────────────
+    async function createFeaturesSection() {
+        const settings = await UcursedntUtils.Storage.get("settings") || { features: {} };
+        settings.features = settings.features || {};
         const features = settings.features;
 
-        const menuElement = document.createElement("div");
-        menuElement.id = "feature-menu";
+        await Pages.unlockEnabledFeatureAchievements(features);
 
-        // Add header
-        const header = document.createElement("div");
-        header.className = "settings-header";
-        
-        const title = document.createElement("div");
-        title.className = "settings-title";
-        UcursedntUtils.DOM.safeSetHTML(title, `<i class="fa-regular fa-cogs"></i> Configuración de U-Cursedn't`);
-        
-        const subtitle = document.createElement("div");
-        subtitle.className = "settings-subtitle";
-        subtitle.textContent = "Personaliza las características de la extensión según tus necesidades";
-        
-        header.appendChild(title);
-        header.appendChild(subtitle);
-        menuElement.appendChild(header);
+        const container = document.createDocumentFragment();
 
-        const featuresList = [
-            { id: "easyCopyGrades", name: "Copia Fácil de Notas", icon: "📋", description: "Botones para copiar notas en diferentes formatos" },
-            { id: "easyCopyMembers", name: "Copia Fácil de Miembros", icon: "👥", description: "Copiar listado de miembros del curso" },
-            { id: "muchoTexto", name: "Recortar Texto Largo", icon: "➕", description: "Colapsar textos largos en foros" },
-            { id: "forumInteraction", name: "Interacción con Foros", icon: "💬", description: "Copiar y enviar posts/hilos del foro al chat IA" },
-            { id: "forumDownload", name: "Descargar Foro", icon: "⬇️", description: "Descargar hilos del foro en TXT, JSON o CSV por rango de páginas" },
-            { id: "otrasRealizaciones", name: "Otras Realizaciones del Curso", icon: "🌐", description: "Acceso rápido a otras realizaciones" },
-            { id: "popupGrading", name: "Ventana Emergente de Calificaciones", icon: "🎓", description: "Editor de calificaciones en popup" },
-            { id: "resizePreviewPDF", name: "Redimensionar Vista Previa de PDF", icon: "📑", description: "Ajustar tamaño de vista previa PDF" },
-            { id: "weekCounter", name: "Contador de Semanas", icon: "📆", description: "Mostrar semana actual del semestre" },
-            { id: "pendingTasks", name: "Insignia Tareas Pendientes", icon: "🔔", description: "Contador de tareas pendientes" },
-            { id: "easyCopyCourseDetails", name: "Copia Fácil de Detalles del Curso", icon: "🏷", description: "Copiar nombre y código del curso" },
-            { id: "collapsableMenus", name: "Menús Colapsables", icon: "💥", description: "Colapsar secciones en página principal" },
-            { id: "pendingNotifications", name: "Notificaciones Pendientes", icon: "🔔", description: "Contador de notificaciones pendientes" },
-            { id: "renameCourses", name: "Renombrar Cursos", icon: "📚", description: "Personalizar nombres de cursos" },
-            { id: "navigationAnimations", name: "Animaciones de Navegación", icon: "✨", description: "Efectos visuales suaves en el menú de navegación" },
-            { id: "taskSubmissionSound", name: "Sonido de Entrega de Tareas", icon: "🔊", description: "Sonido de dopamina al entregar tareas" },
-            { id: "footerCredit", name: "Crédito en el Pie de Página", icon: "❤️", description: "Mostrar crédito del desarrollador en el pie de página" },
-            { id: "aiChatPopup", name: "Chat IA Flotante", icon: "🤖", description: "Popup flotante con UCursitos para chat con IA" },
-            { id: "fuzzySearch", name: "Búsqueda en Navegación", icon: "🔍", description: "Filtro rápido para el menú lateral de los cursos" },
-            { id: "autoPreloadPages", name: "Autocarga de Páginas", icon: "🔄", description: "Carga automáticamente las siguientes páginas al hacer scroll" },
-            { id: "tourGuide", name: "Guía de Usuario", icon: "🗺️", description: "Mostrar alertas informativas al descubrir o interactuar con nuevas funciones" },
-            { id: "tareaPrefill", name: "Autocompletar Tareas", icon: "✍️", description: "Rellena automáticamente el tiempo invertido y un comentario al entregar una tarea" }
-        ];
+        const intro = document.createElement('section');
+        intro.setAttribute('aria-label', 'Resumen');
+        UcursedntUtils.DOM.safeSetHTML(intro, `
+            <p class="lead">Activa o desactiva cada función de U-Cursedn't. Los cambios se guardan al instante y se aplican al recargar la página de U-Cursos.</p>
+            <div class="ucd-toolbar">
+                <div class="pill ok" data-count="on"></div>
+                <div class="pill" data-count="off"></div>
+                <label class="ucd-filter" for="ucd-feature-filter">
+                    ${icon('search')}
+                    <input type="text" id="ucd-feature-filter" placeholder="Filtrar funciones..." autocomplete="off">
+                </label>
+            </div>
+        `);
+        container.appendChild(intro);
 
-        featuresList.forEach(feature => {
-            const featureElement = document.createElement("div");
-            featureElement.className = `feature-group ${features[feature.id] ? 'enabled' : ''}`;
+        const onCount = intro.querySelector('[data-count="on"]');
+        const offCount = intro.querySelector('[data-count="off"]');
+        function updateCounts() {
+            const enabled = Pages.FEATURES.filter(f => Pages.isFeatureEnabled(features, f)).length;
+            onCount.textContent = `${enabled} activas`;
+            offCount.textContent = `${Pages.FEATURES.length - enabled} inactivas`;
+        }
+        updateCounts();
 
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.checked = features[feature.id];
-            checkbox.id = feature.id;
-            checkbox.className = "feature-checkbox";
-            checkbox.addEventListener("change", async (e) => {
-                features[feature.id] = e.target.checked;
-                await UcursedntUtils.Storage.set("settings", settings);
-                featureElement.className = `feature-group ${e.target.checked ? 'enabled' : ''}`;
-                statusSpan.textContent = e.target.checked ? 'Activado' : 'Desactivado';
-                statusSpan.className = `feature-status ${e.target.checked ? 'enabled' : 'disabled'}`;
+        const groupSections = [];
+
+        Pages.GROUPS.forEach(group => {
+            const groupFeatures = Pages.FEATURES.filter(f => f.group === group.id);
+            if (!groupFeatures.length) return;
+
+            const section = document.createElement('section');
+            UcursedntUtils.DOM.safeSetHTML(section, Pages.sectionHeading(group.icon, group.title));
+
+            const list = document.createElement('ul');
+            list.className = 'ucd-feature-list';
+
+            groupFeatures.forEach(feature => {
+                const enabled = Pages.isFeatureEnabled(features, feature);
+                const item = document.createElement('li');
+                item.dataset.search = `${feature.name} ${feature.description}`.toLowerCase();
+
+                const label = document.createElement('label');
+                label.className = `ucd-feature ${enabled ? '' : 'is-off'}`;
+                label.htmlFor = `feature-${feature.id}`;
+                UcursedntUtils.DOM.safeSetHTML(label, `
+                    ${entryIcon(feature)}
+                    <span class="ucd-feature-text">
+                        <span class="ucd-feature-name">${escapeHTML(feature.name)}</span>
+                        <span class="ucd-feature-desc">${escapeHTML(feature.description)}</span>
+                    </span>
+                    <div class="pill ${enabled ? 'ok' : ''}">${enabled ? 'Activa' : 'Inactiva'}</div>
+                `);
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `feature-${feature.id}`;
+                checkbox.checked = enabled;
+                label.appendChild(checkbox);
+
+                const status = label.querySelector('div.pill');
+                checkbox.addEventListener('change', async () => {
+                    const isOn = checkbox.checked;
+                    features[feature.id] = isOn;
+                    await UcursedntUtils.Storage.set("settings", settings);
+                    if (isOn && feature.achievement) {
+                        await UcursedntUtils.Achievements.unlock(feature.id);
+                    }
+                    label.classList.toggle('is-off', !isOn);
+                    status.classList.toggle('ok', isOn);
+                    status.textContent = isOn ? 'Activa' : 'Inactiva';
+                    updateCounts();
+                });
+
+                item.appendChild(label);
+                list.appendChild(item);
             });
 
-            const label = document.createElement("label");
-            label.className = "feature-label";
-            label.setAttribute("for", feature.id);
-            UcursedntUtils.DOM.safeSetHTML(label, `
-                <span style="margin-right: 8px; font-size: 16px;">${feature.icon}</span>
-                <div style="flex: 1;">
-                    <div style="font-weight: 600; margin-bottom: 2px;">${feature.name}</div>
-                    <div style="font-size: 12px; color: #6c757d; font-weight: 400;">${feature.description}</div>
-                </div>
-            `);
-
-            const statusSpan = document.createElement("span");
-            statusSpan.className = `feature-status ${features[feature.id] ? 'enabled' : 'disabled'}`;
-            statusSpan.textContent = features[feature.id] ? 'Activado' : 'Desactivado';
-
-            label.appendChild(statusSpan);
-
-            featureElement.appendChild(checkbox);
-            featureElement.appendChild(label);
-            
-            // Make the entire card clickable
-            featureElement.addEventListener('click', (e) => {
-                if (e.target !== checkbox) {
-                    checkbox.click();
-                }
-            });
-
-            menuElement.appendChild(featureElement);
+            section.appendChild(list);
+            groupSections.push(section);
+            container.appendChild(section);
         });
 
-        // Add AI Chat Configuration Section
-        const aiConfigSection = await createAIConfigSection();
-        menuElement.appendChild(aiConfigSection);
+        // Filtro por nombre o descripción; oculta los grupos sin resultados
+        const filterInput = intro.querySelector('#ucd-feature-filter');
+        filterInput.addEventListener('input', () => {
+            const query = filterInput.value.trim().toLowerCase();
+            groupSections.forEach(section => {
+                let visible = 0;
+                section.querySelectorAll('li[data-search]').forEach(item => {
+                    const match = !query || item.dataset.search.includes(query);
+                    item.hidden = !match;
+                    if (match) visible++;
+                });
+                section.hidden = visible === 0;
+            });
+        });
 
-        // Add Sound Configuration Section
-        const soundConfigSection = await createSoundConfigSection();
-        menuElement.appendChild(soundConfigSection);
-
-        return menuElement;
+        return container;
     }
 
-    // Create AI Chat Configuration Section
+    // ── Asistentes de IA ────────────────────────────────────────────────────
     async function createAIConfigSection() {
-        const aiConfigContainer = document.createElement('div');
-        aiConfigContainer.className = 'ai-config-section';
-        
-        // Section header
-        const sectionHeader = document.createElement('div');
-        sectionHeader.className = 'ai-config-header';
-        UcursedntUtils.DOM.safeSetHTML(sectionHeader, `
-            <h3><i class="fa-regular fa-robot"></i> Configuración de Chat IA - Gemini</h3>
-            <p>Configura tu API key de Google AI Studio para usar el chat flotante con Gemini</p>
-            <div class="gemini-info">
-                <p><strong>📝 Cómo obtener tu API key:</strong></p>
-                <ul>
-                    <li>Ve a <a href="https://aistudio.google.com" target="_blank" style="color: #4285f4; text-decoration: underline;">AI Studio</a></li>
-                    <li>Inicia sesión con tu cuenta de Google</li>
-                    <li>Ve a "Get API key" en el menú lateral</li>
-                    <li>Crea una nueva API key</li>
-                    <li>Copia la key y pégala abajo</li>
-                </ul>
-                <div class="api-warning">
-                    <strong>⚠️ Advertencia:</strong> Exponer una clave de API en una aplicación del lado del cliente no es una práctica recomendada para su uso en producción, ya que puede ser sustraída por actores maliciosos. Este método solo es adecuado para pruebas iniciales y la creación de prototipos.
-                </div>
+        const AI = UcursedntUtils.AI;
+        const aiSettings = await AI.getSettings();
+        const providerOptions = Object.entries(AI.PROVIDERS)
+            .map(([id, provider]) => `<option value="${id}">${escapeHTML(provider.label)}</option>`).join('');
+
+        const section = document.createElement('section');
+        UcursedntUtils.DOM.safeSetHTML(section, `
+            ${Pages.sectionHeading('send', 'Asistentes de IA')}
+            <p class="ucd-section-intro">UCursitos y las funciones IA del foro abren tu pregunta en el asistente que elijas, con el texto ya escrito y usando tu propia sesión. No se necesita API key.</p>
+            <div class="info">
+                Claude, ChatGPT y Perplexity reciben el texto directamente en el enlace. Gemini no lo permite: el texto se copia al portapapeles para que lo pegues. Lo mismo pasa con textos muy largos en cualquier asistente.
+            </div>
+            <table class="form big">
+                <tbody>
+                    <tr>
+                        <th><label for="ai-provider">Asistente por defecto</label></th>
+                        <td><select id="ai-provider" class="ucd-select">${providerOptions}</select></td>
+                    </tr>
+                    <tr>
+                        <th><label for="ai-instructions">Instrucciones</label></th>
+                        <td>
+                            <textarea id="ai-instructions" rows="4" placeholder="Texto que se antepone a todo lo que envías"></textarea>
+                            <span class="ucd-help">Se agregan al inicio de cada envío. Déjalo vacío para enviar solo el contenido.</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="ucd-actions">
+                <button type="button" class="boton ok" id="ai-save">${icon('save')} Guardar</button>
+                <button type="button" class="boton" id="ai-reset">${icon('undo')} Restaurar instrucciones</button>
             </div>
         `);
 
-        // API Key input
-        const apiKeyGroup = document.createElement('div');
-        apiKeyGroup.className = 'config-group';
-        
-        const apiKeyLabel = document.createElement('label');
-        apiKeyLabel.className = 'config-label';
-        UcursedntUtils.DOM.safeSetHTML(apiKeyLabel, '<i class="fa-regular fa-key"></i> API Key de Gemini:');
+        const providerSelect = section.querySelector('#ai-provider');
+        const instructions = section.querySelector('#ai-instructions');
+        const saveBtn = section.querySelector('#ai-save');
+        const resetBtn = section.querySelector('#ai-reset');
 
-        const apiKeyContainer = document.createElement('div');
-        apiKeyContainer.className = 'api-key-container';
+        providerSelect.value = aiSettings.provider;
+        instructions.value = aiSettings.instructions;
 
-        const apiKeyInput = document.createElement('input');
-        apiKeyInput.type = 'password';
-        apiKeyInput.className = 'config-input api-key-input';
-        apiKeyInput.id = 'ai-api-key';
-        apiKeyInput.placeholder = 'Ingresa tu API key de Google AI Studio...';
-
-        const toggleKeyBtn = document.createElement('button');
-        toggleKeyBtn.className = 'toggle-key-btn';
-        toggleKeyBtn.type = 'button';
-        UcursedntUtils.DOM.safeSetHTML(toggleKeyBtn, '<i class="fa-regular fa-eye"></i>');
-        toggleKeyBtn.title = 'Mostrar/Ocultar API Key';
-
-        // System Instructions
-        const systemGroup = document.createElement('div');
-        systemGroup.className = 'config-group';
-        systemGroup.id = 'system-group';
-        
-        const systemLabel = document.createElement('label');
-        systemLabel.className = 'config-label';
-        UcursedntUtils.DOM.safeSetHTML(systemLabel, '<i class="fa-regular fa-robot"></i> Instrucciones del Sistema:');
-
-        const systemTextarea = document.createElement('textarea');
-        systemTextarea.className = 'config-textarea';
-        systemTextarea.id = 'ai-system-instructions';
-        systemTextarea.placeholder = 'Instrucciones para el comportamiento del asistente IA...';
-        systemTextarea.rows = 8;
-
-        const systemButtonsContainer = document.createElement('div');
-        systemButtonsContainer.className = 'system-buttons-container';
-
-        const resetToDefaultBtn = document.createElement('button');
-        resetToDefaultBtn.className = 'modern-button btn-secondary reset-default-btn';
-        resetToDefaultBtn.type = 'button';
-        UcursedntUtils.DOM.safeSetHTML(resetToDefaultBtn, '<i class="fa-regular fa-undo"></i> Restaurar Recomendadas');
-        resetToDefaultBtn.title = 'Restaurar las instrucciones recomendadas para U-Cursos';
-
-        const saveBtn = document.createElement('button');
-        saveBtn.className = 'modern-button btn-primary save-ai-config-btn';
-        UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-save"></i> Guardar Configuración');
-
-        // Load existing settings
-        const aiSettings = await UcursedntUtils.Storage.get('aiChatSettings') || {};
-        const defaultSystemInstructions = window.aiChatPopup?.getDefaultSystemInstructions?.() || `System Prompt: Asistente Virtual de U-Cursos
-
-1. PERSONA
-Eres "Asistente U-Cursos", un asistente virtual experto integrado en la plataforma U-Cursos de la Universidad de Chile. Tu propósito principal es ayudar a estudiantes y académicos a navegar y utilizar la plataforma de manera eficiente, resolviendo sus dudas y facilitando su experiencia académica. Eres un guía amigable, conocedor y siempre dispuesto a ayudar. Tu identidad está ligada exclusivamente a la Universidad de Chile y sus procesos internos gestionados a través de U-Cursos.
-
-2. TAREA
-Tu tarea es responder preguntas y proporcionar orientación sobre las funcionalidades y el contenido de la plataforma U-Cursos. Debes ser capaz de:
-- Responder preguntas directas: Contestar dudas específicas sobre cómo usar la plataforma (ej: "¿Cómo puedo enviar una tarea?", "¿Dónde veo mis calificaciones?").
-- Proporcionar guías paso a paso: Ofrecer instrucciones claras y secuenciales para realizar acciones dentro de la plataforma.
-- Resumir información: Sintetizar el contenido de anuncios, foros o materiales si se te proporciona el contexto.
-- Localizar información: Ayudar a los usuarios a encontrar dónde se ubican ciertas secciones o materiales dentro de sus cursos.
-- Resolver problemas comunes: Ofrecer soluciones a problemas frecuentes que los usuarios puedan encontrar.
-
-Límites y restricciones:
-- No inventes información: Si no tienes la respuesta o la información no está disponible en el contexto proporcionado, indícalo claramente. Sugiere al usuario consultar directamente con su docente o con el soporte técnico de U-Cursos.
-- Privacidad: No tienes acceso a información personal, privada o sensible de los usuarios, como calificaciones específicas, mensajes privados o datos de contacto. No debes solicitarla ni procesarla.
-- Mantente en el tema: Limita tus respuestas al ecosistema de U-Cursos y la vida académica en la Universidad de Chile. Evita responder preguntas de conocimiento general que no estén relacionadas.
-
-3. CONTEXTO
-Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cursos. La información clave que debes manejar es:
-- Plataforma: U-Cursos, un campus virtual y sistema de gestión de aprendizaje desarrollado por el Centro Tecnológico Ucampus para la Universidad de Chile.
-- Audiencia: Estudiantes y académicos de la Universidad de Chile.
-- Funcionalidades Clave:
-  * Sitios de Cursos: Cada curso tiene un sitio web dedicado y administrado por el profesor.
-  * Materiales Educativos: Los estudiantes pueden ver y descargar apuntes, bibliografía y otros materiales. Los profesores pueden subir contenido en múltiples formatos.
-  * Herramientas de Comunicación: Foros para interactuar y sistema de correo para que los profesores envíen anuncios a todo el curso.
-  * Gestión de Tareas y Calificaciones: Los estudiantes pueden enviar tareas y consultar sus notas parciales. Los profesores pueden administrar y calificar estas entregas.
-  * Calendario y Planificación: Agenda electrónica para planificar y visualizar las actividades del curso.
-  * Aplicación Móvil: Existe una app oficial para Android y iOS que envía notificaciones push en tiempo real.
-  * Perfil Personal: Cada usuario puede gestionar su perfil, revisar sus tareas, cursos, calendario y configurar notificaciones.
-
-4. FORMATO
-- Claridad y Concisión: Responde de manera directa y fácil de entender.
-- Estructura: Utiliza listas (con viñetas o numeradas) para desglosar pasos o enumerar características.
-- Énfasis: Usa negrita para resaltar acciones clave, nombres de secciones o botones (ej: "Ve a la sección **Tareas** y haz clic en **Enviar**").
-- Lenguaje: Responde siempre en español de Chile, utilizando terminología común en el ámbito académico chileno (ej: "ramo" en lugar de "asignatura", "nota" en lugar de "calificación").
-
-5. TONO
-- Servicial y Profesional: Mantén un tono amable, respetuoso y formal, adecuado para un entorno universitario.
-- Seguro y Confiable: Proporciona información con seguridad, pero sé humilde cuando no conoces una respuesta.
-- Proactivo y Orientador: No te limites a responder; si es pertinente, ofrece consejos adicionales o sugiere funcionalidades relacionadas que podrían ser útiles para el usuario.`;
-        
-        apiKeyInput.value = aiSettings.apiKey || '';
-        systemTextarea.value = aiSettings.systemInstructions || defaultSystemInstructions;
-
-        // Event listeners
-        toggleKeyBtn.addEventListener('click', () => {
-            const isPassword = apiKeyInput.type === 'password';
-            apiKeyInput.type = isPassword ? 'text' : 'password';
-            UcursedntUtils.DOM.safeSetHTML(toggleKeyBtn, isPassword ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>');
-        });
-
-        resetToDefaultBtn.addEventListener('click', () => {
-            const confirmReset = confirm('¿Estás seguro de que quieres restaurar las instrucciones recomendadas para U-Cursos? Esto sobrescribirá tus instrucciones personalizadas actuales.');
-            if (confirmReset) {
-                if (window.aiChatPopup?.resetToDefaultInstructions) {
-                    const defaultInstructions = window.aiChatPopup.resetToDefaultInstructions();
-                    systemTextarea.value = defaultInstructions;
-                } else {
-                    systemTextarea.value = defaultSystemInstructions;
-                }
-                
-                // Show success message temporarily
-                UcursedntUtils.DOM.safeSetHTML(resetToDefaultBtn, '<i class="fa-regular fa-check"></i> ¡Restaurado!');
-                resetToDefaultBtn.classList.remove('btn-secondary');
-                resetToDefaultBtn.classList.add('btn-success');
-                
-                setTimeout(() => {
-                    UcursedntUtils.DOM.safeSetHTML(resetToDefaultBtn, '<i class="fa-regular fa-undo"></i> Restaurar Recomendadas');
-                    resetToDefaultBtn.classList.remove('btn-success');
-                    resetToDefaultBtn.classList.add('btn-secondary');
-                }, 2000);
-            }
+        resetBtn.addEventListener('click', () => {
+            instructions.value = AI.DEFAULT_INSTRUCTIONS;
+            flashButton(resetBtn, `${icon('check')} Restauradas`, 'ok');
         });
 
         saveBtn.addEventListener('click', async () => {
-            const settings = {
-                apiKey: apiKeyInput.value,
-                systemInstructions: systemTextarea.value.trim() || defaultSystemInstructions,
-                isMinimized: true
-            };
-
-            await UcursedntUtils.Storage.set('aiChatSettings', settings);
-            
-            // Update the chat popup if it exists
-            if (window.aiChatPopup) {
-                window.aiChatPopup.setApiKey(settings.apiKey);
-                window.aiChatPopup.setSystemInstructions(settings.systemInstructions);
-            }
-
-            // Show success message
-            UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-check"></i> ¡Guardado!');
-            saveBtn.classList.remove('btn-primary');
-            saveBtn.classList.add('btn-success');
-            
-            setTimeout(() => {
-                UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-save"></i> Guardar Configuración');
-                saveBtn.classList.remove('btn-success');
-                saveBtn.classList.add('btn-primary');
-            }, 2000);
+            await UcursedntUtils.Storage.set(AI.SETTINGS_KEY, {
+                provider: providerSelect.value,
+                instructions: instructions.value.trim()
+            });
+            flashButton(saveBtn, `${icon('check')} Guardado`);
         });
 
-        // Assemble the components
-        apiKeyContainer.appendChild(apiKeyInput);
-        apiKeyContainer.appendChild(toggleKeyBtn);
-
-        apiKeyGroup.appendChild(apiKeyLabel);
-        apiKeyGroup.appendChild(apiKeyContainer);
-
-        systemGroup.appendChild(systemLabel);
-        systemGroup.appendChild(systemTextarea);
-        systemGroup.appendChild(systemButtonsContainer);
-
-        systemButtonsContainer.appendChild(resetToDefaultBtn);
-
-        aiConfigContainer.appendChild(sectionHeader);
-        aiConfigContainer.appendChild(apiKeyGroup);
-        aiConfigContainer.appendChild(systemGroup);
-        aiConfigContainer.appendChild(saveBtn);
-
-        return aiConfigContainer;
+        return section;
     }
 
+    // ── Sonido de entrega ───────────────────────────────────────────────────
     // Extract YouTube video ID from a URL or plain ID
     function extractYouTubeVideoId(input) {
         const urlMatch = input.match(/(?:youtube\.com\/watch\?(?:.*&)?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
@@ -827,196 +218,153 @@ Tu conocimiento se basa en la estructura y funcionalidades de la plataforma U-Cu
         return null;
     }
 
-    // Create Sound Configuration Section
     async function createSoundConfigSection() {
-        const container = document.createElement('div');
-        container.className = 'sound-config-section';
-
         const defaultVideoId = '_Z3ra0CxCE0';
+        const defaultUrl = `https://www.youtube.com/watch?v=${defaultVideoId}`;
         const soundSettings = await UcursedntUtils.Storage.get('taskSubmissionSoundSettings') || {};
         const currentVideoId = soundSettings.videoId || defaultVideoId;
 
-        const header = document.createElement('div');
-        header.className = 'sound-config-header';
-        UcursedntUtils.DOM.safeSetHTML(header, `
-            <h3><i class="fa-regular fa-music"></i> Configuración de Sonido de Entrega</h3>
-            <p>Personaliza el sonido que se reproduce al entregar una tarea. Ingresa una URL o ID de YouTube.</p>
+        const section = document.createElement('section');
+        UcursedntUtils.DOM.safeSetHTML(section, `
+            ${Pages.sectionHeading('music', 'Sonido de entrega de tareas')}
+            <p class="ucd-section-intro">Elige el video de YouTube cuyo audio suena al entregar una tarea.</p>
+            <table class="form big">
+                <tbody>
+                    <tr>
+                        <th><label for="sound-youtube-url">URL o ID de YouTube</label></th>
+                        <td>
+                            <input type="text" id="sound-youtube-url" placeholder="${defaultUrl}">
+                            <span class="ucd-help">Acepta la URL completa o el ID de 11 caracteres. Déjalo vacío para usar el sonido por defecto (<a href="${defaultUrl}" target="_blank" rel="noopener noreferrer">escuchar</a>).</span>
+                            <div class="wrong" id="sound-error" hidden>La URL o el ID no son válidos. Revisa que sea un enlace de YouTube o un ID de 11 caracteres.</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="ucd-actions">
+                <button type="button" class="boton ok" id="sound-save">${icon('save')} Guardar sonido</button>
+            </div>
         `);
 
-        const urlGroup = document.createElement('div');
-        urlGroup.className = 'config-group';
-
-        const urlLabel = document.createElement('label');
-        urlLabel.className = 'config-label';
-        UcursedntUtils.DOM.safeSetHTML(urlLabel, '<i class="fa-brands fa-youtube"></i> URL o ID del video de YouTube:');
-
-        const urlInput = document.createElement('input');
-        urlInput.type = 'text';
-        urlInput.className = 'config-input';
-        urlInput.id = 'sound-youtube-url';
-        urlInput.placeholder = `https://www.youtube.com/watch?v=${defaultVideoId}`;
-        urlInput.value = currentVideoId !== defaultVideoId
-            ? `https://www.youtube.com/watch?v=${currentVideoId}`
-            : '';
-
-        const helper = document.createElement('div');
-        helper.className = 'config-helper';
-        UcursedntUtils.DOM.safeSetHTML(helper, `<small>
-            <strong>Por defecto:</strong> <a href="https://www.youtube.com/watch?v=${defaultVideoId}" target="_blank" style="color: #17a2b8;">https://www.youtube.com/watch?v=${defaultVideoId}</a><br>
-            Acepta URLs completas de YouTube o solo el ID del video (11 caracteres). Dejar vacío para usar el sonido por defecto.
-        </small>`);
-
-        const saveBtn = document.createElement('button');
-        saveBtn.className = 'modern-button btn-success save-sound-config-btn';
-        UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-save"></i> Guardar Sonido');
+        const urlInput = section.querySelector('#sound-youtube-url');
+        const errorBox = section.querySelector('#sound-error');
+        const saveBtn = section.querySelector('#sound-save');
+        urlInput.value = currentVideoId !== defaultVideoId ? `https://www.youtube.com/watch?v=${currentVideoId}` : '';
 
         saveBtn.addEventListener('click', async () => {
             const input = urlInput.value.trim();
             let videoId = defaultVideoId;
             if (input) {
                 const extracted = extractYouTubeVideoId(input);
-                if (extracted) {
-                    videoId = extracted;
-                } else {
-                    window.showExtensionAlert('URL o ID de YouTube inválido. Por favor, verifica el enlace.');
+                if (!extracted) {
+                    errorBox.hidden = false;
+                    urlInput.focus();
                     return;
                 }
+                videoId = extracted;
             }
+            errorBox.hidden = true;
             await UcursedntUtils.Storage.set('taskSubmissionSoundSettings', { videoId });
-            UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-check"></i> ¡Guardado!');
-            saveBtn.classList.remove('btn-success');
-            saveBtn.classList.add('btn-primary');
-            setTimeout(() => {
-                UcursedntUtils.DOM.safeSetHTML(saveBtn, '<i class="fa-regular fa-save"></i> Guardar Sonido');
-                saveBtn.classList.remove('btn-primary');
-                saveBtn.classList.add('btn-success');
-            }, 2000);
+            flashButton(saveBtn, `${icon('check')} Guardado`);
         });
 
-        urlGroup.appendChild(urlLabel);
-        urlGroup.appendChild(urlInput);
-        urlGroup.appendChild(helper);
-        container.appendChild(header);
-        container.appendChild(urlGroup);
-        container.appendChild(saveBtn);
+        return section;
+    }
 
-        return container;
+    // ── Datos guardados ─────────────────────────────────────────────────────
+    function createStorageSection() {
+        const section = document.createElement('section');
+        UcursedntUtils.DOM.safeSetHTML(section, `
+            ${Pages.sectionHeading('database', 'Datos guardados')}
+            <p class="ucd-section-intro">La extensión guarda tu configuración, logros y preferencias en el almacenamiento sincronizado del navegador.</p>
+            <div class="ucd-actions">
+                <button type="button" class="boton" id="showChromeStorageButton" aria-expanded="false">${icon('eye')} Mostrar datos guardados</button>
+                <button type="button" class="boton wrong" id="clearChromeStorageButton">${icon('trash')} Borrar todos los datos</button>
+            </div>
+            <div class="ucd-storage-wrap" hidden>
+                <table class="ucd-storage-table">
+                    <thead><tr><th>Clave</th><th>Valor</th><th aria-label="Acciones"></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        `);
+
+        const showButton = section.querySelector('#showChromeStorageButton');
+        const clearButton = section.querySelector('#clearChromeStorageButton');
+        const wrap = section.querySelector('.ucd-storage-wrap');
+        const tbody = section.querySelector('tbody');
+
+        async function updateStorageTable() {
+            tbody.replaceChildren();
+            const storageItems = await UcursedntUtils.Storage.getAll();
+
+            Object.keys(storageItems).sort().forEach(key => {
+                const value = JSON.stringify(storageItems[key]);
+                const row = document.createElement('tr');
+
+                const keyCell = document.createElement('td');
+                keyCell.textContent = key;
+
+                const valueCell = document.createElement('td');
+                const code = document.createElement('code');
+                code.textContent = value;
+                code.title = value;
+                valueCell.appendChild(code);
+
+                const actionCell = document.createElement('td');
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'boton wrong';
+                deleteBtn.title = `Borrar "${key}"`;
+                deleteBtn.setAttribute('aria-label', `Borrar "${key}"`);
+                UcursedntUtils.DOM.safeSetHTML(deleteBtn, icon('trash'));
+                deleteBtn.addEventListener('click', async () => {
+                    if (confirm(`¿Borrar "${key}" del almacenamiento de la extensión?`)) {
+                        await UcursedntUtils.Storage.remove(key);
+                        await updateStorageTable();
+                    }
+                });
+                actionCell.appendChild(deleteBtn);
+
+                row.append(keyCell, valueCell, actionCell);
+                tbody.appendChild(row);
+            });
+        }
+
+        showButton.addEventListener('click', async () => {
+            const willShow = wrap.hidden;
+            if (willShow) await updateStorageTable();
+            wrap.hidden = !willShow;
+            showButton.setAttribute('aria-expanded', String(willShow));
+            UcursedntUtils.DOM.safeSetHTML(showButton, willShow
+                ? `${icon('eyeOff')} Ocultar datos guardados`
+                : `${icon('eye')} Mostrar datos guardados`);
+        });
+
+        clearButton.addEventListener('click', async () => {
+            const clearConfirmed = confirm('¿Borrar todos los datos de la extensión? Se pierden tu configuración, tus logros y tus preferencias. Esta acción no se puede deshacer.');
+            if (!clearConfirmed) return;
+
+            await UcursedntUtils.Storage.clear();
+            await initSettings();
+            location.reload();
+        });
+
+        return section;
     }
 
     // Inicializar la página
     async function initPage() {
-        addModernStyles(); // Add modern CSS styles
-        
-        const errorDisplay = document.querySelector("#error");
-        if (errorDisplay) errorDisplay.style.display = "none";
+        const page = Pages.preparePage("U-Cursedn't");
+        UcursedntUtils.UI.ensureSelectStyles();
 
-        const menuTitle = document.querySelector("#navbar > li");
-        if (menuTitle) menuTitle.textContent = "U-Cursedn't";
-
-        const bodyBlankPage = document.querySelector("#body")
-
-        const menuElement = await createFeatureMenu();
-
-        // Create action buttons container
-        const actionContainer = document.createElement('div');
-        actionContainer.className = 'action-buttons';
-
-        const clearButton = document.createElement('button');
-        UcursedntUtils.DOM.safeSetHTML(clearButton, '<i class="fa-regular fa-trash-alt"></i> Borrar Almacenamiento Local');
-        clearButton.className = 'modern-button btn-danger';
-        clearButton.id = 'clearChromeStorageButton';
-
-        clearButton.addEventListener('click', async function() {
-            const clearConfirmed = confirm('¿Estás seguro que quieres borrar el almacenamiento interno? Esta acción no puede revertirse.');
-        
-            if (clearConfirmed) {
-                await UcursedntUtils.Storage.clear();
-                console.log('Chrome storage cleared!');
-                await initSettings();
-                console.log('Settings initialized!');
-                location.reload(); // Refresh to show updated settings
-            } else {
-                console.log('Chrome storage clearing cancelled.');
-            }
-        });
-
-        // Crea un botón que hace alterna el mostrar el Chrome storage
-        const showChromeStorageButton = document.createElement('button');
-        const chromeStorageList = document.createElement('ul');
-        UcursedntUtils.DOM.safeSetHTML(showChromeStorageButton, '<i class="fa-regular fa-database"></i> Mostrar Almacenamiento Local');
-        showChromeStorageButton.className = 'modern-button btn-secondary';
-        showChromeStorageButton.id = 'showChromeStorageButton';
-
-        chromeStorageList.className = 'storage-list';
-
-        // Función para actualizar la lista del almacenamiento Chrome
-        async function updateChromeStorageList() {
-            UcursedntUtils.DOM.safeSetHTML(chromeStorageList, '');
-            const storageItems = await UcursedntUtils.Storage.getAll();
-            
-            Object.keys(storageItems).forEach(key => {
-                const value = JSON.stringify(storageItems[key]);
-                
-                const storageItem = document.createElement('li');
-                storageItem.className = 'storage-item';
-                
-                const keySpan = document.createElement('span');
-                keySpan.className = 'storage-key';
-                keySpan.textContent = key;
-                
-                const valueSpan = document.createElement('span');
-                valueSpan.className = 'storage-value';
-                valueSpan.textContent = value;
-                valueSpan.title = value; // Show full value on hover
-                
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'delete-storage-btn';
-                UcursedntUtils.DOM.safeSetHTML(deleteBtn, '<i class="fa-regular fa-trash"></i>');
-                deleteBtn.title = 'Eliminar este elemento';
-                deleteBtn.addEventListener('click', async function(e) {
-                    e.stopPropagation();
-                    const deleteConfirmed = confirm(`¿Estás seguro que quieres borrar "${key}" del almacenamiento local?`);
-                    if (deleteConfirmed) {
-                        await UcursedntUtils.Storage.remove(key);
-                        await updateChromeStorageList();
-                    }
-                });
-                
-                storageItem.appendChild(keySpan);
-                storageItem.appendChild(valueSpan);
-                storageItem.appendChild(deleteBtn);
-                chromeStorageList.appendChild(storageItem);
-            });
-        }
-
-        // Agrega funcionalidad al botón
-        showChromeStorageButton.addEventListener('click', async function() {
-            if (!bodyBlankPage.contains(chromeStorageList)) {
-                UcursedntUtils.DOM.safeSetHTML(showChromeStorageButton, '<i class="fa-regular fa-eye-slash"></i> Ocultar Almacenamiento Local');
-                await updateChromeStorageList();
-                bodyBlankPage.appendChild(chromeStorageList);
-            } else {
-                UcursedntUtils.DOM.safeSetHTML(showChromeStorageButton, '<i class="fa-regular fa-database"></i> Mostrar Almacenamiento Local');
-                chromeStorageList.remove();
-            }
-        });
-
-        actionContainer.appendChild(showChromeStorageButton);
-        actionContainer.appendChild(clearButton);
-
-        bodyBlankPage.appendChild(menuElement);
-        bodyBlankPage.appendChild(actionContainer);
+        page.appendChild(await createFeaturesSection());
+        page.appendChild(await createAIConfigSection());
+        page.appendChild(await createSoundConfigSection());
+        page.appendChild(createStorageSection());
     }
 
     // Ejecutar la inicialización al cargar la página
     await initSettings();
     await initPage();
-
-    // Log all storage items for debugging
-    const storageItems = await UcursedntUtils.Storage.getAll();
-    Object.keys(storageItems).forEach(key => {
-        const value = JSON.stringify(storageItems[key]);
-        console.log(`Key: ${key}, Value: ${value}`);
-    });
 
 })();
